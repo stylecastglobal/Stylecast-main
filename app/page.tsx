@@ -1,65 +1,96 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
+  const [feedItems] = useState([
+    { id: 1, src: "/moods/minimal-1.jpg", alt: "Minimal look" },
+    { id: 2, src: "/moods/street-1.jpg", alt: "Street look" },
+    { id: 3, src: "/moods/soft-1.jpg", alt: "Soft look" },
+    { id: 4, src: "/moods/romantic-1.jpg", alt: "Romantic look" },
+    { id: 5, src: "/moods/date-1.jpg", alt: "Date look" },
+    { id: 6, src: "/moods/vacation-1.jpg", alt: "Vacation look" },
+  ]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <main className="min-h-screen bg-[#F9F9F9] text-[#111111]">
+      {/* ===== HEADER ===== */}
+      <header className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+          {/* Logo */}
+          <div className="flex items-center gap-2">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              src="/logo.png"
+              alt="StyleCast Logo"
+              width={40}
+              height={40}
+              className="object-contain"
             />
-            Deploy Now
-          </a>
+            <span className="font-bold tracking-wide text-lg">STYLECAST</span>
+          </div>
+
+          {/* Nav links */}
+          <nav className="hidden md:flex gap-8 text-sm font-medium">
+            <a href="#feed" className="hover:text-[#8B6A43] transition">Feed</a>
+            <a href="#shop" className="hover:text-[#8B6A43] transition">Shop</a>
+            <a href="#style-share" className="hover:text-[#8B6A43] transition">Style Share</a>
+            <a href="#mood-looks" className="hover:text-[#8B6A43] transition">Mood Looks</a>
+          </nav>
+        </div>
+      </header>
+
+      {/* ===== HERO ===== */}
+      <section className="relative w-full h-[90vh] flex items-center justify-center text-center">
+        <Image
+  src="/hero1.jpg"
+  alt="Hero"
+  fill
+  priority
+  className="object-cover object-center md:object-[center_20%] brightness-75"
+/>
+
+        <div className="relative z-10 max-w-2xl px-6">
+          <h1 className="text-4xl md:text-6xl font-semibold text-white mb-6">
+            Curate Your World in Style. 
+          </h1>
+          <p className="text-white/80 mb-8">
+            Every look tells a story — make yours unforgettable.
+          </p>
           <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#feed"
+            className="px-6 py-3 bg-white text-black rounded-full font-medium hover:bg-[#e9e9e9] transition"
           >
-            Documentation
+            Explore Feed
           </a>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* ===== FEED PREVIEW ===== */}
+      <section id="feed" className="max-w-7xl mx-auto px-6 py-20">
+        <h2 className="text-3xl font-semibold mb-8 text-center">Explore the Feed</h2>
+        <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+          {feedItems.map((item) => (
+            <div
+              key={item.id}
+              className="overflow-hidden rounded-2xl shadow-sm hover:shadow-md transition"
+            >
+              <Image
+                src={item.src}
+                alt={item.alt}
+                width={500}
+                height={700}
+                className="w-full h-auto object-cover hover:scale-[1.02] transition"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== FOOTER ===== */}
+      <footer className="border-t border-gray-200 py-10 text-center text-sm text-gray-500">
+        © {new Date().getFullYear()} Style Cast. All rights reserved.
+      </footer>
+    </main>
   );
 }
