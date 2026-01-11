@@ -9,18 +9,40 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.2",
+    "cheerio": "^1.1.2",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
+    "firebase": "^12.6.0",
+    "framer-motion": "^12.23.25",
+    "html-to-image": "^1.11.13",
+    "html5-qrcode": "^2.3.8",
+    "lightningcss": "^1.30.2",
+    "lucide-react": "^0.555.0",
+    "motion": "^12.23.25",
+    "next": "16.0.1",
+    "opencv.js": "^1.2.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "next": "16.0.1"
+    "react-hook-form": "^7.68.0",
+    "react-icons": "^5.5.0",
+    "tesseract.js": "^6.0.1",
+    "three": "^0.181.2",
+    "zod": "^4.1.13",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@tailwindcss/postcss": "^4",
+    "@types/cheerio": "^0.22.35",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
-    "eslint-config-next": "16.0.1"
+    "eslint-config-next": "16.0.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
