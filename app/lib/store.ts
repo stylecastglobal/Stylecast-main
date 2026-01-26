@@ -19,6 +19,11 @@ interface MakeupStore {
   viewMode: "before" | "after";
   setViewMode: (mode: "before" | "after") => void;
 
+  applyMode: "auto" | "manual";
+  setApplyMode: (mode: "auto" | "manual") => void;
+  preferredProductId: string | null;
+  setPreferredProductId: (productId: string | null) => void;
+
   setOriginalImage: (image: string) => void;
   setProcessedImage: (image: string) => void;
   addMakeup: (makeup: SelectedMakeup) => void;
@@ -52,6 +57,11 @@ export const useMakeupStore = create<MakeupStore>((set) => ({
   // ⭐ NEW: Before/After
   viewMode: "after",
   setViewMode: (mode) => set({ viewMode: mode }),
+
+  applyMode: "auto",
+  setApplyMode: (mode) => set({ applyMode: mode }),
+  preferredProductId: null,
+  setPreferredProductId: (productId) => set({ preferredProductId: productId }),
 
   setOriginalImage: (image) =>
     set({ originalImage: image, processedImage: image, currentStep: "apply" }),
@@ -117,5 +127,7 @@ export const useMakeupStore = create<MakeupStore>((set) => ({
       isProcessing: false,
       currentStep: "upload",
       viewMode: "after",
+      applyMode: "auto",
+      preferredProductId: null,
     }),
 }));

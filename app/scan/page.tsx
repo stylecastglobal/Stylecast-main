@@ -3,26 +3,116 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Camera, Upload, Search, ArrowLeft } from 'lucide-react';
+import { runOCR } from '@/lib/runOCR';
+import { scoreImageSimilarity } from '@/lib/productScanner/imageMatch';
+
+type ScanStatus = 'idle' | 'processing' | 'low-confidence' | 'error';
+
+type Candidate = {
+  id: string;
+  brand: string;
+  name: string;
+  category: string;
+  image: string | null;
+  image_set: string[];
+  score: number;
+};
+
+const withTimeout = async <T,>(promise: Promise<T>, timeoutMs: number) => {
+  const timeout = new Promise<T>((_, reject) => {
+    const timeoutId = setTimeout(() => {
+      reject(new Error("Timeout"));
+    }, timeoutMs);
+    // Ensure the timeout is cleared if the outer race finishes first.
+    void promise.finally(() => clearTimeout(timeoutId));
+  });
+  return Promise.race([promise, timeout]);
+};
 
 export default function ScanPage() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [productName, setProductName] = useState('');
+  const [scanStatus, setScanStatus] = useState<ScanStatus>('idle');
+  const [scanMessage, setScanMessage] = useState('');
+  const [candidatePreview, setCandidatePreview] = useState<Candidate | null>(null);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // TODO: AI로 제품 인식
-    // 지금은 바로 Try-On 페이지로 이동
-    router.push('/try-on/1');
+    const imageUrl = URL.createObjectURL(file);
+    setScanStatus('processing');
+    setScanMessage('Analyzing your product...');
+    setCandidatePreview(null);
+
+    try {
+      const ocrText = await withTimeout(runOCR(imageUrl), 7000);
+      if (!ocrText.trim()) {
+        setScanStatus('low-confidence');
+        setScanMessage('No text detected. Try manual search.');
+        return;
+      }
+
+      const cacheKey = `scan:search:${ocrText.toLowerCase()}`;
+      const cached = sessionStorage.getItem(cacheKey);
+      const data = cached
+        ? JSON.parse(cached)
+        : await fetch(`/api/scanner/search?q=${encodeURIComponent(ocrText)}`).then((r) => r.json());
+      if (!cached) {
+        sessionStorage.setItem(cacheKey, JSON.stringify(data));
+      }
+      const candidates: Candidate[] = data.results || [];
+
+      if (!candidates.length) {
+        setScanStatus('low-confidence');
+        setScanMessage('Could not recognize this product. Try manual search.');
+        return;
+      }
+
+      const fallbackCandidate = candidates[0];
+      let best: Candidate | null = null;
+      let bestScore = -1;
+
+      for (const candidate of candidates.slice(0, 8)) {
+        if (!candidate.image) continue;
+        const imageScore = await withTimeout(
+          scoreImageSimilarity(imageUrl, candidate.image),
+          3000
+        );
+        const combinedScore = candidate.score * 0.6 + imageScore * 0.4;
+        if (combinedScore > bestScore) {
+          bestScore = combinedScore;
+          best = candidate;
+        }
+      }
+
+      if (!best) {
+        best = fallbackCandidate;
+        bestScore = fallbackCandidate.score;
+      }
+
+      if (bestScore < 0.35) {
+        setScanStatus('low-confidence');
+        setScanMessage('Low confidence. Please search manually or try a clearer photo.');
+        setCandidatePreview(best);
+        return;
+      }
+
+      router.push(`/scan/result/${best.id}?confidence=${Math.round(bestScore * 100)}`);
+    } catch (error) {
+      console.error('Scan failed:', error);
+      setScanStatus('error');
+      setScanMessage('Scan failed. Please try again or search manually.');
+    } finally {
+      URL.revokeObjectURL(imageUrl);
+    }
   };
 
   const handleManualSubmit = () => {
     if (!productName.trim()) return;
     
-    // 수동 입력으로 제품 검색
-    router.push('/try-on/1');
+    router.push(`/scan/search?q=${encodeURIComponent(productName.trim())}`);
   };
 
   return (
@@ -46,6 +136,34 @@ export default function ScanPage() {
       {/* Content */}
       <div className="pt-24 px-6 pb-20">
         <div className="max-w-2xl mx-auto">
+          {/* Quick tools */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mb-10">
+            <div className="rounded-2xl border border-gray-200 p-4">
+              <div className="text-sm font-semibold text-[#111]">Shade Match</div>
+              <p className="mt-1 text-sm text-gray-600">
+                Upload a selfie and match your foundation tone.
+              </p>
+              <button
+                onClick={() => router.push("/scan/shade-match")}
+                className="mt-3 inline-flex items-center rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-[#111] hover:bg-gray-50"
+              >
+                Open Shade Match →
+              </button>
+            </div>
+            <div className="rounded-2xl border border-gray-200 p-4">
+              <div className="text-sm font-semibold text-[#111]">AI Try-On Studio</div>
+              <p className="mt-1 text-sm text-gray-600">
+                Try makeup shades automatically or manually.
+              </p>
+              <button
+                onClick={() => router.push("/ai-makeup-studio")}
+                className="mt-3 inline-flex items-center rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-[#111] hover:bg-gray-50"
+              >
+                Open Try-On →
+              </button>
+            </div>
+          </div>
+
           {/* Intro */}
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4 text-[#111]">Analyze Any Product</h2>
@@ -83,6 +201,17 @@ export default function ScanPage() {
               />
             </div>
           </div>
+
+          {scanStatus !== 'idle' && (
+            <div className="mb-6 rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
+              <p className="font-semibold">{scanMessage}</p>
+              {candidatePreview && (
+                <div className="mt-3 text-sm text-gray-600">
+                  Best guess: {candidatePreview.brand} — {candidatePreview.name}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Divider */}
           <div className="flex items-center gap-4 mb-6">

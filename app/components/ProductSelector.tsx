@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useMakeupStore } from "../lib/store";
-import { SAMPLE_PRODUCTS } from "../data/products";
 import { MakeupCategory, Product, Shade } from "../types/makeup";
 
 export default function ProductSelector() {
@@ -17,7 +16,14 @@ export default function ProductSelector() {
     EYEBROW: 50,
   });
   
-  const { selectedMakeups, addMakeup, removeMakeup, setCurrentCategory } = useMakeupStore();
+  const {
+    selectedMakeups,
+    addMakeup,
+    removeMakeup,
+    setCurrentCategory,
+    preferredProductId,
+  } = useMakeupStore();
+  const [remoteProducts, setRemoteProducts] = useState<Product[]>([]);
 
   // Sync with store when category changes
   useEffect(() => {
@@ -43,7 +49,35 @@ export default function ProductSelector() {
     { value: "EYESHADOW", label: "Eyeshadow" },
   ];
 
-  const products = SAMPLE_PRODUCTS.filter((p) => p.category === selectedCategory);
+  useEffect(() => {
+    const loadProducts = async () => {
+      const cacheKey = `scan:category:${selectedCategory}`;
+      const cached = sessionStorage.getItem(cacheKey);
+      const data = cached
+        ? JSON.parse(cached)
+        : await fetch(`/api/scanner/category?category=${selectedCategory}`).then((r) => r.json());
+      if (!cached) {
+        sessionStorage.setItem(cacheKey, JSON.stringify(data));
+      }
+      const mapped = (data.products || []).map((item: any) => ({
+        ...item,
+        shades: (item.shades || []).map((shade: any) => ({
+          name: shade.shade_name || shade.name,
+          hex: shade.hex || "#000000",
+        })),
+      }));
+      setRemoteProducts(mapped);
+    };
+    loadProducts();
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    if (!preferredProductId || !remoteProducts.length) return;
+    const match = remoteProducts.find((product) => product.id === preferredProductId);
+    if (match) setSelectedProduct(match);
+  }, [preferredProductId, remoteProducts]);
+
+  const products = remoteProducts;
 
   const handleShadeSelect = (shade: Shade) => {
     if (!selectedProduct) return;

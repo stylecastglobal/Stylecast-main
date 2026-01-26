@@ -1,16 +1,34 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import ImageUpload from "../components/ImageUpload";
 import BrushCanvas, { BrushCanvasRef } from "../components/BrushCanvas";
 import BrushControls from "../components/BrushControls";
 import ProductSelector from "../components/ProductSelector";
 import SaveLook from "../components/SaveLook";
 import { useMakeupStore } from "../lib/store";
+import AutoTryOnCanvas from "../components/AutoTryOnCanvas";
 
 export default function AIMakeupStudioPage() {
-  const { originalImage, currentStep, viewMode, setViewMode } = useMakeupStore();
+  const searchParams = useSearchParams();
+  const {
+    originalImage,
+    currentStep,
+    viewMode,
+    setViewMode,
+    applyMode,
+    setApplyMode,
+    setPreferredProductId,
+  } = useMakeupStore();
   const canvasRef = useRef<BrushCanvasRef>(null);
+  useEffect(() => {
+    const productId = searchParams.get("productId");
+    if (productId) {
+      setPreferredProductId(productId);
+    }
+  }, [searchParams, setPreferredProductId]);
+
 
   // Long-press handlers
   const showBefore = () => setViewMode("before");
@@ -86,9 +104,13 @@ export default function AIMakeupStudioPage() {
                     />
                   )}
 
-                  {/* AFTER MODE (Canvas) */}
+                  {/* AFTER MODE */}
                   {viewMode === "after" && (
-                    <BrushCanvas ref={canvasRef} />
+                    applyMode === "auto" ? (
+                      <AutoTryOnCanvas />
+                    ) : (
+                      <BrushCanvas ref={canvasRef} />
+                    )
                   )}
                 </div>
               </div>
@@ -98,6 +120,33 @@ export default function AIMakeupStudioPage() {
 
             {/* RIGHT PANEL */}
             <div className="h-[80vh] overflow-y-auto pr-2 space-y-6">
+
+              {/* Apply Mode */}
+              <div className="bg-white border border-black/10 rounded-xl p-6 shadow-sm">
+                <h3 className="text-lg font-bold text-black mb-4">Apply Mode</h3>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setApplyMode("auto")}
+                    className={`flex-1 py-3 rounded-lg font-semibold ${
+                      applyMode === "auto"
+                        ? "bg-black text-white"
+                        : "border border-gray-300 text-gray-700"
+                    }`}
+                  >
+                    Auto
+                  </button>
+                  <button
+                    onClick={() => setApplyMode("manual")}
+                    className={`flex-1 py-3 rounded-lg font-semibold ${
+                      applyMode === "manual"
+                        ? "bg-black text-white"
+                        : "border border-gray-300 text-gray-700"
+                    }`}
+                  >
+                    Manual
+                  </button>
+                </div>
+              </div>
 
               {/* Brush Tools */}
               <div className="bg-white border border-black/10 rounded-xl p-6 shadow-sm">

@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "ingest:shopify": "node scripts/ingest/shopify.mjs",
+    "ingest:retailer": "node scripts/ingest/retailer-jsonld.mjs",
+    "ingest:dataset": "node scripts/ingest/import-dataset.mjs",
+    "ingest:firestore": "node scripts/ingest/push-firestore.mjs",
+    "ingest:firestore:admin": "node scripts/ingest/push-firestore-admin.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -17,6 +22,7 @@
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "firebase": "^12.6.0",
+    "firebase-admin": "^13.6.0",
     "framer-motion": "^12.23.25",
     "html-to-image": "^1.11.13",
     "html5-qrcode": "^2.3.8",

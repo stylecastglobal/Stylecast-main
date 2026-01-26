@@ -1,9 +1,105 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { brands } from "@/app/data/brandsData";
+
+type ApiProduct = {
+  id: number;
+  title: string;
+  handle: string;
+  image: string | null;
+  images: string[];
+  price: string | null;
+  officialUrl: string;
+};
+
+type BrandProduct = ApiProduct & {
+  brandSlug: string;
+};
 
 export default function Home() {
+  const lookbookScrollRef = useRef<HTMLDivElement | null>(null);
+  const [newDrops, setNewDrops] = useState<BrandProduct[]>([]);
+  const [likedProducts, setLikedProducts] = useState<Set<number>>(new Set());
+
+  const handleLookbookNext = () => {
+    if (!lookbookScrollRef.current) return;
+    lookbookScrollRef.current.scrollBy({ left: 260, behavior: "smooth" });
+  };
+  const handleLookbookPrev = () => {
+    if (!lookbookScrollRef.current) return;
+    lookbookScrollRef.current.scrollBy({ left: -260, behavior: "smooth" });
+  };
+  const toggleLike = (id: number) => {
+    setLikedProducts((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    const brandSlugs = ["glowny", "aime-leon-dore", "scuffers"];
+
+    const loadNewDrops = async () => {
+      const results = await Promise.allSettled(
+        brandSlugs.map((slug) =>
+          fetch(`/api/brands/${slug}`).then((res) =>
+            res.ok ? res.json() : null
+          )
+        )
+      );
+
+      const items: BrandProduct[] = [];
+      results.forEach((result, index) => {
+        if (result.status !== "fulfilled" || !result.value?.products) return;
+        const slug = brandSlugs[index];
+        result.value.products.forEach((product: ApiProduct) => {
+          items.push({ ...product, brandSlug: slug });
+        });
+      });
+
+      if (isMounted) {
+        setNewDrops(items);
+      }
+    };
+
+    loadNewDrops();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const brandBySlug = new Map(brands.map((brand) => [brand.slug, brand]));
+  const newDropItems = newDrops.slice(0, 10);
+  const newDropLoopItems =
+    newDropItems.length > 0 ? [...newDropItems, ...newDropItems] : [];
+  const formatPrice = (price?: string | null) => {
+    if (!price) return "—";
+    const numeric = Number(String(price).replace(/,/g, ""));
+    if (Number.isNaN(numeric)) return price;
+    return new Intl.NumberFormat("en-CA", {
+      style: "currency",
+      currency: "CAD",
+      maximumFractionDigits: 0,
+    }).format(numeric);
+  };
+
+  const lookbookCards = [
+    { id: 1, title: "Casual", image: "/women-grid-1.jpg", season: "Winter 2025" },
+    { id: 2, title: "Airport Outfit", image: "/women-grid-2.jpg", season: "Winter 2025" },
+    { id: 3, title: "Office Ready", image: "/women-grid3.jpg", season: "Winter 2025" },
+    { id: 4, title: "Weekend Vibes", image: "/women-grid-4.jpg", season: "Winter 2025" },
+    { id: 5, title: "Date Night", image: "/women-grid-5.jpg", season: "Winter 2025" },
+    { id: 6, title: "Street Style", image: "/women-grid-6.jpg", season: "Winter 2025" },
+  ];
+
   return (
     <main className="min-h-screen bg-white text-[#111111]">
 
@@ -66,317 +162,276 @@ export default function Home() {
   </div>
 </section>
 
-
-{/* ===== PRODUCT GRID SECTION ===== */}
-<section id="products" className="w-full py-20 bg-white">
+{/* ===== NEW DROPS SECTION ===== */}
+<section className="w-full py-12 bg-gray-50 overflow-hidden">
   
-  {/* Filter Bar */}
-  <div className="max-w-[1600px] mx-auto px-6 mb-8 flex items-center justify-between border-b border-gray-200 pb-4">
-    <div className="flex items-center gap-6">
-      <button className="text-sm font-medium text-[#111] hover:opacity-70 transition">
-        Product ▾
-      </button>
-      <button className="text-sm font-medium text-[#111] hover:opacity-70 transition">
-        Size ▾
-      </button>
-      <button className="text-sm font-medium text-[#111] hover:opacity-70 transition">
-        Color ▾
-      </button>
-    </div>
-    
-    <button className="text-sm font-medium text-[#111] hover:opacity-70 transition">
-      Sort by: Popular ▾
-    </button>
+  {/* Header */}
+  <div className="flex items-center justify-between px-6 mb-6 max-w-[1600px] mx-auto">
+    <h2 className="text-3xl font-semibold tracking-wide text-[#111]">
+      New Drops
+    </h2>
+    <a href="/new-drops" className="text-sm text-[#111] opacity-70 hover:opacity-100 transition">
+      View All →
+    </a>
   </div>
 
-  <div className="max-w-[1600px] mx-auto px-6">
-    
-    {/* TOP ROW - 2 LARGE FEATURED CARDS (SHORTER HEIGHT) */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-      
-      {/* Large Card 1 */}
-      <Link 
-        href="/product/cropped-fringe-jacket"
-        className="group relative bg-white overflow-hidden hover:shadow-xl transition-all duration-300"
-      >
-        {/* Heart Icon */}
-        <button 
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full border border-gray-200 hover:bg-white transition-all"
-        >
-          <svg 
-            className="w-5 h-5 text-gray-700" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
+  {/* Auto-sliding carousel with CSS animation */}
+  <div className="relative">
+    <div 
+      className="flex gap-6 animate-slide"
+      style={{
+        width: 'fit-content',
+      }}
+    >
+      {newDropLoopItems.length > 0 ? (
+        newDropLoopItems.map((item, i) => {
+          const brand = brandBySlug.get(item.brandSlug);
+          const image = item.image || item.images?.[0] || "/product-1.jpg";
+
+          return (
+            <Link 
+              key={`${item.id}-${i}`} 
+              href={item.officialUrl || (brand ? `/brands/${brand.slug}` : "/brands")}
+              className="group relative bg-white overflow-hidden hover:shadow-lg transition-all duration-300 flex-shrink-0 w-[220px]"
+            >
+              {/* Heart Icon */}
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleLike(item.id);
+              }}
+              className="absolute top-3 right-3 z-10 h-10 w-10 flex items-center justify-center bg-white rounded-full border border-gray-200 shadow-sm hover:shadow-md transition"
+              aria-label="Like product"
+              aria-pressed={likedProducts.has(item.id)}
+            >
+              <svg 
+                className="w-5 h-5 text-gray-900" 
+                viewBox="0 0 24 24"
+                fill={likedProducts.has(item.id) ? "currentColor" : "none"}
+                stroke="currentColor" 
+                strokeWidth={1.8}
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  d="M4.318 6.318a4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
+                />
+              </svg>
+            </button>
+
+              {/* Product Image */}
+              <div className="relative w-full aspect-[3/4] bg-gray-50 overflow-hidden">
+                <img 
+                  src={image} 
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+
+              {/* Product Info */}
+              <div className="p-3 bg-white">
+                <p className="text-[10px] text-gray-500 mb-1 font-medium">
+                  {brand?.name ?? "STYLECAST"}
+                </p>
+                <h3 className="text-xs font-semibold text-[#111] mb-1.5 leading-tight line-clamp-2">
+                  {item.title}
+                </h3>
+                <div className="flex items-baseline gap-1.5 mb-1.5">
+                  <span className="text-sm font-bold text-red-600">NEW</span>
+                  <span className="text-sm font-bold text-[#111]">{formatPrice(item.price)}</span>
+                </div>
+                <div className="flex items-center gap-2 text-[10px]">
+                  <span className="text-red-500">❤️ {brand?.favorites ?? "—"}</span>
+                  <span className="text-orange-500">⭐ Just Arrived</span>
+                </div>
+              </div>
+            </Link>
+          );
+        })
+      ) : (
+        Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={`newdrop-skeleton-${i}`}
+            className="bg-white border border-gray-100 flex-shrink-0 w-[220px] overflow-hidden"
           >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={1.5} 
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
-            />
-          </svg>
-        </button>
-
-        {/* Large Product Image - SHORTER */}
-        <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden">
-          <img 
-            src="/producthp-1.jpg" 
-            alt="CROPPED FRINGE JACKET"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        </div>
-
-        {/* Product Info */}
-        <div className="p-5 bg-white">
-          <p className="text-xs text-gray-500 mb-1 font-medium">ZARA</p>
-          <h3 className="text-base font-semibold text-[#111] mb-2 leading-tight">
-            베이직 퍼플러스 집업_SPFZF4TC01
-          </h3>
-          <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-xl font-bold text-red-600">35%</span>
-            <span className="text-xl font-bold text-[#111]">129,900원</span>
+            <div className="w-full aspect-[3/4] bg-gray-100 animate-pulse" />
+            <div className="p-3 space-y-2">
+              <div className="h-3 w-16 bg-gray-100 rounded animate-pulse" />
+              <div className="h-4 w-32 bg-gray-100 rounded animate-pulse" />
+              <div className="h-4 w-24 bg-gray-100 rounded animate-pulse" />
+            </div>
           </div>
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-red-500">❤️ 10만</span>
-            <span className="text-orange-500">⭐ 4.8(4만+)</span>
-          </div>
-        </div>
-      </Link>
-
-      {/* Large Card 2 */}
-      <Link 
-        href="/product/leather-pants"
-        className="group relative bg-white overflow-hidden hover:shadow-xl transition-all duration-300"
-      >
-        {/* Heart Icon */}
-        <button 
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full border border-gray-200 hover:bg-white transition-all"
-        >
-          <svg 
-            className="w-5 h-5 text-gray-700" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={1.5} 
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
-            />
-          </svg>
-        </button>
-
-        {/* Large Product Image - SHORTER */}
-        <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden">
-          <img 
-            src="/product-2.jpg" 
-            alt="LEATHER PANTS"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        </div>
-
-        {/* Product Info */}
-        <div className="p-5 bg-white">
-          <p className="text-xs text-gray-500 mb-1 font-medium">MANGO</p>
-          <h3 className="text-base font-semibold text-[#111] mb-2 leading-tight">
-            Premium Leather Wide Pants
-          </h3>
-          <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-xl font-bold text-red-600">40%</span>
-            <span className="text-xl font-bold text-[#111]">179,900원</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-red-500">❤️ 8.5만</span>
-            <span className="text-orange-500">⭐ 4.9(3.2만+)</span>
-          </div>
-        </div>
-      </Link>
+        ))
+      )}
 
     </div>
+  </div>
 
-    {/* REGULAR GRID - 5 CARDS PER ROW */}
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-6">
-      
+  {/* CSS Animation */}
+  <style jsx>{`
+    @keyframes slide {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .animate-slide {
+      animation: slide 40s linear infinite;
+    }
+
+    .animate-slide:hover {
+      animation-play-state: paused;
+    }
+
+    .lookbook-scroll {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .lookbook-scroll::-webkit-scrollbar {
+      display: none;
+    }
+  `}</style>
+
+</section>
+
+{/* ===== LOOKBOOK CARDS SECTION ===== */}
+<section className="w-full py-12 bg-gray-50">
+
+  {/* Header */}
+  <div className="flex items-center justify-between px-6 mb-6 max-w-[1600px] mx-auto">
+    <h2 className="text-3xl font-semibold tracking-wide text-[#111]">
+      Lookbook
+    </h2>
+    <a href="/lookbook" className="text-sm text-[#111] opacity-70 hover:opacity-100 transition">
+      View All →
+    </a>
+  </div>
+
+  <div className="px-6 max-w-[1600px] mx-auto">
+    <div className="relative">
+      <div
+        ref={lookbookScrollRef}
+        className="lookbook-scroll flex gap-6 overflow-x-auto scroll-smooth pr-12"
+      >
+      {lookbookCards.map((item) => (
+        <Link
+          key={item.id}
+          href={`/lookbook/women/${item.id}`}
+          className="group flex-shrink-0 w-[260px] cursor-pointer"
+        >
+          <div className="relative aspect-[3/5] rounded-2xl overflow-hidden bg-gray-100 shadow-md transition-all duration-300 group-hover:shadow-2xl group-hover:scale-[1.02]">
+            <Image
+              src={item.image}
+              alt={item.title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+
+            {/* Overlay on hover */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+            {/* Text content */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+              <p className="text-white/70 text-xs font-medium tracking-wider uppercase mb-1">
+                {item.season}
+              </p>
+              <h3 className="text-white text-xl font-semibold">
+                {item.title}
+              </h3>
+            </div>
+          </div>
+        </Link>
+      ))}
+      </div>
+
+      <button
+        type="button"
+        onClick={handleLookbookNext}
+        className="absolute -right-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white border border-gray-200 shadow-md hover:shadow-lg transition flex items-center justify-center text-xl text-gray-700"
+        aria-label="Next lookbooks"
+      >
+        ›
+      </button>
+      <button
+        type="button"
+        onClick={handleLookbookPrev}
+        className="absolute -left-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white border border-gray-200 shadow-md hover:shadow-lg transition flex items-center justify-center text-xl text-gray-700"
+        aria-label="Previous lookbooks"
+      >
+        ‹
+      </button>
+    </div>
+  </div>
+</section>
+
+{/* ===== PRODUCT GRID SECTION ===== */}
+<section id="products" className="w-full py-12 bg-white">
+
+  {/* FILTER BAR */}
+  <div className="max-w-[1600px] mx-auto px-6 mb-8 flex items-center justify-between border-b border-gray-200 pb-4">
+    <div className="flex items-center gap-6">
+      <button className="text-sm font-medium">Product ▾</button>
+      <button className="text-sm font-medium">Size ▾</button>
+      <button className="text-sm font-medium">Color ▾</button>
+    </div>
+    <button className="text-sm font-medium">Sort by: Popular ▾</button>
+  </div>
+
+  {/* PRODUCT GRID - 6 columns x 6 rows */}
+  <div className="max-w-[1600px] mx-auto px-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+
       {[
-        { 
-          img: "/product-3.jpg", 
-          brand: "UNIQLO",
-          title: "카고 플랩 디테일 팬츠", 
-          discount: "25%",
-          price: "49,900원",
-          likes: "5.2만",
-          rating: "4.7",
-          reviews: "2.1만+",
-          link: "/product/cargo-flap-detail-pants"
-        },
-        { 
-          img: "/product-4.jpg", 
-          brand: "H&M",
-          title: "피티드 니트 탑", 
-          discount: "30%",
-          price: "29,900원",
-          likes: "6.8만",
-          rating: "4.6",
-          reviews: "1.8만+",
-          link: "/product/fitted-knit-top"
-        },
-        { 
-          img: "/product-5.jpg", 
-          brand: "COS",
-          title: "와이드 턱 팬츠", 
-          discount: "20%",
-          price: "45,900원",
-          likes: "4.3만",
-          rating: "4.8",
-          reviews: "1.5만+",
-          link: "/product/wide-tucked-pants"
-        },
-        { 
-          img: "/product-6.jpg", 
-          brand: "PULL&BEAR",
-          title: "인슐레이티드 하프 스톰 점퍼", 
-          discount: "35%",
-          price: "129,900원",
-          likes: "7.1만",
-          rating: "4.9",
-          reviews: "3.8万+",
-          link: "/product/insulated-half-storm-jumper"
-        },
-        { 
-          img: "/product-7.jpg", 
-          brand: "MASSIMO DUTTI",
-          title: "오버사이즈 레더 코트", 
-          discount: "45%",
-          price: "299,900원",
-          likes: "12만",
-          rating: "4.9",
-          reviews: "5.2만+",
-          link: "/product/oversized-leather-coat"
-        },
-        { 
-          img: "/product-8.jpg", 
-          brand: "BERSHKA",
-          title: "시킨드 윈드디테일 셔츠", 
-          discount: "28%",
-          price: "59,900원",
-          likes: "3.9만",
-          rating: "4.5",
-          reviews: "1.2만+",
-          link: "/product/thickened-winddetail-shirt"
-        },
-        { 
-          img: "/product-9.jpg", 
-          brand: "STRADIVARIUS",
-          title: "라운디드 크롭 데님 점퍼", 
-          discount: "32%",
-          price: "79,900원",
-          likes: "5.8만",
-          rating: "4.7",
-          reviews: "2.4만+",
-          link: "/product/rounded-cropped-denim-jumper"
-        },
-        { 
-          img: "/product-10.jpg", 
-          brand: "ZARA",
-          title: "디스트로이드 니트 탑", 
-          discount: "22%",
-          price: "39,900원",
-          likes: "4.6만",
-          rating: "4.6",
-          reviews: "1.9만+",
-          link: "/product/destroyed-knit-top"
-        },
-        { 
-          img: "/product-11.jpg", 
-          brand: "MANGO",
-          title: "퍼 트리밍 레더 봄버", 
-          discount: "38%",
-          price: "249,900원",
-          likes: "9.4만",
-          rating: "4.8",
-          reviews: "4.1만+",
-          link: "/product/fur-trimmed-leather-bomber"
-        },
-        { 
-          img: "/product-12.jpg", 
-          brand: "COS",
-          title: "오버사이즈 시어링 재킷", 
-          discount: "42%",
-          price: "199,900원",
-          likes: "8.2만",
-          rating: "4.9",
-          reviews: "3.6만+",
-          link: "/product/oversized-shearling-jacket"
-        },
-        { 
-          img: "/product-13.jpg", 
-          brand: "UNIQLO",
-          title: "울 블렌드 트렌치 코트", 
-          discount: "33%",
-          price: "189,900원",
-          likes: "11만",
-          rating: "4.8",
-          reviews: "6.3만+",
-          link: "/product/wool-blend-trench-coat"
-        },
-        { 
-          img: "/product-14.jpg", 
-          brand: "H&M",
-          title: "디스트레스드 데님 재킷", 
-          discount: "26%",
-          price: "89,900원",
-          likes: "6.5만",
-          rating: "4.7",
-          reviews: "2.8만+",
-          link: "/product/distressed-denim-jacket"
-        },
-        { 
-          img: "/product-15.jpg", 
-          brand: "PULL&BEAR",
-          title: "오버핏 후드 집업", 
-          discount: "29%",
-          price: "69,900원",
-          likes: "7.3만",
-          rating: "4.8",
-          reviews: "3.1만+",
-          link: "/product/overfit-hood-zipup"
-        },
-        { 
-          img: "/product-16.jpg", 
-          brand: "BERSHKA",
-          title: "크롭 패딩 베스트", 
-          discount: "31%",
-          price: "79,900원",
-          likes: "5.7만",
-          rating: "4.6",
-          reviews: "2.2万+",
-          link: "/product/crop-padding-vest"
-        },
-        { 
-          img: "/product-17.jpg", 
-          brand: "ZARA",
-          title: "플리츠 미디 스커트", 
-          discount: "24%",
-          price: "55,900원",
-          likes: "4.9만",
-          rating: "4.7",
-          reviews: "1.7만+",
-          link: "/product/pleats-midi-skirt"
-        },
+        { img: "/product-1.jpg", brand: "ZARA", title: "Cropped Fringe Jacket", discount: "30%", price: "89,900원", likes: "12만", rating: "4.8", reviews: "5.2만+" },
+        { img: "/product-2.jpg", brand: "MANGO", title: "Leather Wide Pants", discount: "25%", price: "129,900원", likes: "15만", rating: "4.9", reviews: "6.8만+" },
+        { img: "/product-3.jpg", brand: "COS", title: "Wide Tuck Pants", discount: "20%", price: "109,900원", likes: "9.5만", rating: "4.7", reviews: "4.3만+" },
+        { img: "/product-4.jpg", brand: "H&M", title: "Fitted Knit Top", discount: "35%", price: "39,900원", likes: "18만", rating: "4.8", reviews: "9.1만+" },
+        { img: "/product-5.jpg", brand: "UNIQLO", title: "Cargo Detail Pants", discount: "15%", price: "59,900원", likes: "14만", rating: "4.9", reviews: "7.5만+" },
+        { img: "/product-6.jpg", brand: "PULL&BEAR", title: "Half Storm Jumper", discount: "28%", price: "69,900원", likes: "10만", rating: "4.6", reviews: "4.9万+" },
+        
+        { img: "/product-7.jpg", brand: "MASSIMO DUTTI", title: "Oversized Leather Coat", discount: "32%", price: "249,900원", likes: "16万", rating: "4.9", reviews: "8.3万+" },
+        { img: "/product-8.jpg", brand: "BERSHKA", title: "Wind Detail Shirt", discount: "22%", price: "49,900원", likes: "11万", rating: "4.7", reviews: "5.6万+" },
+        { img: "/product-9.jpg", brand: "STRADIVARIUS", title: "Cropped Denim Jumper", discount: "26%", price: "79,900원", likes: "13万", rating: "4.8", reviews: "6.2万+" },
+        { img: "/product-10.jpg", brand: "ZARA", title: "Destroyed Knit Top", discount: "18%", price: "59,900원", likes: "9.8万", rating: "4.6", reviews: "4.7万+" },
+        { img: "/product-1.jpg", brand: "ARKET", title: "Ribbed Cashmere Sweater", discount: "30%", price: "189,900원", likes: "12万", rating: "4.9", reviews: "5.9万+" },
+        { img: "/product-2.jpg", brand: "WEEKDAY", title: "High Waist Denim", discount: "24%", price: "89,900원", likes: "15万", rating: "4.8", reviews: "7.3万+" },
+
+        { img: "/product-3.jpg", brand: "& OTHER STORIES", title: "Wool Blend Coat", discount: "35%", price: "219,900원", likes: "14万", rating: "4.9", reviews: "6.8万+" },
+        { img: "/product-4.jpg", brand: "MONKI", title: "Oversized Blazer", discount: "28%", price: "99,900원", likes: "11万", rating: "4.7", reviews: "5.4万+" },
+        { img: "/product-5.jpg", brand: "COS", title: "Pleated Midi Skirt", discount: "20%", price: "129,900원", likes: "10万", rating: "4.8", reviews: "4.9万+" },
+        { img: "/product-6.jpg", brand: "ZARA", title: "Textured Knit Cardigan", discount: "25%", price: "69,900원", likes: "16万", rating: "4.9", reviews: "8.1万+" },
+        { img: "/product-7.jpg", brand: "MANGO", title: "Satin Slip Dress", discount: "30%", price: "109,900원", likes: "13万", rating: "4.8", reviews: "6.5万+" },
+        { img: "/product-8.jpg", brand: "H&M", title: "Relaxed Fit Jeans", discount: "22%", price: "49,900원", likes: "18万", rating: "4.7", reviews: "9.3万+" },
+
+        { img: "/product-9.jpg", brand: "UNIQLO", title: "Heattech Turtleneck", discount: "15%", price: "29,900원", likes: "20万", rating: "4.9", reviews: "11万+" },
+        { img: "/product-10.jpg", brand: "PULL&BEAR", title: "Puffer Vest", discount: "32%", price: "79,900원", likes: "12万", rating: "4.8", reviews: "6.1万+" },
+        { img: "/product-1.jpg", brand: "BERSHKA", title: "Cropped Hoodie", discount: "26%", price: "39,900원", likes: "14万", rating: "4.7", reviews: "7.2万+" },
+        { img: "/product-2.jpg", brand: "STRADIVARIUS", title: "Wide Leg Trousers", discount: "28%", price: "59,900원", likes: "11万", rating: "4.8", reviews: "5.8万+" },
+        { img: "/product-3.jpg", brand: "MASSIMO DUTTI", title: "Silk Blend Shirt", discount: "20%", price: "149,900원", likes: "9.5万", rating: "4.9", reviews: "4.6万+" },
+        { img: "/product-4.jpg", brand: "ARKET", title: "Merino Wool Sweater", discount: "35%", price: "169,900원", likes: "13万", rating: "4.9", reviews: "6.4万+" },
+
+        { img: "/product-5.jpg", brand: "WEEKDAY", title: "Straight Denim Jacket", discount: "24%", price: "89,900원", likes: "15万", rating: "4.8", reviews: "7.6万+" },
+        { img: "/product-6.jpg", brand: "& OTHER STORIES", title: "Leather Midi Skirt", discount: "30%", price: "199,900원", likes: "10万", rating: "4.9", reviews: "5.1万+" },
+        { img: "/product-7.jpg", brand: "MONKI", title: "Oversized Sweatshirt", discount: "18%", price: "49,900원", likes: "17万", rating: "4.7", reviews: "8.9万+" },
+        { img: "/product-8.jpg", brand: "COS", title: "Tailored Wool Pants", discount: "25%", price: "139,900원", likes: "12万", rating: "4.8", reviews: "6.3万+" },
+        { img: "/product-9.jpg", brand: "ZARA", title: "Quilted Crossbody Bag", discount: "28%", price: "69,900원", likes: "14万", rating: "4.9", reviews: "7.1万+" },
+        { img: "/product-10.jpg", brand: "MANGO", title: "Chunky Knit Scarf", discount: "22%", price: "39,900원", likes: "11万", rating: "4.6", reviews: "5.5万+" },
+
+        { img: "/product-1.jpg", brand: "H&M", title: "Ribbed Tank Top", discount: "15%", price: "19,900원", likes: "19万", rating: "4.7", reviews: "10万+" },
+        { img: "/product-2.jpg", brand: "UNIQLO", title: "Ultra Light Down Jacket", discount: "32%", price: "119,900원", likes: "16万", rating: "4.9", reviews: "8.7万+" },
+        { img: "/product-3.jpg", brand: "PULL&BEAR", title: "Faux Leather Pants", discount: "26%", price: "69,900원", likes: "13万", rating: "4.8", reviews: "6.6万+" },
+        { img: "/product-4.jpg", brand: "BERSHKA", title: "Graphic Print Tee", discount: "20%", price: "29,900원", likes: "15万", rating: "4.7", reviews: "7.8万+" },
+        { img: "/product-5.jpg", brand: "STRADIVARIUS", title: "Platform Chelsea Boots", discount: "35%", price: "89,900원", likes: "12万", rating: "4.9", reviews: "6.1万+" },
+        { img: "/product-6.jpg", brand: "MASSIMO DUTTI", title: "Cashmere Blend Coat", discount: "30%", price: "349,900원", likes: "10万", rating: "4.9", reviews: "4.9万+" },
+
       ].map((item, i) => (
         <Link 
           key={i} 
-          href={item.link}
+          href="/product/sample"
           className="group relative bg-white overflow-hidden hover:shadow-lg transition-all duration-300"
         >
           {/* Heart Icon */}
@@ -430,461 +485,311 @@ export default function Home() {
       ))}
 
     </div>
-
-    {/* BOTTOM ROW - 2 LARGE FEATURED CARDS (SHORTER HEIGHT) */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      
-      {/* Large Card 3 */}
-      <Link 
-        href="/product/wool-overcoat"
-        className="group relative bg-white overflow-hidden hover:shadow-xl transition-all duration-300"
-      >
-        {/* Heart Icon */}
-        <button 
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full border border-gray-200 hover:bg-white transition-all"
-        >
-          <svg 
-            className="w-5 h-5 text-gray-700" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={1.5} 
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
-            />
-          </svg>
-        </button>
-
-        {/* Large Product Image - SHORTER */}
-        <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden">
-          <img 
-            src="/product-18.jpg" 
-            alt="WOOL OVERCOAT"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        </div>
-
-        {/* Product Info */}
-        <div className="p-5 bg-white">
-          <p className="text-xs text-gray-500 mb-1 font-medium">MASSIMO DUTTI</p>
-          <h3 className="text-base font-semibold text-[#111] mb-2 leading-tight">
-            울 블렌드 더블 오버코트
-          </h3>
-          <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-xl font-bold text-red-600">48%</span>
-            <span className="text-xl font-bold text-[#111]">359,900원</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-red-500">❤️ 15만</span>
-            <span className="text-orange-500">⭐ 4.9(6.8만+)</span>
-          </div>
-        </div>
-      </Link>
-
-      {/* Large Card 4 */}
-      <Link 
-        href="/product/cashmere-knit"
-        className="group relative bg-white overflow-hidden hover:shadow-xl transition-all duration-300"
-      >
-        {/* Heart Icon */}
-        <button 
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full border border-gray-200 hover:bg-white transition-all"
-        >
-          <svg 
-            className="w-5 h-5 text-gray-700" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={1.5} 
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
-            />
-          </svg>
-        </button>
-
-        {/* Large Product Image - SHORTER */}
-        <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden">
-          <img 
-            src="/product-19.jpg" 
-            alt="CASHMERE KNIT"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        </div>
-
-        {/* Product Info */}
-        <div className="p-5 bg-white">
-          <p className="text-xs text-gray-500 mb-1 font-medium">COS</p>
-          <h3 className="text-base font-semibold text-[#111] mb-2 leading-tight">
-            캐시미어 블렌드 터틀넥 니트
-          </h3>
-          <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-xl font-bold text-red-600">36%</span>
-            <span className="text-xl font-bold text-[#111]">159,900원</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-red-500">❤️ 9.7만</span>
-            <span className="text-orange-500">⭐ 4.8(4.5만+)</span>
-          </div>
-        </div>
-      </Link>
-
-    </div>
-
   </div>
-
 </section>
 
-{/* ===== NEW DROPS SECTION ===== */}
-<section className="w-full py-20 bg-gray-50 overflow-hidden">
-  
-  {/* Header */}
-  <div className="flex items-center justify-between px-6 mb-10 max-w-[1600px] mx-auto">
-    <h2 className="text-3xl font-semibold tracking-wide text-[#111]">
-      New Drops
+
+{/* ===== TOP 50 HAUL SECTION ===== */}
+<section className="w-full py-20 bg-gray-50 border-t border-gray-200 overflow-hidden">
+  <div className="max-w-[1600px] mx-auto px-6">
+    
+    {/* Header */}
+    <h2 className="text-3xl font-semibold mb-10 text-[#111]">
+      Top 50 for Your First StyleCast Haul
     </h2>
-    <a href="/new-drops" className="text-sm text-[#111] opacity-70 hover:opacity-100 transition">
-      View All →
-    </a>
+
+    {/* Auto-sliding carousel with CSS animation */}
+    <div className="relative">
+      <div 
+        className="flex gap-6 animate-slide-top50"
+        style={{
+          width: 'fit-content',
+        }}
+      >
+        {/* First set of products */}
+        {[
+          { 
+            img: "/product-1.jpg", 
+            brand: "LIKE THE MOST", 
+            title: "Two tuck long side over pants_charcoal",
+            originalPrice: "$51",
+            discount: "49%",
+            price: "$26"
+          },
+          { 
+            img: "/product-2.jpg", 
+            brand: "GAKKAI UNIONS", 
+            title: "Pocket gamer pigment short sleeve t-shirt khaki m...",
+            originalPrice: "$35",
+            discount: "31%",
+            price: "$24"
+          },
+          { 
+            img: "/product-3.jpg", 
+            brand: "NODU", 
+            title: "Soft henley neck round long sleeve knit [4 colors]",
+            originalPrice: "$39",
+            discount: "28%",
+            price: "$28"
+          },
+          { 
+            img: "/product-4.jpg", 
+            brand: "DRIX", 
+            title: "Special overfit short sleeve t-shirt_5 colors",
+            originalPrice: "$28",
+            discount: "32%",
+            price: "$19"
+          },
+          { 
+            img: "/product-5.jpg", 
+            brand: "MINIMALWORK", 
+            title: "Wide fit cargo pants [4 colors]",
+            originalPrice: "$45",
+            discount: "35%",
+            price: "$29"
+          },
+          { 
+            img: "/product-6.jpg", 
+            brand: "BASIC COTTON", 
+            title: "Premium heavyweight crew neck sweatshirt",
+            originalPrice: "$42",
+            discount: "40%",
+            price: "$25"
+          },
+          { 
+            img: "/product-1.jpg", 
+            brand: "LIKE THE MOST", 
+            title: "Two tuck long side over pants_charcoal",
+            originalPrice: "$51",
+            discount: "49%",
+            price: "$26"
+          },
+          { 
+            img: "/product-2.jpg", 
+            brand: "GAKKAI UNIONS", 
+            title: "Pocket gamer pigment short sleeve t-shirt khaki m...",
+            originalPrice: "$35",
+            discount: "31%",
+            price: "$24"
+          },
+        ].map((item, i) => (
+          <div 
+            key={i}
+            className="flex-shrink-0 w-[220px] group"
+          >
+            <Link href="/product/sample" className="block">
+              {/* Product Image */}
+              <div className="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden mb-3">
+                <img 
+                  src={item.img} 
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                
+                {/* Heart Icon */}
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  className="absolute bottom-4 right-4 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full border border-gray-200 hover:bg-white transition-all"
+                >
+                  <svg 
+                    className="w-5 h-5 text-gray-700" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth={1.5} 
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
+                    />
+                  </svg>
+                </button>
+
+                {/* Color Dots (for 4th item) */}
+                {i === 3 && (
+                  <div className="absolute top-4 right-4 flex flex-col gap-2">
+                    <div className="w-4 h-4 rounded-full bg-white border border-gray-300"></div>
+                    <div className="w-4 h-4 rounded-full bg-gray-300 border border-gray-400"></div>
+                    <div className="w-4 h-4 rounded-full bg-green-800 border border-gray-400"></div>
+                    <div className="w-4 h-4 rounded-full bg-gray-600 border border-gray-400"></div>
+                    <div className="w-4 h-4 rounded-full bg-black border border-gray-400"></div>
+                  </div>
+                )}
+              </div>
+
+              {/* Product Info */}
+              <div>
+                <p className="text-xs font-bold text-[#111] mb-1 uppercase">{item.brand}</p>
+                <h3 className="text-sm text-[#111] mb-2 leading-tight line-clamp-2">
+                  {item.title}
+                </h3>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-sm text-gray-400 line-through">{item.originalPrice}</span>
+                  <span className="text-sm font-bold text-red-600">{item.discount}</span>
+                </div>
+                <p className="text-lg font-bold text-red-600 mt-1">{item.price}</p>
+              </div>
+            </Link>
+          </div>
+        ))}
+
+        {/* Duplicate set for seamless infinite loop */}
+        {[
+          { 
+            img: "/product-1.jpg", 
+            brand: "LIKE THE MOST", 
+            title: "Two tuck long side over pants_charcoal",
+            originalPrice: "$51",
+            discount: "49%",
+            price: "$26"
+          },
+          { 
+            img: "/product-2.jpg", 
+            brand: "GAKKAI UNIONS", 
+            title: "Pocket gamer pigment short sleeve t-shirt khaki m...",
+            originalPrice: "$35",
+            discount: "31%",
+            price: "$24"
+          },
+          { 
+            img: "/product-3.jpg", 
+            brand: "NODU", 
+            title: "Soft henley neck round long sleeve knit [4 colors]",
+            originalPrice: "$39",
+            discount: "28%",
+            price: "$28"
+          },
+          { 
+            img: "/product-4.jpg", 
+            brand: "DRIX", 
+            title: "Special overfit short sleeve t-shirt_5 colors",
+            originalPrice: "$28",
+            discount: "32%",
+            price: "$19"
+          },
+          { 
+            img: "/product-5.jpg", 
+            brand: "MINIMALWORK", 
+            title: "Wide fit cargo pants [4 colors]",
+            originalPrice: "$45",
+            discount: "35%",
+            price: "$29"
+          },
+          { 
+            img: "/product-6.jpg", 
+            brand: "BASIC COTTON", 
+            title: "Premium heavyweight crew neck sweatshirt",
+            originalPrice: "$42",
+            discount: "40%",
+            price: "$25"
+          },
+          { 
+            img: "/product-1.jpg", 
+            brand: "LIKE THE MOST", 
+            title: "Two tuck long side over pants_charcoal",
+            originalPrice: "$51",
+            discount: "49%",
+            price: "$26"
+          },
+          { 
+            img: "/product-2.jpg", 
+            brand: "GAKKAI UNIONS", 
+            title: "Pocket gamer pigment short sleeve t-shirt khaki m...",
+            originalPrice: "$35",
+            discount: "31%",
+            price: "$24"
+          },
+        ].map((item, i) => (
+          <div 
+            key={`dup-${i}`}
+            className="flex-shrink-0 w-[220px] group"
+          >
+            <Link href="/product/sample" className="block">
+              {/* Product Image */}
+              <div className="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden mb-3">
+                <img 
+                  src={item.img} 
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                
+                {/* Heart Icon */}
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  className="absolute bottom-4 right-4 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full border border-gray-200 hover:bg-white transition-all"
+                >
+                  <svg 
+                    className="w-5 h-5 text-gray-700" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth={1.5} 
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
+                    />
+                  </svg>
+                </button>
+
+                {/* Color Dots (for 4th item) */}
+                {i === 3 && (
+                  <div className="absolute top-4 right-4 flex flex-col gap-2">
+                    <div className="w-4 h-4 rounded-full bg-white border border-gray-300"></div>
+                    <div className="w-4 h-4 rounded-full bg-gray-300 border border-gray-400"></div>
+                    <div className="w-4 h-4 rounded-full bg-green-800 border border-gray-400"></div>
+                    <div className="w-4 h-4 rounded-full bg-gray-600 border border-gray-400"></div>
+                    <div className="w-4 h-4 rounded-full bg-black border border-gray-400"></div>
+                  </div>
+                )}
+              </div>
+
+              {/* Product Info */}
+              <div>
+                <p className="text-xs font-bold text-[#111] mb-1 uppercase">{item.brand}</p>
+                <h3 className="text-sm text-[#111] mb-2 leading-tight line-clamp-2">
+                  {item.title}
+                </h3>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-sm text-gray-400 line-through">{item.originalPrice}</span>
+                  <span className="text-sm font-bold text-red-600">{item.discount}</span>
+                </div>
+                <p className="text-lg font-bold text-red-600 mt-1">{item.price}</p>
+              </div>
+            </Link>
+          </div>
+        ))}
+      </div>
+    </div>
   </div>
 
-  {/* Auto-sliding carousel */}
-  <div 
-    id="newdrops-carousel"
-    className="flex gap-6 whitespace-nowrap animate-scroll"
-  >
-    {/* First set of products */}
-    {[
-      { 
-        img: "/newdrop-1.jpg", 
-        brand: "ACNE STUDIOS",
-        title: "오버사이즈 울 블렌드 코트", 
-        discount: "30%",
-        price: "489,900원",
-        likes: "18만",
-        rating: "4.9",
-        reviews: "8.2만+",
-        link: "/product/oversized-wool-coat"
-      },
-      { 
-        img: "/newdrop-2.jpg", 
-        brand: "AMI PARIS",
-        title: "로고 크루넥 스웨터", 
-        discount: "25%",
-        price: "229,900원",
-        likes: "12만",
-        rating: "4.8",
-        reviews: "5.6만+",
-        link: "/product/logo-crewneck-sweater"
-      },
-      { 
-        img: "/newdrop-3.jpg", 
-        brand: "GANNI",
-        title: "체크 울 미니 스커트", 
-        discount: "28%",
-        price: "189,900원",
-        likes: "9.4만",
-        rating: "4.7",
-        reviews: "3.8만+",
-        link: "/product/check-wool-mini-skirt"
-      },
-      { 
-        img: "/newdrop-4.jpg", 
-        brand: "STUSSY",
-        title: "시그니처 후드 집업", 
-        discount: "22%",
-        price: "149,900원",
-        likes: "14만",
-        rating: "4.9",
-        reviews: "7.1万+",
-        link: "/product/signature-hood-zipup"
-      },
-      { 
-        img: "/newdrop-5.jpg", 
-        brand: "CARHARTT WIP",
-        title: "더블니 팬츠", 
-        discount: "20%",
-        price: "129,900원",
-        likes: "11만",
-        rating: "4.8",
-        reviews: "6.3만+",
-        link: "/product/double-knee-pants"
-      },
-      { 
-        img: "/newdrop-6.jpg", 
-        brand: "MAISON KITSUNE",
-        title: "폭스 패치 티셔츠", 
-        discount: "18%",
-        price: "89,900원",
-        likes: "8.7만",
-        rating: "4.7",
-        reviews: "4.2만+",
-        link: "/product/fox-patch-tshirt"
-      },
-      { 
-        img: "/newdrop-7.jpg", 
-        brand: "APC",
-        title: "하프문 크로스백", 
-        discount: "35%",
-        price: "319,900원",
-        likes: "13만",
-        rating: "4.9",
-        reviews: "5.9만+",
-        link: "/product/halfmoon-crossbag"
-      },
-      { 
-        img: "/newdrop-8.jpg", 
-        brand: "LEMAIRE",
-        title: "크롭 와이드 데님", 
-        discount: "32%",
-        price: "259,900원",
-        likes: "10만",
-        rating: "4.8",
-        reviews: "4.7만+",
-        link: "/product/crop-wide-denim"
-      },
-    ].map((item, i) => (
-      <Link 
-        key={i} 
-        href={item.link}
-        className="group relative bg-white overflow-hidden hover:shadow-lg transition-all duration-300 flex-shrink-0 w-[220px]"
-      >
-        {/* Heart Icon */}
-        <button 
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full border border-gray-200 hover:bg-white transition-all"
-        >
-          <svg 
-            className="w-4 h-4 text-gray-700" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={1.5} 
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
-            />
-          </svg>
-        </button>
+  {/* CSS Animation */}
+  <style jsx>{`
+    @keyframes slide-top50 {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
 
-        {/* Product Image */}
-        <div className="relative w-full aspect-[3/4] bg-gray-50 overflow-hidden">
-          <img 
-            src={item.img} 
-            alt={item.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        </div>
+    .animate-slide-top50 {
+      animation: slide-top50 40s linear infinite;
+    }
 
-        {/* Product Info */}
-        <div className="p-3 bg-white">
-          <p className="text-[10px] text-gray-500 mb-1 font-medium">{item.brand}</p>
-          <h3 className="text-xs font-semibold text-[#111] mb-1.5 leading-tight line-clamp-2">
-            {item.title}
-          </h3>
-          <div className="flex items-baseline gap-1.5 mb-1.5">
-            <span className="text-sm font-bold text-red-600">{item.discount}</span>
-            <span className="text-sm font-bold text-[#111]">{item.price}</span>
-          </div>
-          <div className="flex items-center gap-2 text-[10px]">
-            <span className="text-red-500">❤️ {item.likes}</span>
-            <span className="text-orange-500">⭐ {item.rating}({item.reviews})</span>
-          </div>
-        </div>
-      </Link>
-    ))}
-
-    {/* Duplicate set for infinite loop */}
-    {[
-      { 
-        img: "/newdrop-1.jpg", 
-        brand: "ACNE STUDIOS",
-        title: "오버사이즈 울 블렌드 코트", 
-        discount: "30%",
-        price: "489,900원",
-        likes: "18만",
-        rating: "4.9",
-        reviews: "8.2만+",
-        link: "/product/oversized-wool-coat"
-      },
-      { 
-        img: "/newdrop-2.jpg", 
-        brand: "AMI PARIS",
-        title: "로고 크루넥 스웨터", 
-        discount: "25%",
-        price: "229,900원",
-        likes: "12만",
-        rating: "4.8",
-        reviews: "5.6만+",
-        link: "/product/logo-crewneck-sweater"
-      },
-      { 
-        img: "/newdrop-3.jpg", 
-        brand: "GANNI",
-        title: "체크 울 미니 스커트", 
-        discount: "28%",
-        price: "189,900원",
-        likes: "9.4만",
-        rating: "4.7",
-        reviews: "3.8만+",
-        link: "/product/check-wool-mini-skirt"
-      },
-      { 
-        img: "/newdrop-4.jpg", 
-        brand: "STUSSY",
-        title: "시그니처 후드 집업", 
-        discount: "22%",
-        price: "149,900원",
-        likes: "14만",
-        rating: "4.9",
-        reviews: "7.1万+",
-        link: "/product/signature-hood-zipup"
-      },
-      { 
-        img: "/newdrop-5.jpg", 
-        brand: "CARHARTT WIP",
-        title: "더블니 팬츠", 
-        discount: "20%",
-        price: "129,900원",
-        likes: "11만",
-        rating: "4.8",
-        reviews: "6.3만+",
-        link: "/product/double-knee-pants"
-      },
-      { 
-        img: "/newdrop-6.jpg", 
-        brand: "MAISON KITSUNE",
-        title: "폭스 패치 티셔츠", 
-        discount: "18%",
-        price: "89,900원",
-        likes: "8.7만",
-        rating: "4.7",
-        reviews: "4.2만+",
-        link: "/product/fox-patch-tshirt"
-      },
-      { 
-        img: "/newdrop-7.jpg", 
-        brand: "APC",
-        title: "하프문 크로스백", 
-        discount: "35%",
-        price: "319,900원",
-        likes: "13만",
-        rating: "4.9",
-        reviews: "5.9만+",
-        link: "/product/halfmoon-crossbag"
-      },
-      { 
-        img: "/newdrop-8.jpg", 
-        brand: "LEMAIRE",
-        title: "크롭 와이드 데님", 
-        discount: "32%",
-        price: "259,900원",
-        likes: "10만",
-        rating: "4.8",
-        reviews: "4.7만+",
-        link: "/product/crop-wide-denim"
-      },
-    ].map((item, i) => (
-      <Link 
-        key={`dup-${i}`} 
-        href={item.link}
-        className="group relative bg-white overflow-hidden hover:shadow-lg transition-all duration-300 flex-shrink-0 w-[220px]"
-      >
-        {/* Heart Icon */}
-        <button 
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full border border-gray-200 hover:bg-white transition-all"
-        >
-          <svg 
-            className="w-4 h-4 text-gray-700" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={1.5} 
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
-            />
-          </svg>
-        </button>
-
-        {/* Product Image */}
-        <div className="relative w-full aspect-[3/4] bg-gray-50 overflow-hidden">
-          <img 
-            src={item.img} 
-            alt={item.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        </div>
-
-        {/* Product Info */}
-        <div className="p-3 bg-white">
-          <p className="text-[10px] text-gray-500 mb-1 font-medium">{item.brand}</p>
-          <h3 className="text-xs font-semibold text-[#111] mb-1.5 leading-tight line-clamp-2">
-            {item.title}
-          </h3>
-          <div className="flex items-baseline gap-1.5 mb-1.5">
-            <span className="text-sm font-bold text-red-600">{item.discount}</span>
-            <span className="text-sm font-bold text-[#111]">{item.price}</span>
-          </div>
-          <div className="flex items-center gap-2 text-[10px]">
-            <span className="text-red-500">❤️ {item.likes}</span>
-            <span className="text-orange-500">⭐ {item.rating}({item.reviews})</span>
-          </div>
-        </div>
-      </Link>
-    ))}
-
-  </div>
-
-  {/* Auto-scroll script */}
-  <script
-    dangerouslySetInnerHTML={{
-      __html: `
-        const carousel = document.getElementById("newdrops-carousel");
-        let scrollPos = 0;
-        const speed = 0.8;
-
-        function autoScroll() {
-          if (!carousel) return;
-          scrollPos += speed;
-          
-          if (scrollPos >= carousel.scrollWidth / 2) {
-            scrollPos = 0;
-          }
-          
-          carousel.scrollLeft = scrollPos;
-          requestAnimationFrame(autoScroll);
-        }
-
-        requestAnimationFrame(autoScroll);
-      `,
-    }}
-  />
-
+    .animate-slide-top50:hover {
+      animation-play-state: paused;
+    }
+  `}</style>
 </section>
 
 
