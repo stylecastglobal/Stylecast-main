@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -14,7 +14,7 @@ type SearchResult = {
   score: number;
 };
 
-export default function ScanSearchPage() {
+function ScanSearchInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const query = searchParams.get("q") || "";
@@ -25,7 +25,9 @@ export default function ScanSearchPage() {
     if (!query) return;
     const run = async () => {
       setLoading(true);
-      const res = await fetch(`/api/scanner/search?q=${encodeURIComponent(query)}`);
+      const res = await fetch(
+        `/api/scanner/search?q=${encodeURIComponent(query)}`
+      );
       const data = await res.json();
       setResults(data.results || []);
       setLoading(false);
@@ -41,7 +43,9 @@ export default function ScanSearchPage() {
 
         {loading && <p className="text-gray-500">Searching...</p>}
         {!loading && results.length === 0 && (
-          <p className="text-gray-500">No products found. Try a different search.</p>
+          <p className="text-gray-500">
+            No products found. Try a different search.
+          </p>
         )}
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -64,13 +68,25 @@ export default function ScanSearchPage() {
                 )}
               </div>
               <div className="p-4">
-                <p className="text-xs uppercase text-gray-400">{result.brand}</p>
-                <p className="font-semibold text-gray-900">{result.name}</p>
+                <p className="text-xs uppercase text-gray-400">
+                  {result.brand}
+                </p>
+                <p className="font-semibold text-gray-900">
+                  {result.name}
+                </p>
               </div>
             </button>
           ))}
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="p-10">Loading search results...</div>}>
+      <ScanSearchInner />
+    </Suspense>
   );
 }
