@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { brands } from "../brandsData";
+import { brands } from "@/app/data/brandsData";
 
 const LETTERS = [
   "A","B","C","D","E","F","G",
