@@ -1,8 +1,6 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -16,7 +14,7 @@ type SearchResult = {
   score: number;
 };
 
-export default function ScanSearchPage() {
+function ScanSearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const query = searchParams.get("q") || "";
@@ -82,5 +80,13 @@ export default function ScanSearchPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ScanSearchPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center">로딩 중...</div>}>
+      <ScanSearchContent />
+    </Suspense>
   );
 }

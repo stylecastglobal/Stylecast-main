@@ -1,9 +1,6 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
-
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import ImageUpload from "../components/ImageUpload";
 import BrushCanvas, { BrushCanvasRef } from "../components/BrushCanvas";
@@ -13,7 +10,7 @@ import SaveLook from "../components/SaveLook";
 import { useMakeupStore } from "../lib/store";
 import AutoTryOnCanvas from "../components/AutoTryOnCanvas";
 
-export default function AIMakeupStudioPage() {
+function MakeupStudioContent() {
   const searchParams = useSearchParams();
   const {
     originalImage,
@@ -150,5 +147,13 @@ export default function AIMakeupStudioPage() {
         )}
       </main>
     </div>
+  );
+}
+
+export default function AIMakeupStudioPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center">로딩 중...</div>}>
+      <MakeupStudioContent />
+    </Suspense>
   );
 }

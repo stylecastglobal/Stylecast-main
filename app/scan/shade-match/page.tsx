@@ -1,9 +1,6 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
-
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import ColorPicker from "@/src/components/tryon/ColorPicker";
 import { rgbToLab, rgbToHex } from "@/app/lib/color-analysis/colorScience";
@@ -17,7 +14,7 @@ type Match = {
   accuracy: number;
 };
 
-export default function ShadeMatchPage() {
+function ShadeMatchContent() {
   const searchParams = useSearchParams();
   const category = searchParams.get("category") || "FOUNDATION";
   const [image, setImage] = useState<string | null>(null);
@@ -131,5 +128,13 @@ export default function ShadeMatchPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ShadeMatchPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center">로딩 중...</div>}>
+      <ShadeMatchContent />
+    </Suspense>
   );
 }
