@@ -8,9 +8,8 @@ export const brands: Brand[] = [
     name: "GLOWNY",
     description:
       "Premium Korean skincare brand focused on natural glow and radiance.",
-    heroImage: "https://en.glowny.co.kr/cdn/shop/files/hero.jpg",
+    heroImage: "/glowny-brandcardpicture.jpg",
     category: ["Beauty", "Skincare"],
-    favorites: "9K",
   },
   {
     id: "aime-leon-dore",
@@ -18,10 +17,8 @@ export const brands: Brand[] = [
     name: "Aimé Leon Dore",
     description:
       "New York-based lifestyle brand blending streetwear with classic menswear.",
-    heroImage: "/brands/ald-hero.jpg",
+    heroImage: "/aimeleondore-brandcardpicture.jpg",
     category: ["Apparel", "Streetwear"],
-    badge: "TOP RATED",
-    favorites: "15K",
     trending: true,
   },
   {
@@ -29,10 +26,8 @@ export const brands: Brand[] = [
     slug: "scuffers",
     name: "Scuffers",
     description: "Comfortable, durable footwear combining style with functionality.",
-    heroImage: "/brands/scuffers-hero.jpg",
+    heroImage: "/scuffers-brandcardpicture.jpg",
     category: ["Footwear"],
-    badge: "9,999+ REVIEWS",
-    favorites: "133K",
   },
 ];
 
