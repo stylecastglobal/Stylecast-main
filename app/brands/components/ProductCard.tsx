@@ -23,11 +23,8 @@ export default function ProductCard({ product, brandSlug }: ProductCardProps) {
     product.images[0] ||
     "https://placehold.co/400x500/EEE/333?text=No+Image";
 
-  return (
-    <Link
-      href={`/products/${product.handle}?brand=${brandSlug}`}
-      className="block group"
-    >
+  const cardContent = (
+    <>
       {/* 이미지 */}
       <div className="relative aspect-[3/4] bg-gray-100 mb-3 overflow-hidden">
         <Image
@@ -54,6 +51,28 @@ export default function ProductCard({ product, brandSlug }: ProductCardProps) {
           </p>
         )}
       </div>
+    </>
+  );
+
+  if (product.officialUrl) {
+    return (
+      <a
+        href={product.officialUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block group"
+      >
+        {cardContent}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      href={`/products/${product.handle}?brand=${brandSlug}`}
+      className="block group"
+    >
+      {cardContent}
     </Link>
   );
 }

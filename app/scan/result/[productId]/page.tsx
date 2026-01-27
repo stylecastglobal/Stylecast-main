@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import ScanResultClient from "./scan-result-client";
 
@@ -10,9 +11,14 @@ export default async function ScanResultPage({ params, searchParams }: PageProps
   const { productId } = await params;
   const resolvedParams = await searchParams;
   const confidence = resolvedParams?.confidence || "";
+  const headersList = await headers();
+  const host =
+    headersList.get("x-forwarded-host") ?? headersList.get("host");
+  const proto = headersList.get("x-forwarded-proto") ?? "http";
+  const baseUrl = host ? `${proto}://${host}` : "http://localhost:3000";
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/scanner/products/${productId}`,
+    `${baseUrl}/api/scanner/products/${productId}`,
     { cache: "no-store" }
   );
 
