@@ -81,7 +81,6 @@ export default function Footer() {
               <li><Link href="/shop/new">New Arrivals</Link></li>
               <li><Link href="/shop/apparel">Apparel</Link></li>
               <li><Link href="/shop/beauty">Beauty</Link></li>
-              <li><Link href="/shop/wellness">Wellness</Link></li>
               <li><Link href="/lookbook">Lookbook</Link></li>
               <li><Link href="/scan">Scan</Link></li>
               <li><Link href="/brands">Brand Directory</Link></li>

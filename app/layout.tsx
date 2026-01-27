@@ -131,9 +131,6 @@ export default function RootLayout({
 
                 {/* MAIN LINKS */}
                 <div className="flex items-center gap-8">
-                  <Link href="/stylist" className="py-4 hover:text-gray-300">
-                    Stylist
-                  </Link>
                   <Link href="/scan" className="py-4 hover:text-gray-300">
                     Scan
                   </Link>
@@ -145,9 +142,6 @@ export default function RootLayout({
                   </Link>
                   <Link href="/beauty" className="py-4 hover:text-gray-300">
                     Beauty
-                  </Link>
-                  <Link href="/wellness" className="py-4 hover:text-gray-300">
-                    Wellness
                   </Link>
 
                   {/* ⚠️ Wishes는 기존 기능 (찜 아님) */}

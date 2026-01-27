@@ -157,7 +157,6 @@ export default function Header() {
 
           {/* MAIN NAV */}
           <div className="flex gap-8 text-sm">
-            <Link href="/stylist">Stylist</Link>
             <Link href="/scan">Scan</Link>
             <Link href="/lookbook">Lookbook</Link>
             <Link href="/shop">Apparel</Link>
