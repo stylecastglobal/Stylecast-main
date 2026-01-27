@@ -19,13 +19,6 @@ export default function BrandCard({ brand }: BrandCardProps) {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
           />
 
-          {brand.favorites && (
-            <div className="absolute top-4 right-4 flex items-center gap-1 text-white text-sm">
-              <span>♡</span>
-              <span>{brand.favorites}</span>
-            </div>
-          )}
-
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
             {brand.badge && (
               <div className="text-white text-xs mb-1 font-semibold">

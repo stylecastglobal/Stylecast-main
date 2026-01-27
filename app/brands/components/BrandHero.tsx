@@ -43,12 +43,7 @@ export default function BrandHero({ brand }: BrandHeroProps) {
             <p className="text-lg leading-relaxed opacity-95 mb-4">
               {brand.description}
             </p>
-            {brand.favorites && (
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-xl">♡</span>
-                <span className="font-medium">{brand.favorites} favorites</span>
-              </div>
-            )}
+            
           </div>
         </div>
       </div>

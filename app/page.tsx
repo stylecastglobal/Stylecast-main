@@ -242,7 +242,7 @@ export default function Home() {
                   <span className="text-sm font-bold text-[#111]">{formatPrice(item.price)}</span>
                 </div>
                 <div className="flex items-center gap-2 text-[10px]">
-                  <span className="text-red-500">❤️ {brand?.favorites ?? "—"}</span>
+                  
                   <span className="text-orange-500">⭐ Just Arrived</span>
                 </div>
               </div>
