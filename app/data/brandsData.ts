@@ -41,14 +41,6 @@ export const brands: Brand[] = [
     badge: '9,999+ REVIEWS',
     favorites: '133K',
   },
-  {
-    id: 'cheap',
-    slug: 'cheap',
-    name: 'cheap',
-    description: 'Affordable fashion essentials and everyday styles.',
-    heroImage: 'https://placehold.co/1200x1600?text=cheap',
-    category: ['Apparel'],
-  },
 ];
 
 export const getBrandById = (id: string): Brand | undefined => {
