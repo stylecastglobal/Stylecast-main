@@ -11,9 +11,6 @@ const BRAND_CONFIG: Record<string, { shopifyDomain: string }> = {
   scuffers: {
     shopifyDomain: "https://scuffers.com",
   },
-  cheap: {
-    shopifyDomain: "https://stylecastglobal.com",
-  },
 };
 export async function GET(
   _req: Request,
