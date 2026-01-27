@@ -25,15 +25,6 @@ export const brands: Brand[] = [
     trending: true,
   },
   {
-    id: "meem",
-    slug: "meem",
-    name: "ME+EM",
-    description: "Contemporary British womenswear brand for the modern woman.",
-    heroImage: "/brands/meem-hero.jpg",
-    category: ["Apparel", "Womenswear"],
-    favorites: "13K",
-  },
-  {
     id: "scuffers",
     slug: "scuffers",
     name: "Scuffers",

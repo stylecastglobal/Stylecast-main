@@ -155,56 +155,6 @@ export const products: Product[] = [
     inStock: true,
   },
 
-  // ==================== ME+EM Products ====================
-  {
-    id: 'meem-001',
-    brandId: 'meem',
-    title: 'Silk Blouse',
-    description: 'Elegant silk blouse with subtle draping.',
-    price: 225000,
-    images: [
-      'https://placehold.co/900x1200/EEE/333?text=ME%2BEM+Silk+Blouse',
-    ],
-    category: 'Apparel',
-    inStock: true,
-  },
-  {
-    id: 'meem-002',
-    brandId: 'meem',
-    title: 'Tailored Trousers',
-    description: 'Modern tailored trousers with a flattering fit.',
-    price: 195000,
-    images: [
-      'https://placehold.co/900x1200/EEE/333?text=ME%2BEM+Tailored+Trousers',
-    ],
-    category: 'Apparel',
-    inStock: true,
-  },
-  {
-    id: 'meem-003',
-    brandId: 'meem',
-    title: 'Cashmere Knit',
-    description: 'Luxurious cashmere knit sweater.',
-    price: 385000,
-    images: [
-      'https://placehold.co/900x1200/EEE/333?text=ME%2BEM+Cashmere+Knit',
-    ],
-    category: 'Apparel',
-    inStock: true,
-  },
-  {
-    id: 'meem-004',
-    brandId: 'meem',
-    title: 'Leather Tote Bag',
-    description: 'Structured leather tote for everyday elegance.',
-    price: 425000,
-    images: [
-      'https://placehold.co/900x1200/EEE/333?text=ME%2BEM+Leather+Tote',
-    ],
-    category: 'Accessories',
-    inStock: true,
-  },
-
   // ==================== Scuffers Products ====================
   {
     id: 'scuffers-001',
