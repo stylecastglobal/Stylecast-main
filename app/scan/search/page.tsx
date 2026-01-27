@@ -1,6 +1,9 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -14,7 +17,7 @@ type SearchResult = {
   score: number;
 };
 
-function ScanSearchInner() {
+export default function ScanSearchPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const query = searchParams.get("q") || "";
@@ -80,13 +83,5 @@ function ScanSearchInner() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function Page() {
-  return (
-    <Suspense fallback={<div className="p-10">Loading search results...</div>}>
-      <ScanSearchInner />
-    </Suspense>
   );
 }

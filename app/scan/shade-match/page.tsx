@@ -1,6 +1,9 @@
 "use client";
 
-import { Suspense, useState } from "react";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import ColorPicker from "@/src/components/tryon/ColorPicker";
 import { rgbToLab, rgbToHex } from "@/app/lib/color-analysis/colorScience";
@@ -14,7 +17,7 @@ type Match = {
   accuracy: number;
 };
 
-function ShadeMatchInner() {
+export default function ShadeMatchPage() {
   const searchParams = useSearchParams();
   const category = searchParams.get("category") || "FOUNDATION";
   const [image, setImage] = useState<string | null>(null);
@@ -119,9 +122,7 @@ function ShadeMatchInner() {
                   </div>
                   <div
                     className="w-full h-12 rounded-lg border mt-3"
-                    style={{
-                      backgroundColor: match.shade.hex,
-                    }}
+                    style={{ backgroundColor: match.shade.hex }}
                   />
                 </div>
               ))}
@@ -130,13 +131,5 @@ function ShadeMatchInner() {
         )}
       </div>
     </div>
-  );
-}
-
-export default function Page() {
-  return (
-    <Suspense fallback={<div className="p-10">Loading shade matcher...</div>}>
-      <ShadeMatchInner />
-    </Suspense>
   );
 }
