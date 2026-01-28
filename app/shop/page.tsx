@@ -1,250 +1,165 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import LookCarousel, { LookItem } from "../components/LookCarousel";
+import Link from "next/link";
 
 export default function ShopPage() {
-  // ======= PAGE STATE ======= //
-  const [gender, setGender] = useState<"men" | "women">("men");
-  const [budget, setBudget] = useState(500);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedGender, setSelectedGender] = useState<"all" | "men" | "women">("all");
+  
+  // Bestsellers Carousel State
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const carouselRef = useRef<NodeJS.Timeout | null>(null);
 
-  // ======= CURATED LOOKS (MEN) ======= //
-  const menLooks: LookItem[] = [
+  // Categories
+  const categories = [
+    { id: "tops", label: "Tops", count: 342 },
+    { id: "bottoms", label: "Bottoms", count: 218 },
+    { id: "outerwear", label: "Outerwear", count: 156 },
+    { id: "footwear", label: "Footwear", count: 289 },
+    { id: "accessories", label: "Accessories", count: 421 },
+    { id: "bags", label: "Bags", count: 134 },
+  ];
+
+  // Bestsellers Data (12 items for 2 slides)
+  const bestsellers = [
     {
       id: 1,
-      image: "/women-printer-1.jpg",
-      price: "$688.99",
-      tags: ["Casual", "CollegeLook", "WinterOutfit"],
-      coat: "Zara",
-      top: "Aritzia",
-      bottom: "Zara",
-      shoes: "Adidas",
-      jewelry: "Swarovski",
+      brand: "ZARA",
+      title: "Cropped Fringe Jacket",
+      originalPrice: 89900,
+      salePrice: 62930,
+      discount: 30,
+      image: "/drop-1.jpg",
+      likes: 126,
+      reviews: 4865,
     },
     {
       id: 2,
-      image: "/women-grid-1.jpg",
-      price: "$688.99",
-      tags: ["Casual", "CollegeLook"],
-      coat: "Zara",
-      top: "Aritzia",
-      bottom: "Zara",
-      shoes: "Adidas",
-      jewelry: "Swarovski",
+      brand: "MANGO",
+      title: "Leather Wide Pants",
+      originalPrice: 129900,
+      salePrice: 97425,
+      discount: 25,
+      image: "/drop-2.jpg",
+      likes: 156,
+      reviews: 4916,
     },
     {
       id: 3,
-      image: "/women-grid-4.jpg",
-      price: "$688.99",
-      tags: ["WinterStyle", "SoftMinimal"],
-      coat: "Zara",
-      top: "Aritzia",
-      bottom: "Zara",
-      shoes: "Adidas",
-      jewelry: "Swarovski",
+      brand: "COS",
+      title: "Wide Tuck Pants",
+      originalPrice: 109900,
+      salePrice: 87920,
+      discount: 20,
+      image: "/drop-3.jpg",
+      likes: 65,
+      reviews: 474,
     },
     {
       id: 4,
-      image: "/women-grid-5.jpg",
-      price: "$688.99",
-      tags: ["StreetWear", "CollegeLook"],
-      coat: "Zara",
-      top: "Aritzia",
-      bottom: "Zara",
-      shoes: "Adidas",
-      jewelry: "Swarovski",
+      brand: "H&M",
+      title: "Fitted Knit Top",
+      originalPrice: 39900,
+      salePrice: 25935,
+      discount: 35,
+      image: "/drop-6.jpg",
+      likes: 186,
+      reviews: 4819,
     },
     {
       id: 5,
-      image: "/women-grid-3.jpg",
-      price: "$688.99",
-      tags: ["Minimal", "LayeredLook"],
-      coat: "Zara",
-      top: "Aritzia",
-      bottom: "Zara",
-      shoes: "Adidas",
-      jewelry: "Swarovski",
+      brand: "UNIQLO",
+      title: "Cargo Detail Pants",
+      originalPrice: 59900,
+      salePrice: 50915,
+      discount: 15,
+      image: "/drop-7.jpg",
+      likes: 74,
+      reviews: 4975,
     },
     {
       id: 6,
-      image: "/apparel6.jpg",
-      price: "$688.99",
-      tags: ["KoreanLook", "DailyOutfit"],
-      coat: "Zara",
-      top: "Aritzia",
-      bottom: "Zara",
-      shoes: "Adidas",
-      jewelry: "Swarovski",
+      brand: "PULL&BEAR",
+      title: "Half Storm Jumper",
+      originalPrice: 64900,
+      salePrice: 46728,
+      discount: 28,
+      image: "/drop-8.jpg",
+      likes: 109,
+      reviews: 4649,
     },
-  ];
-
-  // ======= CURATED LOOKS (WOMEN) ======= //
-  const womenLooks: LookItem[] = [
     {
       id: 7,
-      image: "/look-w1.png",
-      price: "$512.00",
-      tags: ["SoftGirl", "StreetStyle"],
-      coat: "Aritzia",
-      top: "Brandy",
-      bottom: "Zara",
-      shoes: "New Balance",
-      jewelry: "Tiffany",
+      brand: "MASSIMO DUTTI",
+      title: "Oversized Leather Coat",
+      originalPrice: 249900,
+      salePrice: 169932,
+      discount: 32,
+      image: "/women-printer-1.jpg",
+      likes: 212,
+      reviews: 3865,
     },
     {
       id: 8,
-      image: "/look-w2.png",
-      price: "$498.00",
-      tags: ["Minimal", "KoreanLook"],
-      coat: "Musinsa",
-      top: "Aritzia",
-      bottom: "Uniqlo",
-      shoes: "Adidas",
-      jewelry: "Noon Jewelry",
+      brand: "BERSHKA",
+      title: "Wind Detail Screenshot",
+      originalPrice: 49900,
+      salePrice: 38922,
+      discount: 22,
+      image: "/women-grid-1.jpg",
+      likes: 89,
+      reviews: 2847,
     },
     {
       id: 9,
-      image: "/look-w1.png",
-      price: "$512.00",
-      tags: ["ChicLook", "Monochrome"],
-      coat: "Aritzia",
-      top: "Brandy",
-      bottom: "Zara",
-      shoes: "New Balance",
-      jewelry: "Tiffany",
+      brand: "STRADIVARUIS",
+      title: "Cropped Denim Jumper",
+      originalPrice: 79900,
+      salePrice: 59128,
+      discount: 26,
+      image: "/women-grid-4.jpg",
+      likes: 134,
+      reviews: 3756,
     },
     {
       id: 10,
-      image: "/look-w2.png",
-      price: "$498.00",
-      tags: ["WinterDateLook", "MinimalFit"],
-      coat: "Musinsa",
-      top: "Aritzia",
-      bottom: "Uniqlo",
-      shoes: "Adidas",
-      jewelry: "Noon Jewelry",
+      brand: "ZARA",
+      title: "Destroyed Knit Top",
+      originalPrice: 59900,
+      salePrice: 49118,
+      discount: 18,
+      image: "/women-grid-5.jpg",
+      likes: 95,
+      reviews: 2934,
     },
     {
       id: 11,
-      image: "/look-w1.png",
-      price: "$512.00",
-      tags: ["K-Fashion", "SoftMinimal"],
-      coat: "Aritzia",
-      top: "Brandy",
-      bottom: "Zara",
-      shoes: "New Balance",
-      jewelry: "Tiffany",
+      brand: "ARKET",
+      title: "Hooded Cashmere Sweater",
+      originalPrice: 189900,
+      salePrice: 132930,
+      discount: 30,
+      image: "/women-grid-3.jpg",
+      likes: 167,
+      reviews: 4123,
     },
     {
       id: 12,
-      image: "/look-w2.png",
-      price: "$498.00",
-      tags: ["CleanLook", "WarmStyle"],
-      coat: "Musinsa",
-      top: "Aritzia",
-      bottom: "Uniqlo",
-      shoes: "Adidas",
-      jewelry: "Noon Jewelry",
+      brand: "WEEKDAY",
+      title: "High Waist Denim",
+      originalPrice: 89900,
+      salePrice: 68322,
+      discount: 24,
+      image: "/apparel6.jpg",
+      likes: 203,
+      reviews: 5298,
     },
   ];
 
-  const curatedLooks = gender === "men" ? menLooks : womenLooks;
-
-  // ======= DUMMY "AI" LOOKS 생성 (지금은 프론트에서만) ======= //
-  const makeAiLooks = (baseLooks: LookItem[], budgetValue: number): LookItem[] => {
-    const clamped = Math.max(50, Math.min(budgetValue, 99999));
-    return Array.from({ length: 5 }).map((_, idx) => {
-      const base = baseLooks[idx % baseLooks.length];
-      const priceStr = `$${clamped.toLocaleString()}`;
-      return {
-        ...base,
-        id: 1000 + idx, // AI룩은 id대역 따로
-        price: priceStr,
-        tags: ["AIStyled", ...base.tags],
-      };
-    });
-  };
-
-  // 지금은 AI 대신 더미 데이터 사용
-  // 나중에 실제 AI API 붙일 때는 여기서 fetch 호출로 교체하면 됨.
-  // ex) const aiLooks = await fetch("/api/generateOutfits", { ... })
-  const aiLooks = makeAiLooks(curatedLooks, budget);
-
-  // 캐러셀에 보여줄 전체 룩 (curated + "AI")
-  const allLooks = [...curatedLooks, ...aiLooks];
-
-  // ======= NEW DROPS DATA ======= //
-  const newDropsMen = [
-    {
-      id: 1,
-      title: "Wool Blend Coat",
-      img: "/drop-1.jpg",
-      price: 89900,
-      sale: 20,
-      likes: 728,
-      reviews: 1240,
-      rating: 5.0,
-    },
-    {
-      id: 2,
-      title: "Minimal Grey Coat",
-      img: "/drop-2.jpg",
-      price: 120000,
-      sale: 28,
-      likes: 512,
-      reviews: 890,
-      rating: 4.9,
-    },
-    {
-      id: 3,
-      title: "Classic Wool Coat",
-      img: "/drop-3.jpg",
-      price: 159900,
-      sale: 20,
-      likes: 319,
-      reviews: 620,
-      rating: 4.8,
-    },
-  ];
-
-  const newDropsWomen = [
-    {
-      id: 6,
-      title: "Soft Beige Coat",
-      img: "/drop-6.jpg",
-      price: 129000,
-      sale: 30,
-      likes: 980,
-      reviews: 2200,
-      rating: 5.0,
-    },
-    {
-      id: 7,
-      title: "Premium Long Coat",
-      img: "/drop-7.jpg",
-      price: 168000,
-      sale: 25,
-      likes: 600,
-      reviews: 1300,
-      rating: 4.9,
-    },
-    {
-      id: 8,
-      title: "Winter Warm Coat",
-      img: "/drop-8.jpg",
-      price: 149000,
-      sale: 18,
-      likes: 441,
-      reviews: 860,
-      rating: 4.7,
-    },
-  ];
-
-  const activeDrops = gender === "men" ? newDropsMen : newDropsWomen;
-
-  // New Drops 위시리스트 상태
+  // Wishlist state
   const [wishlist, setWishlist] = useState<number[]>([]);
   const toggleWishlist = (id: number) => {
     setWishlist((prev) =>
@@ -252,133 +167,391 @@ export default function ShopPage() {
     );
   };
 
+  // Auto-slide carousel
+  useEffect(() => {
+    if (!isHovered) {
+      carouselRef.current = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % 2); // 2 slides (0 and 1)
+      }, 5000); // Change every 5 seconds
+    }
+
+    return () => {
+      if (carouselRef.current) {
+        clearInterval(carouselRef.current);
+      }
+    };
+  }, [isHovered]);
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % 2);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + 2) % 2);
+  };
+
   return (
-    <section className="min-h-screen w-full bg-white pt-32 px-6 md:px-12 lg:px-20 text-[#111]">
+    <div className="min-h-screen bg-white">
+    
 
-      {/* Title */}
-      <h1 className="text-4xl md:text-5xl font-semibold tracking-tight mb-10">
-        Apparel
-      </h1>
-
-      {/* Style by Occasion */}
-      <h2 className="text-xl font-semibold mb-4">Style by Occasion</h2>
-
-      <div className="flex flex-wrap gap-4 mb-10">
-        {[
-          "Office Outfits",
-          "College Look",
-          "Date Look",
-          "Night-Out Look",
-          "Vacation Look",
-        ].map((label) => (
-          <button
-            key={label}
-            className="px-6 py-2 border rounded-full text-sm hover:bg-black hover:text-white transition"
-          >
-            #{label}
-          </button>
-        ))}
-
-        {/* Gender Filter */}
-        <div className="flex ml-auto gap-3">
-          <button
-            onClick={() => setGender("men")}
-            className={`px-5 py-2 border rounded-full transition ${
-              gender === "men" ? "bg-black text-white" : ""
-            }`}
-          >
-            Men
-          </button>
-
-          <button
-            onClick={() => setGender("women")}
-            className={`px-5 py-2 border rounded-full transition ${
-              gender === "women" ? "bg-black text-white" : ""
-            }`}
-          >
-            Women
-          </button>
-        </div>
-      </div>
-
-      {/* Build Your Look */}
-      <div className="flex items-center justify-between mb-2">
-        <h2 className="text-xl font-semibold">Build Your Look</h2>
-        <Link href="#" className="text-sm underline">
-          Explore More &gt;
-        </Link>
-      </div>
-
-      <p className="text-gray-500 text-sm mb-4">
-        Select your budget and discover a curated outfit made for you.
-      </p>
-
-      {/* Budget Slider */}
-      <input
-        type="range"
-        min="50"
-        max="99999"
-        value={budget}
-        onChange={(e) => setBudget(Number(e.target.value))}
-        className="w-full accent-black mb-3"
-      />
-
-      <p className="text-right text-sm text-gray-600 mb-6 font-medium">
-        Selected Budget:{" "}
-        <span className="font-semibold">${budget.toLocaleString()}</span>
-      </p>
-
-      {/* Carousel (curated + dummy AI looks) */}
-      <LookCarousel items={allLooks} />
-
-      {/* New Drops */}
-      <div className="flex items-center justify-between mt-16 mb-6">
-        <h2 className="text-xl font-semibold">New Drops</h2>
-        <Link href="#" className="text-sm underline">
-          Explore More &gt;
-        </Link>
-      </div>
-
-      {/* New Drops Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-        {activeDrops.map((item) => (
-          <div key={item.id} className="cursor-pointer">
-            <div className="relative w-full aspect-[3/4] bg-gray-100 rounded-xl overflow-hidden">
-              <Image
-                src={item.img}
-                alt={item.title}
-                fill
-                className="object-cover"
-              />
-
-              {/* Wishlist Heart */}
+      {/* Hero Section with Categories */}
+      <section className="pt-24 pb-16 px-6 md:px-12 lg:px-20 border-b border-gray-200">
+        <div className="max-w-[1600px] mx-auto">
+          {/* Gender Filter */}
+          <div className="flex justify-end mb-12 gap-1">
+            {["all", "men", "women"].map((gender) => (
               <button
-                onClick={() => toggleWishlist(item.id)}
-                className="absolute top-2 right-2 text-xl"
+                key={gender}
+                onClick={() => setSelectedGender(gender as any)}
+                className={`px-6 py-1.5 text-xs uppercase tracking-[0.2em] transition-all ${
+                  selectedGender === gender
+                    ? "bg-black text-white"
+                    : "text-gray-400 hover:text-black"
+                }`}
               >
-                {wishlist.includes(item.id) ? "❤️" : "♡"}
+                {gender}
+              </button>
+            ))}
+          </div>
+
+          {/* Shop by Categories */}
+          <h1 className="text-xs uppercase tracking-[0.25em] text-gray-400 mb-8 font-semibold">
+            Shop by Category
+          </h1>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-gray-200">
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`bg-white p-8 text-left transition-all hover:bg-gray-50 group ${
+                  selectedCategory === cat.id ? "bg-black text-white" : ""
+                }`}
+              >
+                <div className="flex flex-col h-full justify-between">
+                  <div>
+                    <h3
+                      className={`text-2xl mb-2 font-semibold tracking-tight ${
+                        selectedCategory === cat.id ? "text-white" : "text-black"
+                      }`}
+                    >
+                      {cat.label}
+                    </h3>
+                    <p
+                      className={`text-xs tracking-[0.2em] font-medium ${
+                        selectedCategory === cat.id
+                          ? "text-gray-300"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {cat.count} items
+                    </p>
+                  </div>
+                  <div
+                    className={`mt-6 text-[11px] uppercase tracking-[0.25em] font-semibold ${
+                      selectedCategory === cat.id
+                        ? "text-white"
+                        : "text-black opacity-0 group-hover:opacity-100"
+                    } transition-opacity`}
+                  >
+                    Browse →
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bestsellers Carousel Section */}
+      <section className="py-16 px-6 md:px-12 lg:px-20">
+        <div className="max-w-[1600px] mx-auto">
+          {/* Section Header */}
+          <div className="flex justify-between items-center mb-8">
+            <div className="flex items-baseline gap-4">
+              <h2 className="text-2xl font-normal">Bestsellers</h2>
+              <Link
+                href="#"
+                className="text-xs text-gray-500 hover:text-black transition-colors"
+              >
+                View All →
+              </Link>
+            </div>
+
+            {/* Manual Arrow Buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={prevSlide}
+                className="w-10 h-10 border border-gray-300 hover:border-black hover:bg-black hover:text-white transition-all flex items-center justify-center"
+              >
+                ←
+              </button>
+              <button
+                onClick={nextSlide}
+                className="w-10 h-10 border border-gray-300 hover:border-black hover:bg-black hover:text-white transition-all flex items-center justify-center"
+              >
+                →
               </button>
             </div>
+          </div>
 
-            <p className="text-sm mt-3 font-medium">{item.title}</p>
+          {/* Carousel Container */}
+          <div
+            className="relative overflow-hidden"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <div
+              className="flex transition-transform duration-700 ease-in-out"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {/* Slide 1 (Items 0-5) */}
+              <div className="w-full flex-shrink-0">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                  {bestsellers.slice(0, 6).map((item) => (
+                    <Link
+                      key={item.id}
+                      href="#"
+                      className="group block"
+                    >
+                      {/* Product Image */}
+                      <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden mb-3">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        
+                        {/* Wishlist Heart Button */}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleWishlist(item.id);
+                          }}
+                          className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
+                        >
+                          {wishlist.includes(item.id) ? "❤️" : "♡"}
+                        </button>
+                      </div>
 
-            <p className="text-[13px] text-black font-semibold mt-1">
-              ₩{item.price.toLocaleString()}
-            </p>
+                      {/* Product Info */}
+                      <div className="space-y-1">
+                        <p className="text-xs text-gray-500 font-medium">
+                          {item.brand}
+                        </p>
+                        <h3 className="text-sm font-normal line-clamp-1">
+                          {item.title}
+                        </h3>
+                        
+                        {/* Price */}
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold text-red-600">
+                            {item.discount}%
+                          </span>
+                          <span className="text-sm font-bold">
+                            {item.salePrice.toLocaleString()}원
+                          </span>
+                        </div>
+                        
+                        <p className="text-xs text-gray-400 line-through">
+                          {item.originalPrice.toLocaleString()}원
+                        </p>
 
-            <p className="text-[12px] text-red-600 mt-0.5">
-              {item.sale}% off
-            </p>
+                        {/* Stats */}
+                        <div className="flex items-center gap-3 pt-1">
+                          <span className="text-xs text-gray-500">
+                            ♡ {item.likes}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            ★ {item.reviews.toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
-            <div className="flex items-center gap-3 mt-1">
-              <span className="text-[12px] text-gray-600">❤️ {item.likes}</span>
-              <span className="text-[12px] text-gray-600">
-                ⭐ {item.reviews.toLocaleString()} ({item.rating})
-              </span>
+              {/* Slide 2 (Items 6-11) */}
+              <div className="w-full flex-shrink-0">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                  {bestsellers.slice(6, 12).map((item) => (
+                    <Link
+                      key={item.id}
+                      href="#"
+                      className="group block"
+                    >
+                      {/* Product Image */}
+                      <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden mb-3">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        
+                        {/* Wishlist Heart Button */}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleWishlist(item.id);
+                          }}
+                          className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
+                        >
+                          {wishlist.includes(item.id) ? "❤️" : "♡"}
+                        </button>
+                      </div>
+
+                      {/* Product Info */}
+                      <div className="space-y-1">
+                        <p className="text-xs text-gray-500 font-medium">
+                          {item.brand}
+                        </p>
+                        <h3 className="text-sm font-normal line-clamp-1">
+                          {item.title}
+                        </h3>
+                        
+                        {/* Price */}
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold text-red-600">
+                            {item.discount}%
+                          </span>
+                          <span className="text-sm font-bold">
+                            {item.salePrice.toLocaleString()}원
+                          </span>
+                        </div>
+                        
+                        <p className="text-xs text-gray-400 line-through">
+                          {item.originalPrice.toLocaleString()}원
+                        </p>
+
+                        {/* Stats */}
+                        <div className="flex items-center gap-3 pt-1">
+                          <span className="text-xs text-gray-500">
+                            ♡ {item.likes}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            ★ {item.reviews.toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Slide Indicators */}
+            <div className="flex justify-center gap-2 mt-6">
+              {[0, 1].map((index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    currentSlide === index
+                      ? "bg-black w-8"
+                      : "bg-gray-300 hover:bg-gray-400"
+                  }`}
+                />
+              ))}
             </div>
           </div>
-        ))}
-      </div>
-    </section>
+        </div>
+      </section>
+
+      {/* Product Grid Section (Musinsa Style) */}
+      <section className="py-8 px-6 md:px-12 lg:px-20 bg-white">
+        <div className="max-w-[1600px] mx-auto">
+          {/* Filter Bar */}
+          <div className="flex items-center justify-between mb-6 py-5 border-b border-gray-200">
+            <div className="flex gap-8">
+              <button className="text-base hover:text-black transition-colors flex items-center gap-2 font-normal">
+                Product <span className="text-xs">▼</span>
+              </button>
+              <button className="text-base hover:text-black transition-colors flex items-center gap-2 font-normal">
+                Size <span className="text-xs">▼</span>
+              </button>
+              <button className="text-base hover:text-black transition-colors flex items-center gap-2 font-normal">
+                Color <span className="text-xs">▼</span>
+              </button>
+            </div>
+            <button className="text-base text-black hover:opacity-70 transition-opacity flex items-center gap-2 font-normal">
+              Sort by: Popular <span className="text-xs">▼</span>
+            </button>
+          </div>
+
+          {/* Product Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {bestsellers.map((item) => (
+              <Link
+                key={item.id}
+                href="#"
+                className="group block"
+              >
+                {/* Product Image */}
+                <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden mb-3">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  
+                  {/* Wishlist Heart Button */}
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleWishlist(item.id);
+                    }}
+                    className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
+                  >
+                    {wishlist.includes(item.id) ? "❤️" : "♡"}
+                  </button>
+                </div>
+
+                {/* Product Info */}
+                <div className="space-y-1">
+                  <p className="text-xs text-gray-500 font-medium">
+                    {item.brand}
+                  </p>
+                  <h3 className="text-sm font-normal line-clamp-1">
+                    {item.title}
+                  </h3>
+                  
+                  {/* Price */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-red-600">
+                      {item.discount}%
+                    </span>
+                    <span className="text-sm font-bold">
+                      {item.salePrice.toLocaleString()}원
+                    </span>
+                  </div>
+                  
+                  <p className="text-xs text-gray-400 line-through">
+                    {item.originalPrice.toLocaleString()}원
+                  </p>
+
+                  {/* Stats */}
+                  <div className="flex items-center gap-3 pt-1">
+                    <span className="text-xs text-gray-500">
+                      ♡ {item.likes}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      ★ {item.reviews.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

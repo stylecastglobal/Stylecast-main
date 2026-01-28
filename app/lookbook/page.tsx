@@ -2,54 +2,10 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { gridLookbooks, type LookbookItem } from "./lookbookData";
 
 // Gender type
 type Gender = "women" | "men";
-
-// Printer lookbook data (what goes in the printer)
-const printerLookbooks = {
-  women: [
-    "/women-printer-1.jpg",
-    "/women-printer-2.jpg",
-    "/women-printer-3.jpg",
-    "/women-printer-4.jpg",
-    "/women-printer-5.jpg",
-  ],
-  men: [
-    "/men-printer-1.jpg",
-    "/men-printer-2.jpg",
-    "/men-printer-3.jpg",
-    "/men-printer-4.jpg",
-    "/men-printer-5.jpg",
-  ],
-};
-
-// Grid lookbook data (separate from printer)
-const gridLookbooks = {
-  women: [
-    { id: 1, title: "Casual", image: "/women-grid-1.jpg", season: "Winter 2025" },
-    { id: 2, title: "Airport Outfit", image: "/women-grid-2.jpg", season: "Winter 2025" },
-    { id: 3, title: "Office Ready", image: "/women-grid3.jpg", season: "Winter 2025" },
-    { id: 4, title: "Weekend Vibes", image: "/women-grid-4.jpg", season: "Winter 2025" },
-    { id: 5, title: "Date Night", image: "/women-grid-5.jpg", season: "Winter 2025" },
-    { id: 6, title: "Street Style", image: "/women-grid-6.jpg", season: "Winter 2025" },
-    { id: 7, title: "Cozy Layers", image: "/women-grid-7.jpg", season: "Winter 2025" },
-    { id: 8, title: "Athletic Edge", image: "/women-grid-8.jpg", season: "Winter 2025" },
-    { id: 9, title: "Classic Elegance", image: "/women-grid-9.jpg", season: "Winter 2025" },
-  ],
-  men: [
-    { id: 1, title: "Sharp Tailored", image: "/men-grid-1.jpg", season: "Winter 2025" },
-    { id: 2, title: "Casual Friday", image: "/men-grid-2.jpg", season: "Winter 2025" },
-    { id: 3, title: "Business Pro", image: "/men-grid-3.jpg", season: "Winter 2025" },
-    { id: 4, title: "Weekend Relaxed", image: "/men-grid-4.jpg", season: "Winter 2025" },
-    { id: 5, title: "Evening Sophisticated", image: "/men-grid-5.jpg", season: "Winter 2025" },
-    { id: 6, title: "Urban Street", image: "/men-grid-6.jpg", season: "Winter 2025" },
-    { id: 7, title: "Warm Layers", image: "/men-grid-7.jpg", season: "Winter 2025" },
-    { id: 8, title: "Sport Luxe", image: "/men-grid-8.jpg", season: "Winter 2025" },
-    { id: 9, title: "Timeless Classic", image: "/men-grid-9.jpg", season: "Winter 2025" },
-  ],
-};
 
 // Row titles for the 6 horizontal rows
 const rowTitles = [
@@ -62,86 +18,48 @@ const rowTitles = [
 ];
 
 export default function Lookbook() {
-  const router = useRouter();
-  
   // Gender state
   const [selectedGender, setSelectedGender] = useState<Gender>("women");
-
-  const [currentPrint, setCurrentPrint] = useState(0);
-  const [isPrinting, setIsPrinting] = useState(false);
-  const [printedPhoto, setPrintedPhoto] = useState<number | null>(null);
-  const [isFalling, setIsFalling] = useState(false);
-  const [lightsOn, setLightsOn] = useState(true);
-
-  const [showDetails, setShowDetails] = useState(false);
-  const [selectedOutfit, setSelectedOutfit] = useState<number | null>(null);
+  const [isSubmitOpen, setIsSubmitOpen] = useState(false);
+  const [activeLookbook, setActiveLookbook] = useState<LookbookItem | null>(null);
+  const [submitComplete, setSubmitComplete] = useState(false);
+  const [productLinks, setProductLinks] = useState<string[]>([""]);
+  const [lookbookLink, setLookbookLink] = useState("");
+  const [lookbookPdf, setLookbookPdf] = useState<File | null>(null);
+  const [submitError, setSubmitError] = useState("");
 
   // Carousel index per row (6 rows)
   const [rowIndices, setRowIndices] = useState<number[]>([0, 0, 0, 0, 0, 0]);
 
   // Get current lookbooks based on gender
-  const currentPrinterLookbooks = printerLookbooks[selectedGender];
   const currentGridLookbooks = gridLookbooks[selectedGender];
 
+  // Reset row carousels when gender changes
   useEffect(() => {
-    const interval = setInterval(() => setLightsOn((p) => !p), 800);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Reset printer + row carousels when gender changes
-  useEffect(() => {
-    setCurrentPrint(0);
-    setPrintedPhoto(null);
-    setIsFalling(false);
-    setIsPrinting(false);
     setRowIndices([0, 0, 0, 0, 0, 0]);
   }, [selectedGender]);
 
-  const printerSound = () => {
-    const audio = new Audio(
-      "https://cdn.pixabay.com/download/audio/2022/03/15/audio_d1718ab41b.mp3?filename=printer-cutting-paper-43258.mp3"
-    );
-    audio.volume = 0.5;
-    audio.play().catch(() => {});
-  };
-
-  const handlePrint = () => {
-    if (isPrinting) return;
-
-    if (printedPhoto !== null) {
-      setIsFalling(true);
-      setTimeout(() => {
-        setPrintedPhoto(null);
-        setIsFalling(false);
-        setCurrentPrint((c) => (c + 1) % currentPrinterLookbooks.length);
-      }, 800);
-      return;
-    }
-
-    setIsPrinting(true);
-    printerSound();
-
-    setTimeout(() => {
-      setPrintedPhoto(currentPrint);
-      setIsPrinting(false);
-    }, 2800);
-  };
-
-  const handlePhotoClick = () => {
-    if (printedPhoto !== null) {
-      setSelectedOutfit(printedPhoto);
-      setShowDetails(true);
-    }
-  };
-
   const handleLookbookClick = (id: number) => {
-    router.push(`/lookbook/${selectedGender}/${id}`);
+    const next = currentGridLookbooks.find((item) => item.id === id) ?? null;
+    setActiveLookbook(next);
   };
 
-  // Build 6 rows, each intended to show 3 items (Option C: rows 4–6 empty until you add more)
+  const parsePrice = (price: string) => {
+    const normalized = Number(price.replace(/[^0-9.]/g, ""));
+    return Number.isFinite(normalized) ? normalized : 0;
+  };
+
+  const formatPrice = (value: number) =>
+    new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    }).format(value);
+
+  // Build 6 rows, each intended to show 4 items
   const rows = Array.from({ length: 6 }, (_, i) => {
-    const start = i * 3;
-    return currentGridLookbooks.slice(start, start + 3);
+    const start = i * 4;
+    return currentGridLookbooks.slice(start, start + 4);
   });
 
   const handlePrev = (rowIndex: number) => {
@@ -168,11 +86,29 @@ export default function Lookbook() {
 
   return (
     <main className="min-h-screen bg-white text-[#111]">
-      {/* TITLE SECTION */}
-      <section className="w-full pt-24 pb-8 text-center">
-        <h1 className="text-[3.3rem] md:text-[4.4rem] font-semibold tracking-tight">
-          LOOKBOOK
-        </h1>
+      {/* Submit CTA */}
+      <section className="w-full px-12 pt-20 pb-6">
+        <div className="max-w-[1400px] mx-auto flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between bg-gray-50 border border-gray-200 rounded-2xl px-6 py-5">
+          <div>
+            <h2 className="text-lg font-semibold text-black">Create your lookbook</h2>
+            <p className="text-sm text-gray-600">
+              Submissions are reviewed first. Approved lookbooks will appear here.
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              setIsSubmitOpen(true);
+              setSubmitComplete(false);
+              setProductLinks([""]);
+              setLookbookLink("");
+              setLookbookPdf(null);
+              setSubmitError("");
+            }}
+            className="self-start sm:self-auto bg-black text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-900 transition-colors"
+          >
+            Submit a Lookbook
+          </button>
+        </div>
       </section>
 
       {/* GENDER TOGGLE */}
@@ -201,148 +137,9 @@ export default function Lookbook() {
         </div>
       </section>
 
-      {/* MAIN CONTENT: PRINTER + LOOKBOOK GRID */}
-      <section className="w-full flex gap-12 px-12 pb-32">
-        
-        {/* LEFT: PRINTER (1/3 width) */}
-        <div className="w-1/3 flex flex-col items-center">
-          <div className="mb-6 text-center">
-            <p className="text-gray-800 text-lg font-medium">
-              StyleCast weekly lookbooks are now up.
-            </p>
-            <p className="text-gray-500 text-sm max-w-xs mt-2 leading-relaxed mx-auto">
-              Print this week&apos;s curated outfits as receipt-style snapshots
-              you can save, screenshot, or share.
-            </p>
-          </div>
-
-          <div className="w-full max-w-md">
-            {/* Printer Head */}
-            <div className="relative mx-auto h-16 w-full rounded-full bg-gradient-to-b from-[#f7f7f7] via-[#d9d9d9] to-[#b9b9b9] border border-[#cfcfcf] shadow-[0_10px_25px_rgba(0,0,0,0.18)] flex items-center px-8">
-              <div className="absolute inset-[3px] rounded-full bg-gradient-to-b from-[#fdfdfd] via-[#dcdcdc] to-[#b5b5b5]" />
-              <div className="relative w-full h-3 rounded-full bg-gradient-to-b from-[#4a4a4a] to-[#2b2b2b] shadow-inner" />
-
-              <div className="absolute right-8 top-1/2 -translate-y-1/2 flex gap-2">
-                <div
-                  className={`h-2.5 w-2.5 rounded-full transition-all duration-500 ${
-                    lightsOn
-                      ? "bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.7)]"
-                      : "bg-green-700/40"
-                  }`}
-                />
-                <div
-                  className={`h-2.5 w-2.5 rounded-full transition-all duration-500 ${
-                    !lightsOn
-                      ? "bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.7)]"
-                      : "bg-blue-700/40"
-                  }`}
-                />
-              </div>
-            </div>
-
-            {/* Printer Body */}
-            <div className="relative mt-4 rounded-[28px] bg-[#f0f0f0] border border-[#dedede] px-6 pb-8 pt-6 shadow-[0_18px_40px_rgba(0,0,0,0.16)]">
-              <div className="mb-6">
-                <div className="rounded-2xl bg-[#f7f7f7] border border-[#dedede] p-3 shadow-inner">
-                  <div className="rounded-xl bg-black px-4 py-2 text-center">
-                    <p className="text-[11px] text-white tracking-[0.26em] font-mono">
-                      PHOTO {currentPrint + 1}/{currentPrinterLookbooks.length}
-                    </p>
-
-                    {isPrinting && (
-                      <div className="mt-2 flex justify-center gap-1">
-                        <span className="queue-dot" />
-                        <span className="queue-dot delay-150" />
-                        <span className="queue-dot delay-300" />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="relative h-[420px] rounded-2xl bg-[#161616] overflow-hidden border border-[#232323]">
-                <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-black/60 to-transparent pointer-events-none" />
-                <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-black/60 to-transparent pointer-events-none" />
-                <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/80 to-transparent pointer-events-none z-10" />
-
-                {isPrinting && (
-                  <div
-                    className="absolute left-1/2 top-0 w-[260px] bg-white rounded-md overflow-hidden shadow-xl"
-                    style={{
-                      transform: "translate(-50%, -110%)",
-                      animation:
-                        "printDown 2.8s cubic-bezier(0.4,0,0.2,1) forwards",
-                    }}
-                  >
-                    <ReceiptContent
-                      outfitSrc={currentPrinterLookbooks[currentPrint]}
-                      index={currentPrint}
-                    />
-                  </div>
-                )}
-
-                {!isPrinting && printedPhoto !== null && (
-                  <div
-                    onClick={handlePhotoClick}
-                    className={`absolute left-1/2 top-1/2 w-[260px] bg-white rounded-md overflow-hidden cursor-pointer transition-transform duration-200 hover:scale-[1.02] ${
-                      isFalling ? "animate-fall-out" : ""
-                    }`}
-                    style={{
-                      transform: "translate(-50%, -50%)",
-                      filter:
-                        "drop-shadow(0 18px 40px rgba(0,0,0,0.35))",
-                    }}
-                  >
-                    <ReceiptContent
-                      outfitSrc={currentPrinterLookbooks[printedPhoto]}
-                      index={printedPhoto}
-                    />
-                  </div>
-                )}
-
-                {!isPrinting && printedPhoto === null && (
-                  <div className="absolute left-1/2 -top-[35%] w-[260px] opacity-15">
-                    <div
-                      className="bg-white rounded-md overflow-hidden"
-                      style={{ transform: "translateX(-50%)" }}
-                    >
-                      <ReceiptContent
-                        outfitSrc={currentPrinterLookbooks[currentPrint]}
-                        index={currentPrint}
-                        minimal
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <button
-                onClick={handlePrint}
-                disabled={isPrinting}
-                className={`mt-8 w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all ${
-                  isPrinting
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-black text-white hover:bg-[#222] shadow-lg"
-                }`}
-              >
-                {isPrinting
-                  ? "Printing..."
-                  : printedPhoto !== null
-                  ? "Print Next Outfit"
-                  : "Print Outfit"}
-              </button>
-
-              <p className="mt-3 text-center text-sm text-gray-600">
-                {printedPhoto === null
-                  ? "Click to print your first outfit receipt."
-                  : "Click the printed receipt for details, or print the next outfit."}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* RIGHT: LOOKBOOK GRID (2/3 width) → now 6 titled rows with arrows */}
-        <div className="w-2/3 space-y-16">
+      {/* MAIN CONTENT: LOOKBOOK GRID */}
+      <section className="w-full px-12 pb-32">
+        <div className="w-full space-y-16">
           {rows.map((items, rowIndex) => (
             <div key={rowIndex}>
               {/* Row title */}
@@ -360,9 +157,9 @@ export default function Lookbook() {
                   ‹
                 </button>
 
-                <div className="grid grid-cols-3 gap-6">
+                <div className="grid grid-cols-4 gap-6">
                   {items.length === 0 ? (
-                    <div className="col-span-3 text-sm text-gray-300 italic">
+                    <div className="col-span-4 text-sm text-gray-300 italic">
                       No outfits yet for this category.
                     </div>
                   ) : (
@@ -418,179 +215,262 @@ export default function Lookbook() {
         </div>
       </section>
 
-      {/* OUTFIT DETAILS MODAL */}
-      {showDetails && selectedOutfit !== null && (
+      {/* Submit Modal */}
+      {isSubmitOpen && (
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setShowDetails(false)}
+          onClick={() => setIsSubmitOpen(false)}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl p-8 max-w-xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl"
           >
-            <h2 className="text-2xl font-bold mb-4">
-              Outfit #{selectedOutfit + 1}
-            </h2>
-
-            <div className="relative w-full aspect-[3/4] mb-6 rounded-2xl overflow-hidden">
-              <Image
-                src={currentPrinterLookbooks[selectedOutfit]}
-                alt="Outfit"
-                fill
-                className="object-cover"
-              />
+            <div className="flex items-start justify-between mb-2">
+              <div>
+                <h3 className="text-xl font-semibold">Submit your lookbook</h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  Submissions are reviewed first. Approved lookbooks will appear on this page.
+                </p>
+              </div>
+              <button
+                onClick={() => setIsSubmitOpen(false)}
+                className="text-gray-400 hover:text-black"
+                aria-label="Close"
+              >
+                ✕
+              </button>
             </div>
 
-            <div className="space-y-3">
-              <div className="border-t-2 border-dashed border-gray-300 pt-4">
-                <h3 className="font-semibold text-lg mb-3">
-                  Product Details
-                </h3>
-
-                <div className="space-y-3">
-                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl text-sm">
-                    <span>Top</span>
-                    <span className="text-gray-600">
-                      StyleCast Collection
-                    </span>
+            {submitComplete ? (
+              <div className="rounded-2xl bg-gray-50 border border-gray-200 p-5 text-sm text-gray-700">
+                Thanks! Your submission is pending review. Once approved, it will appear
+                on this page.
+              </div>
+            ) : (
+              <form
+                className="mt-6 space-y-5"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  const hasLink = lookbookLink.trim().length > 0;
+                  const hasPdf = Boolean(lookbookPdf);
+                  if (!hasLink && !hasPdf) {
+                    setSubmitError("Please provide a lookbook link or upload a PDF.");
+                    return;
+                  }
+                  setSubmitError("");
+                  setSubmitComplete(true);
+                }}
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-semibold text-gray-600">Name</label>
+                    <input
+                      required
+                      className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm"
+                      placeholder="Your name"
+                    />
                   </div>
-
-                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl text-sm">
-                    <span>Bottom</span>
-                    <span className="text-gray-600">Premium Line</span>
-                  </div>
-
-                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl text-sm">
-                    <span>Accessories</span>
-                    <span className="text-gray-600">
-                      Curated Selection
-                    </span>
+                  <div>
+                    <label className="text-xs font-semibold text-gray-600">Email</label>
+                    <input
+                      required
+                      type="email"
+                      className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm"
+                      placeholder="you@email.com"
+                    />
                   </div>
                 </div>
-              </div>
 
+                <div>
+                  <label className="text-xs font-semibold text-gray-600">
+                    Lookbook link (optional)
+                  </label>
+                  <input
+                    type="url"
+                    value={lookbookLink}
+                    onChange={(event) => setLookbookLink(event.target.value)}
+                    className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm"
+                    placeholder="Drive, Notion, or portfolio link"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-gray-600">
+                    Upload lookbook PDF (optional)
+                  </label>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    onChange={(event) => {
+                      const file = event.target.files?.[0] || null;
+                      setLookbookPdf(file);
+                    }}
+                    className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Provide either a link or a PDF. Only one is required.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-semibold text-gray-600">
+                      Product links (required)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setProductLinks((prev) => [...prev, ""])}
+                      className="text-xs font-semibold text-black hover:opacity-70"
+                    >
+                      + Add link
+                    </button>
+                  </div>
+                  <div className="space-y-3">
+                    {productLinks.map((link, index) => (
+                      <div key={`product-link-${index}`} className="flex gap-2">
+                        <input
+                          required
+                          type="url"
+                          value={link}
+                          onChange={(event) => {
+                            const value = event.target.value;
+                            setProductLinks((prev) => {
+                              const next = [...prev];
+                              next[index] = value;
+                              return next;
+                            });
+                          }}
+                          className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm"
+                          placeholder={`Product URL #${index + 1}`}
+                        />
+                        {productLinks.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setProductLinks((prev) =>
+                                prev.filter((_, idx) => idx !== index)
+                              )
+                            }
+                            className="px-3 text-gray-400 hover:text-black"
+                            aria-label="Remove link"
+                          >
+                            ✕
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    Include every product link that should appear in the lookbook.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-gray-600">Notes</label>
+                  <textarea
+                    className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm min-h-[100px]"
+                    placeholder="Tell us about the concept or styling."
+                  />
+                </div>
+
+                {submitError && (
+                  <p className="text-sm text-red-600">{submitError}</p>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full bg-black text-white py-3 rounded-xl text-sm font-semibold hover:bg-gray-900 transition-colors"
+                >
+                  Submit for review
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Lookbook Detail Modal */}
+      {activeLookbook && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setActiveLookbook(null)}
+        >
+          <div
+            onClick={(event) => event.stopPropagation()}
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl"
+          >
+            <div className="flex items-start justify-between mb-6 gap-6">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
+                  {activeLookbook.season}
+                </p>
+                <h3 className="text-2xl font-semibold mt-2">
+                  {activeLookbook.title}
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  {activeLookbook.creator}
+                </p>
+              </div>
               <button
-                onClick={() => setShowDetails(false)}
-                className="w-full py-4 mt-4 bg-[#111] text-white rounded-xl font-semibold hover:bg-[#333] transition"
+                onClick={() => setActiveLookbook(null)}
+                className="text-gray-400 hover:text-black"
+                aria-label="Close"
               >
-                Close Details
+                ✕
               </button>
+            </div>
+
+            <div className="rounded-3xl border border-gray-100 bg-[#f7f6f2] p-3 sm:p-3.5 mb-6">
+              <div className="relative aspect-[4/5] w-full max-w-[430px] mx-auto">
+                <Image
+                  src={activeLookbook.image}
+                  alt={activeLookbook.title}
+                  fill
+                  className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.12)]"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {activeLookbook.products.map((product, index) => (
+                <div
+                  key={`${product.name}-${index}`}
+                  className="border border-gray-200 rounded-2xl p-4 flex items-center justify-between gap-4"
+                >
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.2em] text-gray-400">
+                      {product.brand}
+                    </p>
+                    <p className="text-sm font-semibold">{product.name}</p>
+                    <p className="text-sm text-gray-500">{product.price}</p>
+                  </div>
+                  <a
+                    href={product.officialUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-semibold text-black underline hover:text-gray-700"
+                  >
+                    Buy on official store
+                  </a>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 flex items-center justify-between text-sm font-semibold">
+              <span>Total look cost</span>
+              <span>
+                {formatPrice(
+                  activeLookbook.products.reduce(
+                    (sum, product) => sum + parsePrice(product.price),
+                    0
+                  )
+                )}
+              </span>
             </div>
           </div>
         </div>
       )}
 
-      {/* CSS */}
-      <style jsx>{`
-        @keyframes printDown {
-          0% { transform: translate(-50%, -110%); }
-          40% { transform: translate(-50%, -10%); }
-          100% { transform: translate(-50%, 40%); }
-        }
-
-        @keyframes fall-out {
-          0% { transform: translate(-50%, -50%); opacity: 1; }
-          100% { transform: translate(-50%, 150%); opacity: 0; }
-        }
-
-        .animate-fall-out {
-          animation: fall-out 0.8s forwards ease-in;
-        }
-
-        .queue-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 9999px;
-          background-color: #22c55e;
-          animation: pulseDot 0.9s infinite ease-in-out;
-        }
-
-        .delay-150 { animation-delay: 0.15s; }
-        .delay-300 { animation-delay: 0.3s; }
-
-        @keyframes pulseDot {
-          0%, 100% { opacity: 0.25; transform: scale(0.85); }
-          50% { opacity: 1; transform: scale(1.15); }
-        }
-
-        .receipt-body {
-          background: linear-gradient(to bottom, #fff 0%, #fff 75%, #f6f6f6 100%);
-        }
-
-        .receipt-edge {
-          height: 10px;
-          background-image:
-            linear-gradient(-45deg, transparent 75%, #e5e5e5 75%),
-            linear-gradient(45deg, transparent 75%, #e5e5e5 75%);
-          background-size: 8px 8px;
-          background-position: 0 0, 4px 4px;
-        }
-
-        .paper-curl {
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          width: 60px;
-          height: 60px;
-          background: radial-gradient(circle at 100% 100%, rgba(0,0,0,0.18), transparent 60%);
-          opacity: 0.35;
-        }
-      `}</style>
     </main>
-  );
-}
-
-function ReceiptContent({
-  outfitSrc,
-  index,
-  minimal = false,
-}: {
-  outfitSrc: string;
-  index: number;
-  minimal?: boolean;
-}) {
-  return (
-    <div className="relative">
-      <div className="receipt-body px-8 pt-8 pb-6">
-        {!minimal && (
-          <div className="mb-4 text-center">
-            <p className="text-[11px] font-semibold tracking-[0.28em] text-gray-800">
-              OUTFIT RECEIPT
-            </p>
-          </div>
-        )}
-
-        <div className="relative w-full aspect-[3/4] mb-4">
-          <Image
-            src={outfitSrc}
-            alt={`Outfit ${index + 1}`}
-            fill
-            className="object-contain"
-          />
-        </div>
-
-        {!minimal && (
-          <>
-            <div className="mt-2 text-center text-[11px] text-gray-700">
-              <p className="font-medium">STYLECAST OUTFIT #{index + 1}</p>
-              <p className="font-mono text-[10px] text-gray-500">
-                CURATED FOR YOU
-              </p>
-            </div>
-
-            <div className="mt-4 border-t border-dashed border-gray-300 pt-2 text-center text-[10px] font-mono text-gray-500">
-              <p>SC-00{index + 1} • LOOKBOOK</p>
-            </div>
-
-            <div className="mt-3 flex justify-center">
-              <div className="w-24 h-5 bg-[repeating-linear-gradient(90deg,#111_0_2px,transparent_2px_4px)] opacity-70" />
-            </div>
-          </>
-        )}
-      </div>
-
-      <div className="receipt-edge" />
-      <div className="paper-curl" />
-    </div>
   );
 }

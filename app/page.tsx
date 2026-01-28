@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { brands } from "@/app/data/brandsData";
+import { feedItems } from "@/app/feed/feedData";
 
 type ApiProduct = {
   id: number;
@@ -80,6 +81,13 @@ export default function Home() {
   const newDropItems = newDrops.slice(0, 10);
   const newDropLoopItems =
     newDropItems.length > 0 ? [...newDropItems, ...newDropItems] : [];
+  const top50Items = newDrops.slice(0, 8);
+  const top50LoopItems =
+    top50Items.length > 0 ? [...top50Items, ...top50Items] : [];
+  const productGridItems: Array<BrandProduct | null> =
+    newDrops.length > 0
+      ? newDrops.slice(0, 18)
+      : Array.from({ length: 18 }).map(() => null);
   const formatPrice = (price?: string | null) => {
     if (!price) return "—";
     const numeric = Number(String(price).replace(/,/g, ""));
@@ -194,32 +202,6 @@ export default function Home() {
               href={item.officialUrl || (brand ? `/brands/${brand.slug}` : "/brands")}
               className="group relative bg-white overflow-hidden hover:shadow-lg transition-all duration-300 flex-shrink-0 w-[220px]"
             >
-              {/* Heart Icon */}
-            <button 
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                toggleLike(item.id);
-              }}
-              className="absolute top-3 right-3 z-10 h-10 w-10 flex items-center justify-center bg-white rounded-full border border-gray-200 shadow-sm hover:shadow-md transition"
-              aria-label="Like product"
-              aria-pressed={likedProducts.has(item.id)}
-            >
-              <svg 
-                className="w-5 h-5 text-gray-900" 
-                viewBox="0 0 24 24"
-                fill={likedProducts.has(item.id) ? "currentColor" : "none"}
-                stroke="currentColor" 
-                strokeWidth={1.8}
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  d="M4.318 6.318a4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
-                />
-              </svg>
-            </button>
-
               {/* Product Image */}
               <div className="relative w-full aspect-[3/4] bg-gray-50 overflow-hidden">
                 <img 
@@ -238,13 +220,9 @@ export default function Home() {
                   {item.title}
                 </h3>
                 <div className="flex items-baseline gap-1.5 mb-1.5">
-                  <span className="text-sm font-bold text-red-600">NEW</span>
                   <span className="text-sm font-bold text-[#111]">{formatPrice(item.price)}</span>
                 </div>
-                <div className="flex items-center gap-2 text-[10px]">
-                  
-                  <span className="text-orange-500">⭐ Just Arrived</span>
-                </div>
+                <div className="flex items-center gap-2 text-[10px]" />
               </div>
             </Link>
           );
@@ -298,8 +276,73 @@ export default function Home() {
 
 </section>
 
+{/* ===== PRODUCT GRID SECTION ===== */}
+<section id="products" className="w-full py-12 bg-white">
+
+  {/* FILTER BAR */}
+  <div className="max-w-[1600px] mx-auto px-6 mb-8 flex items-center justify-between border-b border-gray-200 pb-4">
+    <div className="flex items-center gap-6">
+      <button className="text-sm font-medium">Product ▾</button>
+      <button className="text-sm font-medium">Size ▾</button>
+      <button className="text-sm font-medium">Color ▾</button>
+    </div>
+    <button className="text-sm font-medium">Sort by: Popular ▾</button>
+  </div>
+
+  {/* PRODUCT GRID - 6 columns x 3 rows */}
+  <div className="max-w-[1600px] mx-auto px-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+      {productGridItems.map((item, i) =>
+        item ? (
+            <Link
+              key={`${item.id}-${i}`}
+              href={`/products/${item.handle}?brand=${item.brandSlug}`}
+              className="group relative bg-white overflow-hidden hover:shadow-lg transition-all duration-300"
+            >
+              {/* Product Image */}
+              <div className="relative w-full aspect-[3/4] bg-gray-50 overflow-hidden">
+                <img
+                  src={item.image || item.images?.[0] || "/product-1.jpg"}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+
+              {/* Product Info */}
+              <div className="p-3 bg-white">
+                <p className="text-[10px] text-gray-500 mb-1 font-medium">
+                  {brandBySlug.get(item.brandSlug)?.name ?? "STYLECAST"}
+                </p>
+                <h3 className="text-xs font-semibold text-[#111] mb-1.5 leading-tight line-clamp-2">
+                  {item.title}
+                </h3>
+                <div className="flex items-baseline gap-1.5 mb-1.5">
+                  <span className="text-sm font-bold text-[#111]">
+                    {formatPrice(item.price)}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <div
+              key={`product-skeleton-${i}`}
+              className="bg-white border border-gray-100 overflow-hidden"
+            >
+              <div className="w-full aspect-[3/4] bg-gray-100 animate-pulse" />
+              <div className="p-3 space-y-2">
+                <div className="h-3 w-16 bg-gray-100 rounded animate-pulse" />
+                <div className="h-4 w-32 bg-gray-100 rounded animate-pulse" />
+                <div className="h-4 w-24 bg-gray-100 rounded animate-pulse" />
+              </div>
+            </div>
+          )
+      )}
+    </div>
+  </div>
+</section>
+
 {/* ===== LOOKBOOK CARDS SECTION ===== */}
-<section className="w-full py-12 bg-gray-50">
+<section className="w-full py-12 bg-gray-50 overflow-hidden">
 
   {/* Header */}
   <div className="flex items-center justify-between px-6 mb-6 max-w-[1600px] mx-auto">
@@ -321,28 +364,24 @@ export default function Home() {
         <Link
           key={item.id}
           href={`/lookbook/women/${item.id}`}
-          className="group flex-shrink-0 w-[260px] cursor-pointer"
+          className="group relative bg-white overflow-hidden hover:shadow-lg transition-all duration-300 flex-shrink-0 w-[220px]"
         >
-          <div className="relative aspect-[3/5] rounded-2xl overflow-hidden bg-gray-100 shadow-md transition-all duration-300 group-hover:shadow-2xl group-hover:scale-[1.02]">
+          <div className="relative w-full aspect-[3/4] bg-gray-50 overflow-hidden p-2">
             <Image
               src={item.image}
               alt={item.title}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-contain transition-transform duration-500 group-hover:scale-105"
             />
-
-            {/* Overlay on hover */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-            {/* Text content */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-              <p className="text-white/70 text-xs font-medium tracking-wider uppercase mb-1">
-                {item.season}
-              </p>
-              <h3 className="text-white text-xl font-semibold">
-                {item.title}
-              </h3>
-            </div>
+          </div>
+          <div className="p-3 bg-white">
+            <p className="text-[10px] text-gray-500 mb-1 font-medium">
+              {item.season}
+            </p>
+            <h3 className="text-xs font-semibold text-[#111] mb-1.5 leading-tight line-clamp-2">
+              {item.title}
+            </h3>
+            <div className="flex items-center gap-2 text-[10px] text-orange-500" />
           </div>
         </Link>
       ))}
@@ -368,129 +407,9 @@ export default function Home() {
   </div>
 </section>
 
-{/* ===== PRODUCT GRID SECTION ===== */}
-<section id="products" className="w-full py-12 bg-white">
-
-  {/* FILTER BAR */}
-  <div className="max-w-[1600px] mx-auto px-6 mb-8 flex items-center justify-between border-b border-gray-200 pb-4">
-    <div className="flex items-center gap-6">
-      <button className="text-sm font-medium">Product ▾</button>
-      <button className="text-sm font-medium">Size ▾</button>
-      <button className="text-sm font-medium">Color ▾</button>
-    </div>
-    <button className="text-sm font-medium">Sort by: Popular ▾</button>
-  </div>
-
-  {/* PRODUCT GRID - 6 columns x 6 rows */}
-  <div className="max-w-[1600px] mx-auto px-6">
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-
-      {[
-        { img: "/product-1.jpg", brand: "ZARA", title: "Cropped Fringe Jacket", discount: "30%", price: "89,900원", likes: "12만", rating: "4.8", reviews: "5.2만+" },
-        { img: "/product-2.jpg", brand: "MANGO", title: "Leather Wide Pants", discount: "25%", price: "129,900원", likes: "15만", rating: "4.9", reviews: "6.8만+" },
-        { img: "/product-3.jpg", brand: "COS", title: "Wide Tuck Pants", discount: "20%", price: "109,900원", likes: "9.5만", rating: "4.7", reviews: "4.3만+" },
-        { img: "/product-4.jpg", brand: "H&M", title: "Fitted Knit Top", discount: "35%", price: "39,900원", likes: "18만", rating: "4.8", reviews: "9.1만+" },
-        { img: "/product-5.jpg", brand: "UNIQLO", title: "Cargo Detail Pants", discount: "15%", price: "59,900원", likes: "14만", rating: "4.9", reviews: "7.5만+" },
-        { img: "/product-6.jpg", brand: "PULL&BEAR", title: "Half Storm Jumper", discount: "28%", price: "69,900원", likes: "10만", rating: "4.6", reviews: "4.9万+" },
-        
-        { img: "/product-7.jpg", brand: "MASSIMO DUTTI", title: "Oversized Leather Coat", discount: "32%", price: "249,900원", likes: "16万", rating: "4.9", reviews: "8.3万+" },
-        { img: "/product-8.jpg", brand: "BERSHKA", title: "Wind Detail Shirt", discount: "22%", price: "49,900원", likes: "11万", rating: "4.7", reviews: "5.6万+" },
-        { img: "/product-9.jpg", brand: "STRADIVARIUS", title: "Cropped Denim Jumper", discount: "26%", price: "79,900원", likes: "13万", rating: "4.8", reviews: "6.2万+" },
-        { img: "/product-10.jpg", brand: "ZARA", title: "Destroyed Knit Top", discount: "18%", price: "59,900원", likes: "9.8万", rating: "4.6", reviews: "4.7万+" },
-        { img: "/product-1.jpg", brand: "ARKET", title: "Ribbed Cashmere Sweater", discount: "30%", price: "189,900원", likes: "12万", rating: "4.9", reviews: "5.9万+" },
-        { img: "/product-2.jpg", brand: "WEEKDAY", title: "High Waist Denim", discount: "24%", price: "89,900원", likes: "15万", rating: "4.8", reviews: "7.3万+" },
-
-        { img: "/product-3.jpg", brand: "& OTHER STORIES", title: "Wool Blend Coat", discount: "35%", price: "219,900원", likes: "14万", rating: "4.9", reviews: "6.8万+" },
-        { img: "/product-4.jpg", brand: "MONKI", title: "Oversized Blazer", discount: "28%", price: "99,900원", likes: "11万", rating: "4.7", reviews: "5.4万+" },
-        { img: "/product-5.jpg", brand: "COS", title: "Pleated Midi Skirt", discount: "20%", price: "129,900원", likes: "10万", rating: "4.8", reviews: "4.9万+" },
-        { img: "/product-6.jpg", brand: "ZARA", title: "Textured Knit Cardigan", discount: "25%", price: "69,900원", likes: "16万", rating: "4.9", reviews: "8.1万+" },
-        { img: "/product-7.jpg", brand: "MANGO", title: "Satin Slip Dress", discount: "30%", price: "109,900원", likes: "13万", rating: "4.8", reviews: "6.5万+" },
-        { img: "/product-8.jpg", brand: "H&M", title: "Relaxed Fit Jeans", discount: "22%", price: "49,900원", likes: "18万", rating: "4.7", reviews: "9.3万+" },
-
-        { img: "/product-9.jpg", brand: "UNIQLO", title: "Heattech Turtleneck", discount: "15%", price: "29,900원", likes: "20万", rating: "4.9", reviews: "11万+" },
-        { img: "/product-10.jpg", brand: "PULL&BEAR", title: "Puffer Vest", discount: "32%", price: "79,900원", likes: "12万", rating: "4.8", reviews: "6.1万+" },
-        { img: "/product-1.jpg", brand: "BERSHKA", title: "Cropped Hoodie", discount: "26%", price: "39,900원", likes: "14万", rating: "4.7", reviews: "7.2万+" },
-        { img: "/product-2.jpg", brand: "STRADIVARIUS", title: "Wide Leg Trousers", discount: "28%", price: "59,900원", likes: "11万", rating: "4.8", reviews: "5.8万+" },
-        { img: "/product-3.jpg", brand: "MASSIMO DUTTI", title: "Silk Blend Shirt", discount: "20%", price: "149,900원", likes: "9.5万", rating: "4.9", reviews: "4.6万+" },
-        { img: "/product-4.jpg", brand: "ARKET", title: "Merino Wool Sweater", discount: "35%", price: "169,900원", likes: "13万", rating: "4.9", reviews: "6.4万+" },
-
-        { img: "/product-5.jpg", brand: "WEEKDAY", title: "Straight Denim Jacket", discount: "24%", price: "89,900원", likes: "15万", rating: "4.8", reviews: "7.6万+" },
-        { img: "/product-6.jpg", brand: "& OTHER STORIES", title: "Leather Midi Skirt", discount: "30%", price: "199,900원", likes: "10万", rating: "4.9", reviews: "5.1万+" },
-        { img: "/product-7.jpg", brand: "MONKI", title: "Oversized Sweatshirt", discount: "18%", price: "49,900원", likes: "17万", rating: "4.7", reviews: "8.9万+" },
-        { img: "/product-8.jpg", brand: "COS", title: "Tailored Wool Pants", discount: "25%", price: "139,900원", likes: "12万", rating: "4.8", reviews: "6.3万+" },
-        { img: "/product-9.jpg", brand: "ZARA", title: "Quilted Crossbody Bag", discount: "28%", price: "69,900원", likes: "14万", rating: "4.9", reviews: "7.1万+" },
-        { img: "/product-10.jpg", brand: "MANGO", title: "Chunky Knit Scarf", discount: "22%", price: "39,900원", likes: "11万", rating: "4.6", reviews: "5.5万+" },
-
-        { img: "/product-1.jpg", brand: "H&M", title: "Ribbed Tank Top", discount: "15%", price: "19,900원", likes: "19万", rating: "4.7", reviews: "10万+" },
-        { img: "/product-2.jpg", brand: "UNIQLO", title: "Ultra Light Down Jacket", discount: "32%", price: "119,900원", likes: "16万", rating: "4.9", reviews: "8.7万+" },
-        { img: "/product-3.jpg", brand: "PULL&BEAR", title: "Faux Leather Pants", discount: "26%", price: "69,900원", likes: "13万", rating: "4.8", reviews: "6.6万+" },
-        { img: "/product-4.jpg", brand: "BERSHKA", title: "Graphic Print Tee", discount: "20%", price: "29,900원", likes: "15万", rating: "4.7", reviews: "7.8万+" },
-        { img: "/product-5.jpg", brand: "STRADIVARIUS", title: "Platform Chelsea Boots", discount: "35%", price: "89,900원", likes: "12万", rating: "4.9", reviews: "6.1万+" },
-        { img: "/product-6.jpg", brand: "MASSIMO DUTTI", title: "Cashmere Blend Coat", discount: "30%", price: "349,900원", likes: "10万", rating: "4.9", reviews: "4.9万+" },
-
-      ].map((item, i) => (
-        <Link 
-          key={i} 
-          href="/product/sample"
-          className="group relative bg-white overflow-hidden hover:shadow-lg transition-all duration-300"
-        >
-          {/* Heart Icon */}
-          <button 
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full border border-gray-200 hover:bg-white transition-all"
-          >
-            <svg 
-              className="w-4 h-4 text-gray-700" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={1.5} 
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
-              />
-            </svg>
-          </button>
-
-          {/* Product Image */}
-          <div className="relative w-full aspect-[3/4] bg-gray-50 overflow-hidden">
-            <img 
-              src={item.img} 
-              alt={item.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-          </div>
-
-          {/* Product Info */}
-          <div className="p-3 bg-white">
-            <p className="text-[10px] text-gray-500 mb-1 font-medium">{item.brand}</p>
-            <h3 className="text-xs font-semibold text-[#111] mb-1.5 leading-tight line-clamp-2">
-              {item.title}
-            </h3>
-            <div className="flex items-baseline gap-1.5 mb-1.5">
-              <span className="text-sm font-bold text-red-600">{item.discount}</span>
-              <span className="text-sm font-bold text-[#111]">{item.price}</span>
-            </div>
-            <div className="flex items-center gap-2 text-[10px]">
-              <span className="text-red-500">❤️ {item.likes}</span>
-              <span className="text-orange-500">⭐ {item.rating}({item.reviews})</span>
-            </div>
-          </div>
-        </Link>
-      ))}
-
-    </div>
-  </div>
-</section>
-
 
 {/* ===== TOP 50 HAUL SECTION ===== */}
-<section className="w-full py-20 bg-gray-50 border-t border-gray-200 overflow-hidden">
+<section className="w-full py-20 bg-gray-50 overflow-hidden">
   <div className="max-w-[1600px] mx-auto px-6">
     
     {/* Header */}
@@ -500,273 +419,58 @@ export default function Home() {
 
     {/* Auto-sliding carousel with CSS animation */}
     <div className="relative">
-      <div 
+      <div
         className="flex gap-6 animate-slide-top50"
         style={{
-          width: 'fit-content',
+          width: "fit-content",
         }}
       >
-        {/* First set of products */}
-        {[
-          { 
-            img: "/product-1.jpg", 
-            brand: "LIKE THE MOST", 
-            title: "Two tuck long side over pants_charcoal",
-            originalPrice: "$51",
-            discount: "49%",
-            price: "$26"
-          },
-          { 
-            img: "/product-2.jpg", 
-            brand: "GAKKAI UNIONS", 
-            title: "Pocket gamer pigment short sleeve t-shirt khaki m...",
-            originalPrice: "$35",
-            discount: "31%",
-            price: "$24"
-          },
-          { 
-            img: "/product-3.jpg", 
-            brand: "NODU", 
-            title: "Soft henley neck round long sleeve knit [4 colors]",
-            originalPrice: "$39",
-            discount: "28%",
-            price: "$28"
-          },
-          { 
-            img: "/product-4.jpg", 
-            brand: "DRIX", 
-            title: "Special overfit short sleeve t-shirt_5 colors",
-            originalPrice: "$28",
-            discount: "32%",
-            price: "$19"
-          },
-          { 
-            img: "/product-5.jpg", 
-            brand: "MINIMALWORK", 
-            title: "Wide fit cargo pants [4 colors]",
-            originalPrice: "$45",
-            discount: "35%",
-            price: "$29"
-          },
-          { 
-            img: "/product-6.jpg", 
-            brand: "BASIC COTTON", 
-            title: "Premium heavyweight crew neck sweatshirt",
-            originalPrice: "$42",
-            discount: "40%",
-            price: "$25"
-          },
-          { 
-            img: "/product-1.jpg", 
-            brand: "LIKE THE MOST", 
-            title: "Two tuck long side over pants_charcoal",
-            originalPrice: "$51",
-            discount: "49%",
-            price: "$26"
-          },
-          { 
-            img: "/product-2.jpg", 
-            brand: "GAKKAI UNIONS", 
-            title: "Pocket gamer pigment short sleeve t-shirt khaki m...",
-            originalPrice: "$35",
-            discount: "31%",
-            price: "$24"
-          },
-        ].map((item, i) => (
-          <div 
-            key={i}
-            className="flex-shrink-0 w-[220px] group"
-          >
-            <Link href="/product/sample" className="block">
-              {/* Product Image */}
-              <div className="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden mb-3">
-                <img 
-                  src={item.img} 
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                
-                {/* Heart Icon */}
-                <button 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  className="absolute bottom-4 right-4 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full border border-gray-200 hover:bg-white transition-all"
+        {top50LoopItems.length > 0
+          ? top50LoopItems.map((item, i) => {
+              const brand = brandBySlug.get(item.brandSlug);
+              const image = item.image || item.images?.[0] || "/product-1.jpg";
+
+              return (
+                <Link
+                  key={`${item.id}-${i}`}
+                  href={`/products/${item.handle}?brand=${item.brandSlug}`}
+                  className="flex-shrink-0 w-[220px] group"
                 >
-                  <svg 
-                    className="w-5 h-5 text-gray-700" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth={1.5} 
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
+                  <div className="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden mb-3">
+                    <img
+                      src={image}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                  </svg>
-                </button>
-
-                {/* Color Dots (for 4th item) */}
-                {i === 3 && (
-                  <div className="absolute top-4 right-4 flex flex-col gap-2">
-                    <div className="w-4 h-4 rounded-full bg-white border border-gray-300"></div>
-                    <div className="w-4 h-4 rounded-full bg-gray-300 border border-gray-400"></div>
-                    <div className="w-4 h-4 rounded-full bg-green-800 border border-gray-400"></div>
-                    <div className="w-4 h-4 rounded-full bg-gray-600 border border-gray-400"></div>
-                    <div className="w-4 h-4 rounded-full bg-black border border-gray-400"></div>
                   </div>
-                )}
-              </div>
 
-              {/* Product Info */}
-              <div>
-                <p className="text-xs font-bold text-[#111] mb-1 uppercase">{item.brand}</p>
-                <h3 className="text-sm text-[#111] mb-2 leading-tight line-clamp-2">
-                  {item.title}
-                </h3>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-sm text-gray-400 line-through">{item.originalPrice}</span>
-                  <span className="text-sm font-bold text-red-600">{item.discount}</span>
-                </div>
-                <p className="text-lg font-bold text-red-600 mt-1">{item.price}</p>
-              </div>
-            </Link>
-          </div>
-        ))}
-
-        {/* Duplicate set for seamless infinite loop */}
-        {[
-          { 
-            img: "/product-1.jpg", 
-            brand: "LIKE THE MOST", 
-            title: "Two tuck long side over pants_charcoal",
-            originalPrice: "$51",
-            discount: "49%",
-            price: "$26"
-          },
-          { 
-            img: "/product-2.jpg", 
-            brand: "GAKKAI UNIONS", 
-            title: "Pocket gamer pigment short sleeve t-shirt khaki m...",
-            originalPrice: "$35",
-            discount: "31%",
-            price: "$24"
-          },
-          { 
-            img: "/product-3.jpg", 
-            brand: "NODU", 
-            title: "Soft henley neck round long sleeve knit [4 colors]",
-            originalPrice: "$39",
-            discount: "28%",
-            price: "$28"
-          },
-          { 
-            img: "/product-4.jpg", 
-            brand: "DRIX", 
-            title: "Special overfit short sleeve t-shirt_5 colors",
-            originalPrice: "$28",
-            discount: "32%",
-            price: "$19"
-          },
-          { 
-            img: "/product-5.jpg", 
-            brand: "MINIMALWORK", 
-            title: "Wide fit cargo pants [4 colors]",
-            originalPrice: "$45",
-            discount: "35%",
-            price: "$29"
-          },
-          { 
-            img: "/product-6.jpg", 
-            brand: "BASIC COTTON", 
-            title: "Premium heavyweight crew neck sweatshirt",
-            originalPrice: "$42",
-            discount: "40%",
-            price: "$25"
-          },
-          { 
-            img: "/product-1.jpg", 
-            brand: "LIKE THE MOST", 
-            title: "Two tuck long side over pants_charcoal",
-            originalPrice: "$51",
-            discount: "49%",
-            price: "$26"
-          },
-          { 
-            img: "/product-2.jpg", 
-            brand: "GAKKAI UNIONS", 
-            title: "Pocket gamer pigment short sleeve t-shirt khaki m...",
-            originalPrice: "$35",
-            discount: "31%",
-            price: "$24"
-          },
-        ].map((item, i) => (
-          <div 
-            key={`dup-${i}`}
-            className="flex-shrink-0 w-[220px] group"
-          >
-            <Link href="/product/sample" className="block">
-              {/* Product Image */}
-              <div className="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden mb-3">
-                <img 
-                  src={item.img} 
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                
-                {/* Heart Icon */}
-                <button 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  className="absolute bottom-4 right-4 w-10 h-10 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-full border border-gray-200 hover:bg-white transition-all"
-                >
-                  <svg 
-                    className="w-5 h-5 text-gray-700" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth={1.5} 
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
-                    />
-                  </svg>
-                </button>
-
-                {/* Color Dots (for 4th item) */}
-                {i === 3 && (
-                  <div className="absolute top-4 right-4 flex flex-col gap-2">
-                    <div className="w-4 h-4 rounded-full bg-white border border-gray-300"></div>
-                    <div className="w-4 h-4 rounded-full bg-gray-300 border border-gray-400"></div>
-                    <div className="w-4 h-4 rounded-full bg-green-800 border border-gray-400"></div>
-                    <div className="w-4 h-4 rounded-full bg-gray-600 border border-gray-400"></div>
-                    <div className="w-4 h-4 rounded-full bg-black border border-gray-400"></div>
+                  <div>
+                    <p className="text-xs font-bold text-[#111] mb-1 uppercase">
+                      {brand?.name ?? "STYLECAST"}
+                    </p>
+                    <h3 className="text-sm text-[#111] mb-2 leading-tight line-clamp-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-lg font-bold text-[#111] mt-1">
+                      {formatPrice(item.price)}
+                    </p>
                   </div>
-                )}
-              </div>
-
-              {/* Product Info */}
-              <div>
-                <p className="text-xs font-bold text-[#111] mb-1 uppercase">{item.brand}</p>
-                <h3 className="text-sm text-[#111] mb-2 leading-tight line-clamp-2">
-                  {item.title}
-                </h3>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-sm text-gray-400 line-through">{item.originalPrice}</span>
-                  <span className="text-sm font-bold text-red-600">{item.discount}</span>
+                </Link>
+              );
+            })
+          : Array.from({ length: 8 }).map((_, i) => (
+              <div
+                key={`top50-skeleton-${i}`}
+                className="flex-shrink-0 w-[220px] group"
+              >
+                <div className="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden mb-3 animate-pulse" />
+                <div className="space-y-2">
+                  <div className="h-3 w-20 bg-gray-100 rounded animate-pulse" />
+                  <div className="h-4 w-32 bg-gray-100 rounded animate-pulse" />
+                  <div className="h-4 w-16 bg-gray-100 rounded animate-pulse" />
                 </div>
-                <p className="text-lg font-bold text-red-600 mt-1">{item.price}</p>
               </div>
-            </Link>
-          </div>
-        ))}
+            ))}
       </div>
     </div>
   </div>
@@ -795,7 +499,7 @@ export default function Home() {
 
 
 {/* ===== AI FEATURES BANNERS (BENTO GRID) ===== */}
-<section className="w-full border-t border-gray-200 bg-white py-20 px-6">
+<section className="w-full bg-white py-20 px-6">
   <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
 
     {/* LEFT: SCAN & TRY BANNER */}
@@ -881,7 +585,7 @@ export default function Home() {
 
 
 {/* ===== PEOPLE FEED SECTION ===== */}
-<section id="people-feed" className="w-full py-24 bg-white border-t border-gray-200">
+<section id="people-feed" className="w-full py-24 bg-white">
 
   {/* HEADER */}
   <div className="flex items-center justify-between px-6 mb-12 max-w-[1600px] mx-auto">
@@ -895,38 +599,30 @@ export default function Home() {
   </div>
 
   {/* GRID FEED */}
-  <div className="px-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-[1600px] mx-auto">
-
-    {[
-      "/feed-1.jpg",
-      "/feed-2.jpg",
-      "/feed-3.jpg",
-      "/feed-4.jpg",
-      "/feed-5.jpg",
-      "/feed-6.jpg",
-      "/feed-7.jpg",
-      "/feed-8.jpg",
-    ].map((src, i) => (
-      <div
-        key={i}
-        className="relative w-full h-[260px] md:h-[300px] rounded-2xl overflow-hidden bg-gray-100 hover:scale-[1.02] transition-transform duration-300 cursor-pointer group"
-      >
-        <img
-          src={src}
-          alt={`Feed post ${i + 1}`}
-          className="w-full h-full object-cover"
-        />
-
-        {/* Overlay on hover */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300"></div>
-
-        {/* Username overlay */}
-        <div className="absolute bottom-3 left-3 px-3 py-1 bg-black/50 text-white text-xs rounded-full backdrop-blur-sm">
-          @user{i + 1}
+  <div className="px-6 max-w-[1600px] mx-auto">
+    <div className="columns-2 md:columns-3 lg:columns-4 gap-2 [column-fill:_balance]">
+      {feedItems.slice(0, 12).map((item) => (
+        <div
+          key={item.id}
+          className="group relative break-inside-avoid bg-white p-1"
+        >
+          <div className="relative w-full overflow-hidden">
+            <img
+              src={item.image}
+              alt={item.title}
+              className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.01]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <div className="absolute left-3 right-3 bottom-3 translate-y-3 text-xs font-semibold text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+              {item.title}
+            </div>
+            <div className="absolute bottom-3 left-3 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-white transition-opacity duration-200 group-hover:opacity-0">
+              {item.username}
+            </div>
+          </div>
         </div>
-      </div>
-    ))}
-
+      ))}
+    </div>
   </div>
 </section>
 

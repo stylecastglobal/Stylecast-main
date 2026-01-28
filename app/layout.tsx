@@ -58,7 +58,19 @@ export default function RootLayout({
                       className="w-full rounded-full border border-gray-300 px-4 py-2 pl-10 text-sm focus:outline-none focus:border-gray-400"
                     />
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                      🔍
+                      <svg
+                        className="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M11 3a8 8 0 1 0 0 16a8 8 0 0 0 0-16Z" />
+                        <path d="M20 20l-3.6-3.6" />
+                      </svg>
                     </span>
                   </div>
                 </div>
@@ -131,17 +143,14 @@ export default function RootLayout({
 
                 {/* MAIN LINKS */}
                 <div className="flex items-center gap-8">
-                  <Link href="/scan" className="py-4 hover:text-gray-300">
-                    Scan
-                  </Link>
-                  <Link href="/lookbook" className="py-4 hover:text-gray-300">
-                    Lookbook
-                  </Link>
                   <Link href="/shop" className="py-4 hover:text-gray-300">
                     Apparel
                   </Link>
                   <Link href="/beauty" className="py-4 hover:text-gray-300">
                     Beauty
+                  </Link>
+                  <Link href="/lookbook" className="py-4 hover:text-gray-300">
+                    Lookbook
                   </Link>
 
                   {/* ⚠️ Wishes는 기존 기능 (찜 아님) */}
