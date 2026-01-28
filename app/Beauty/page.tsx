@@ -13,14 +13,22 @@ function HeroBannerSection() {
       subtitle: "Real Glass Glow Device",
       description: "Enjoy enhanced absorption, radiance, elasticity, pore care, and customized LED care.",
       cta: "SHOP NOW",
-      image: "/medicubebanner-beauty.jpg", // Replace with actual image path
+      image: "/anuabanner-beauty1.jpg", // Replace with actual image path
     },
     {
       id: 2,
       title: "Dasique",
       subtitle: "Eyeshadow Palette",
       cta: "SHOP NOW",
-      image: "/dasiquebanner-beauty.jpg", // Replace with actual image path
+      image: "/rhodebanner-beauty.jpg", // Replace with actual image path
+    },
+    {
+      id: 3,
+      title: "Cream De Rose Lip Tint",
+      description:
+        "Inspired by the beautiful colors of roses, this lip tint is a celebration of romance and elegance. Each shade is carefully crafted to mimic the delicate hues found in roses, from soft pinks to deep, velvety reds.",
+      cta: "SHOP NOW",
+      image: "/dasiquebanner-beauty1.jpg",
     },
     // Add 3 more banner objects here when you have them ready
   ];
@@ -62,73 +70,47 @@ function HeroBannerSection() {
                 />
                 
                 {/* Content Overlay */}
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
-                    {/* Conditional positioning based on banner id */}
-                    {banner.id === 1 ? (
-                      // Medicube banner - Text on the right aligned with logo
-                      <div className="ml-auto max-w-xl space-y-3 sm:space-y-5 text-right pr-0 sm:pr-8 lg:pr-20 pt-8 sm:pt-12">
-                        {/* Main Title */}
-                        <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-black leading-none">
-                          {banner.title}
-                        </h2>
-                        
-                        {/* Subtitle */}
-                        {banner.subtitle && (
-                          <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black leading-tight">
-                            {banner.subtitle}
-                          </h3>
-                        )}
-                        
-                        {/* Description */}
-                        {banner.description && (
-                          <p className="text-base sm:text-lg lg:text-xl text-black max-w-lg ml-auto leading-relaxed">
-                            {banner.description}
+                <div className="absolute inset-0">
+                  {banner.cta && (
+                    <>
+                      {banner.id === 2 ? (
+                        <div className="absolute top-6 right-6 sm:top-8 sm:right-8 lg:top-10 lg:right-10 flex flex-col items-end gap-4 max-w-xs sm:max-w-sm">
+                          <button className="bg-white text-black px-12 sm:px-16 lg:px-20 py-3 sm:py-4 text-sm sm:text-base font-semibold uppercase tracking-wider shadow-lg transition-colors hover:bg-gray-100">
+                            {banner.cta}
+                          </button>
+                          <p className="text-xs sm:text-sm text-white/95 text-right leading-relaxed drop-shadow max-w-[360px] sm:max-w-[420px] text-balance">
+                            Rhode is a line of curated skincare essentials. Formulated for a variety of
+                            skin types and needs with high performance ingredients, it’s a daily routine
+                            that nourishes your skin barrier over time.
                           </p>
-                        )}
-                        
-                        {/* CTA Button */}
-                        {banner.cta && (
-                          <div className="pt-4 sm:pt-6">
-                            <button className="bg-black text-white px-12 sm:px-16 lg:px-20 py-3 sm:py-4 text-sm sm:text-base font-semibold hover:bg-gray-800 transition-colors uppercase tracking-wider">
-                              {banner.cta}
-                            </button>
+                        </div>
+                      ) : banner.id === 3 ? (
+                        <div className="absolute top-8 left-14 sm:top-10 sm:left-20 lg:top-12 lg:left-24 max-w-sm sm:max-w-md text-left space-y-4">
+                          <div className="space-y-2">
+                            <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white leading-tight">
+                              {banner.title}
+                            </h2>
+                            {banner.description && (
+                              <p className="text-xs sm:text-sm text-white/95 leading-relaxed">
+                                {banner.description}
+                              </p>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    ) : (
-                      // Dasique banner - Text on the left with white color and shadow
-                      <div className="max-w-xl space-y-4 sm:space-y-6 text-left pl-0 sm:pl-8 lg:pl-12">
-                        {/* Main Title */}
-                        <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight" style={{ textShadow: '2px 2px 8px rgba(0, 0, 0, 0.4)' }}>
-                          {banner.title}
-                        </h2>
-                        
-                        {/* Subtitle */}
-                        {banner.subtitle && (
-                          <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight" style={{ textShadow: '2px 2px 8px rgba(0, 0, 0, 0.4)' }}>
-                            {banner.subtitle}
-                          </h3>
-                        )}
-                        
-                        {/* Description */}
-                        {banner.description && (
-                          <p className="text-base sm:text-lg lg:text-xl text-white max-w-md leading-relaxed" style={{ textShadow: '1px 1px 6px rgba(0, 0, 0, 0.3)' }}>
-                            {banner.description}
-                          </p>
-                        )}
-                        
-                        {/* CTA Button */}
-                        {banner.cta && (
-                          <div className="pt-4 sm:pt-6">
-                            <button className="bg-black text-white px-12 sm:px-16 lg:px-20 py-3 sm:py-4 text-sm sm:text-base font-semibold hover:bg-gray-800 transition-colors uppercase tracking-wider shadow-lg">
-                              {banner.cta}
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                          <button className="bg-[#f7b6c2] text-white px-10 sm:px-12 lg:px-14 py-3 sm:py-3.5 text-xs sm:text-sm font-semibold uppercase tracking-wider shadow-lg transition-colors hover:bg-[#efa2b1]">
+                            {banner.cta}
+                          </button>
+                        </div>
+                      ) : banner.id === 1 ? (
+                        <button className="absolute left-[40%] top-[58%] -translate-x-1/2 bg-black text-white px-12 sm:px-16 lg:px-20 py-3 sm:py-4 text-sm sm:text-base font-semibold uppercase tracking-wider shadow-lg transition-colors hover:bg-gray-900">
+                          {banner.cta}
+                        </button>
+                      ) : (
+                        <button className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 lg:bottom-10 lg:right-10 bg-[#3f6f3a] text-white px-12 sm:px-16 lg:px-20 py-3 sm:py-4 text-sm sm:text-base font-semibold uppercase tracking-wider shadow-lg transition-colors hover:bg-[#345f31]">
+                          {banner.cta}
+                        </button>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -637,29 +619,52 @@ function RecommendedSection() {
   const recommendations = [
     {
       id: 1,
-      youtuber: "TATI",
-      title: "Gamechanging device that literally does it all.",
-      description: "Discover Tati's favorite beauty secret-the tool Gamechanging...",
-      badge: "TOP SECRET",
+      youtuber: "Beauty Lab",
+      title: "Korean Autumn Mute Makeup",
+      description: "#메이크업 #가을뮤트 #갈뮤메이크업 #makeup #Autumnmute #Autumnmutemakeup.",
+      badge: "TRENDING",
+      videoId: "RlftNO6Atf0",
+      url: "https://youtu.be/RlftNO6Atf0?si=AcZF5LDnBCvV7M09",
     },
     {
       id: 2,
-      youtuber: "Michelle Phan",
-      title: "New/Jeans Inspired Makeup and Dewy...",
-      description: "6,718 Trackbak Michelle's skincare hack! How to use ha...",
+      youtuber: "Skin Notes",
+      title: "Hailey Bieber’s Quick Everyday Morning Routine | Beauty Secrets | Vogue",
+      description: "Hailey Bieber spends some time with Vogue to go over her streamlined, everyday morning beauty routine.",
+      videoId: "9wdisivSWYU",
+      url: "https://youtu.be/9wdisivSWYU?si=0eYCj1uai49Qrm0X",
     },
     {
       id: 3,
-      youtuber: "Michelle Phan",
-      title: "How To Get a Jawline and Reduce Double Chin Wit...",
-      description: "Michelle will show you how to use her favorite Medicube...",
+      youtuber: "Glow Guide",
+      title: "Chic Soft Glam Everyday Makeup",
+      description: "Get ready with me! Today's look is this chic soft glam that's been my everyday go-to makeup lately ♡ ",
+      videoId: "g6geutlCWjM",
+      url: "https://youtu.be/g6geutlCWjM?si=iFtygn2gdR6q1l39",
     },
     {
       id: 4,
-      youtuber: "TATI",
-      title: "GAMECHANGERS ... New Products Tested 🔥",
-      description: "TATI WESTBROOK'S ESSENTIALS Get Gamechanging...",
-      badge: "NEW",
+      youtuber: "Beauty Reset",
+      title: "NO MAKEUP MAKEUP ♡ Natural Everyday Makeup for Beginners",
+      description: "This is my go-to (I'm not wearing any makeup) naturally pretty, effortless no makeup makeup look!",
+      videoId: "vNpafKvDbzk",
+      url: "https://youtu.be/vNpafKvDbzk?si=PcW59VDhQOolWtYa",
+    },
+    {
+      id: 5,
+      youtuber: "The Daily Edit",
+      title: "clean girl makeup (no foundation)",
+      description: "#cleangirl #cleangirlmakeup #nofoundation",
+      videoId: "P3UJj3Dm7ao",
+      url: "https://youtu.be/P3UJj3Dm7ao?si=8_KG7bRpSpZIWRLN",
+    },
+    {
+      id: 6,
+      youtuber: "Glow Room",
+      title: "Madison Beer’s Guide to Soap Brows and Easy Blush | Beauty Secrets | Vogue",
+      description: "Pop star Madison Beer gets real about her skin struggles over the years, and shares her perfected everyday beauty routine.",
+      videoId: "9K_CZizKdVs",
+      url: "https://youtu.be/9K_CZizKdVs?si=oY7Y3QYCov1RkWg7",
     },
   ];
 
@@ -669,43 +674,55 @@ function RecommendedSection() {
         RECOMMENDED BY BEAUTY EXPERTS
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        {recommendations.map((rec) => (
-          <div
-            key={rec.id}
-            className="border-2 border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group bg-white"
-          >
-            <div className="relative aspect-video bg-gray-100">
-              <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
-                <div className="w-12 sm:w-16 h-12 sm:h-16 bg-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <svg className="w-6 sm:w-8 h-6 sm:h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+      <div className="relative">
+        <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-2 scroll-smooth">
+          {recommendations.map((rec) => (
+            <a
+              key={rec.id}
+              href={rec.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-2 border-gray-200 rounded-xl sm:rounded-2xl overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group bg-white flex-shrink-0 w-[280px] sm:w-[320px]"
+            >
+              <div className="relative aspect-video bg-gray-100">
+                <img
+                  src={`https://img.youtube.com/vi/${rec.videoId}/hqdefault.jpg`}
+                  alt={rec.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-black/10" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-12 sm:w-16 h-12 sm:h-16 bg-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <svg
+                      className="w-6 sm:w-8 h-6 sm:h-8 text-white ml-1"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
                 </div>
+
+                {rec.badge && (
+                  <div className="absolute top-2 sm:top-3 left-2 sm:left-3 bg-black text-white text-xs font-bold px-2 py-1 rounded">
+                    {rec.badge}
+                  </div>
+                )}
+
               </div>
 
-              {rec.badge && (
-                <div className="absolute top-2 sm:top-3 left-2 sm:left-3 bg-black text-white text-xs font-bold px-2 py-1 rounded">
-                  {rec.badge}
-                </div>
-              )}
-
-              <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex items-center gap-2 bg-white border border-gray-200 rounded-full px-2 sm:px-3 py-1">
-                <div className="w-5 sm:w-6 h-5 sm:h-6 bg-gray-300 rounded-full" />
-                <span className="text-xs font-medium text-black">{rec.youtuber}</span>
+              <div className="p-3 sm:p-4">
+                <h3 className="text-xs sm:text-sm font-semibold text-black mb-2 line-clamp-2">
+                  {rec.title}
+                </h3>
+                <p className="text-xs text-gray-600 line-clamp-2">
+                  {rec.description}
+                </p>
               </div>
-            </div>
-
-            <div className="p-3 sm:p-4">
-              <h3 className="text-xs sm:text-sm font-semibold text-black mb-2 line-clamp-2">
-                {rec.title}
-              </h3>
-              <p className="text-xs text-gray-600 line-clamp-2">
-                {rec.description}
-              </p>
-            </div>
-          </div>
-        ))}
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   );
