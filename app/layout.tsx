@@ -89,23 +89,13 @@ export default function RootLayout({
                       height={22}
                     />
                     <div className="leading-tight">
-<<<<<<< HEAD
-                      <div className="text-sm font-semibold">Sign In</div>
                       <div className="text-xs text-gray-500">
-                        for FREE Shipping
-=======
-                      <div className="text-xs text-gray-500">
->>>>>>> b1bf4f0 (변경사항)
                       </div>
                     </div>
                   </Link>
 
                   {/* ❤️ WISHLIST (찜 전용) */}
-<<<<<<< HEAD
-                  <Link href="/wishlist" className="hover:opacity-70 transition">
-=======
                   <Link href="/wishlist" className="hover:opacity-70 transition -ml-6">
->>>>>>> b1bf4f0 (변경사항)
                     <Image
                       src="/heart.png"
                       alt="Wishlist"
@@ -115,11 +105,7 @@ export default function RootLayout({
                   </Link>
 
                   {/* 🛍 CART */}
-<<<<<<< HEAD
-                  <Link href="/cart" className="hover:opacity-70 transition">
-=======
-                  <Link href="/cart" className="hover:opacity-70 transition -ml-3">
->>>>>>> b1bf4f0 (변경사항)
+                  <Link href="/cart" className="hover:opacity-70 transition -ml-6">
                     <Image
                       src="/shopping-bag.png"
                       alt="Cart"
@@ -190,8 +176,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> b1bf4f0 (변경사항)
