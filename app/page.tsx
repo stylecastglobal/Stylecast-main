@@ -373,6 +373,7 @@ export default function Home() {
               fill
               className="object-contain transition-transform duration-500 group-hover:scale-105"
             />
+<<<<<<< HEAD
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <div className="absolute left-3 right-3 bottom-3 translate-y-3 text-xs font-semibold text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
               <p className="text-[10px] text-white/70 mb-1">{item.season}</p>
@@ -380,6 +381,17 @@ export default function Home() {
                 {item.title}
               </h3>
             </div>
+=======
+          </div>
+          <div className="p-3 bg-white">
+            <p className="text-[10px] text-gray-500 mb-1 font-medium">
+              {item.season}
+            </p>
+            <h3 className="text-xs font-semibold text-[#111] mb-1.5 leading-tight line-clamp-2">
+              {item.title}
+            </h3>
+            <div className="flex items-center gap-2 text-[10px] text-orange-500" />
+>>>>>>> b1bf4f0 (변경사항)
           </div>
         </Link>
       ))}
