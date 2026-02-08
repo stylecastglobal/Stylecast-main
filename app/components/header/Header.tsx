@@ -77,10 +77,7 @@ export default function Header() {
 
               <div className="leading-tight text-sm">
                 <div className="font-semibold">Sign In</div>
-<<<<<<< HEAD
                 <div className="text-xs">for FREE Shipping</div>
-=======
->>>>>>> b1bf4f0 (변경사항)
               </div>
             </Link>
 
