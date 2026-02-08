@@ -25,6 +25,67 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const megaMenuColumns = [
+    {
+      title: "FEATURED",
+      items: [
+        { label: "Apparel", href: "/shop" },
+        { label: "Beauty", href: "/beauty" },
+        { label: "New Arrivals", href: "/new-arrivals" },
+        { label: "Best Sellers", href: "/best-sellers" },
+      ],
+    },
+    {
+      title: "CLOTHING",
+      items: [
+        { label: "All Clothing", href: "/clothing/all" },
+        { label: "Tops", href: "/clothing/tops" },
+        { label: "Pants", href: "/clothing/pants" },
+        { label: "Dresses", href: "/clothing/dresses" },
+        { label: "Outerwear", href: "/clothing/outerwear" },
+      ],
+    },
+    {
+      title: "SHOES",
+      items: [
+        { label: "Sneakers", href: "/shop" },
+        { label: "Boots", href: "/shop" },
+        { label: "Loafers", href: "/shop" },
+        { label: "Heels", href: "/shop" },
+        { label: "Sandals", href: "/shop" },
+      ],
+    },
+    {
+      title: "ACCESSORIES",
+      items: [
+        { label: "Bags", href: "/shop" },
+        { label: "Jewelry", href: "/shop" },
+        { label: "Hats", href: "/shop" },
+        { label: "Sunglasses", href: "/shop" },
+        { label: "Belts", href: "/shop" },
+      ],
+    },
+    {
+      title: "BEAUTY",
+      items: [
+        { label: "All Beauty", href: "/beauty" },
+        { label: "Makeup", href: "/beauty/makeup" },
+        { label: "Skincare", href: "/beauty/skincare" },
+        { label: "Hair", href: "/beauty/hair" },
+        { label: "Fragrance", href: "/beauty/fragrance" },
+      ],
+    },
+    {
+      title: "BRANDS",
+      items: [
+        { label: "Popular Brands", href: "/brands" },
+        { label: "New Brands", href: "/brands" },
+        { label: "Designer", href: "/brands" },
+        { label: "Street", href: "/brands" },
+        { label: "All Brands", href: "/brands" },
+      ],
+    },
+  ];
 
   return (
     <html lang="en">
@@ -132,8 +193,26 @@ export default function RootLayout({
 
                   {isCategoryOpen && (
                     <div className="absolute top-full left-0 w-[1200px] bg-white text-black p-8 shadow-xl border border-gray-200">
-                      <div className="text-sm text-gray-500">
-                        Mega menu content here
+                      <div className="grid grid-cols-6 gap-8 text-sm">
+                        {megaMenuColumns.map((column) => (
+                          <div key={column.title}>
+                            <h4 className="font-semibold mb-3 text-gray-900">
+                              {column.title}
+                            </h4>
+                            <ul className="space-y-2 text-gray-700">
+                              {column.items.map((item) => (
+                                <li key={`${column.title}-${item.label}`}>
+                                  <Link
+                                    href={item.href}
+                                    className="hover:text-black"
+                                  >
+                                    {item.label}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   )}
@@ -141,12 +220,6 @@ export default function RootLayout({
 
                 {/* MAIN LINKS */}
                 <div className="flex items-center gap-8">
-                  <Link href="/shop" className="py-4 hover:text-gray-300">
-                    Apparel
-                  </Link>
-                  <Link href="/beauty" className="py-4 hover:text-gray-300">
-                    Beauty
-                  </Link>
                   <Link href="/lookbook" className="py-4 hover:text-gray-300">
                     Lookbook
                   </Link>

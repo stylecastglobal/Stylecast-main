@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 // ========== Hero Banner Section ==========
 function HeroBannerSection() {
@@ -161,16 +162,51 @@ function ShopByCollectionSection() {
   const [isHovered, setIsHovered] = useState(false);
 
   const collections = [
-    { id: 1, title: "Winter-Ready Skincare", image: "/collection-winter-skincare.jpg" },
-    { id: 2, title: "Best Sellers", image: "/collection-best-sellers.jpg" },
-    { id: 3, title: "New Arrivals", image: "/collection-new-arrivals.jpg" },
-    { id: 4, title: "Sun Care", image: "/collection-sun-care.jpg" },
-    { id: 5, title: "Facial Cleanser", image: "/collection-facial-cleanser.jpg" },
-    { id: 6, title: "Makeup Remover", image: "/collection-makeup-remover.jpg" },
-    { id: 7, title: "Toner Pads", image: "/collection-toner-pads.jpg" },
-    { id: 8, title: "Serum & Ampoule", image: "/collection-serum-ampoule.jpg" },
-    { id: 9, title: "Toner & Essence", image: "/collection-toner-essence.jpg" },
-    { id: 10, title: "Face Masks", image: "/collection-face-masks.jpg" },
+    {
+      id: 1,
+      title: "Winter-Ready Skincare",
+      image: "/collection-winter-skincare.jpg",
+      slug: "winter-ready-skincare",
+    },
+    {
+      id: 2,
+      title: "Best Sellers",
+      image: "/collection-best-sellers.jpg",
+      slug: "best-sellers",
+    },
+    {
+      id: 3,
+      title: "New Arrivals",
+      image: "/collection-new-arrivals.jpg",
+      slug: "new-arrivals",
+    },
+    { id: 4, title: "Sun Care", image: "/collection-sun-care.jpg", slug: "sun-care" },
+    {
+      id: 5,
+      title: "Facial Cleanser",
+      image: "/collection-facial-cleanser.jpg",
+      slug: "facial-cleanser",
+    },
+    {
+      id: 6,
+      title: "Makeup Remover",
+      image: "/collection-makeup-remover.jpg",
+      slug: "makeup-remover",
+    },
+    { id: 7, title: "Toner Pads", image: "/collection-toner-pads.jpg", slug: "toner-pads" },
+    {
+      id: 8,
+      title: "Serum & Ampoule",
+      image: "/collection-serum-ampoule.jpg",
+      slug: "serum-ampoule",
+    },
+    {
+      id: 9,
+      title: "Toner & Essence",
+      image: "/collection-toner-essence.jpg",
+      slug: "toner-essence",
+    },
+    { id: 10, title: "Face Masks", image: "/collection-face-masks.jpg", slug: "face-masks" },
   ];
 
   const itemsPerPage = 6;
@@ -244,8 +280,9 @@ function ShopByCollectionSection() {
         {/* Collection Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
           {currentCollections.map((collection) => (
-            <button
+            <Link
               key={collection.id}
+              href={`/collections/${collection.slug}`}
               className="flex flex-col items-center group cursor-pointer"
             >
               {/* Circle Image Container */}
@@ -263,7 +300,7 @@ function ShopByCollectionSection() {
               <p className="text-sm sm:text-base text-center font-medium text-gray-700 max-w-[140px] leading-snug">
                 {collection.title}
               </p>
-            </button>
+            </Link>
           ))}
         </div>
       </div>

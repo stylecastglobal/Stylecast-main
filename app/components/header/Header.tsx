@@ -145,6 +145,13 @@ export default function Header() {
               <div className="absolute top-full left-0 w-[1200px] bg-white text-black p-8 shadow-2xl">
                 <div className="grid grid-cols-6 gap-8 text-sm">
                   <div>
+                    <h4 className="font-semibold mb-3">FEATURED</h4>
+                    <ul className="space-y-2 text-gray-700">
+                      <li><Link href="/shop">Apparel</Link></li>
+                      <li><Link href="/beauty">Beauty</Link></li>
+                    </ul>
+                  </div>
+                  <div>
                     <h4 className="font-semibold mb-3">CLOTHING</h4>
                     <ul className="space-y-2 text-gray-700">
                       <li><Link href="/clothing/all">All Clothing</Link></li>
@@ -160,8 +167,6 @@ export default function Header() {
 
           {/* MAIN NAV */}
           <div className="flex gap-8 text-sm">
-            <Link href="/shop">Apparel</Link>
-            <Link href="/beauty">Beauty</Link>
             <Link href="/lookbook">Lookbook</Link>
             <Link href="/wishes">Wishes</Link>
             <Link href="/feed">Feed</Link>

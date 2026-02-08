@@ -78,7 +78,7 @@ export default function Footer() {
               Shop
             </h4>
             <ul className="space-y-2 text-sm text-neutral-700">
-              <li><Link href="/shop/new">New Arrivals</Link></li>
+              <li><Link href="/new-arrivals">New Arrivals</Link></li>
               <li><Link href="/shop/apparel">Apparel</Link></li>
               <li><Link href="/shop/beauty">Beauty</Link></li>
               <li><Link href="/lookbook">Lookbook</Link></li>

@@ -175,7 +175,7 @@ export default function Home() {
   
   {/* Header */}
   <div className="flex items-center justify-between px-6 mb-6 max-w-[1600px] mx-auto">
-    <h2 className="text-3xl font-semibold tracking-wide text-[#111]">
+    <h2 className="text-3xl font-light tracking-tight text-[#111]">
       New Drops
     </h2>
     <a href="/new-drops" className="text-sm text-[#111] opacity-70 hover:opacity-100 transition">
@@ -276,6 +276,38 @@ export default function Home() {
 
 </section>
 
+{/* ===== TRENDING BRANDS SECTION ===== */}
+<section className="w-full py-12 bg-white">
+  <div className="max-w-[1600px] mx-auto px-6">
+    <div className="flex items-center justify-between mb-8">
+      <h2 className="text-3xl font-light tracking-tight text-[#111]">
+        Trending Brands
+      </h2>
+      <Link href="/brands" className="text-sm text-[#111] opacity-70 hover:opacity-100 transition">
+        View All →
+      </Link>
+    </div>
+
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {[
+        { label: "Outerwear", count: "2.4k sold", image: "/apparel-hero1.jpg" },
+        { label: "Knitwear", count: "1.8k sold", image: "/apparel-knitsection-hero.jpg" },
+        { label: "Denim", count: "1.5k sold", image: "/apparel-hero3.jpg" },
+        { label: "Bags & Acc.", count: "1.2k sold", image: "/apparel-hero5.jpg" },
+      ].map((cat) => (
+        <Link key={cat.label} href="#" className="group relative block aspect-[4/5] overflow-hidden bg-gray-100">
+          <Image src={cat.image} alt={cat.label} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-5">
+            <p className="text-white text-sm font-semibold">{cat.label}</p>
+            <p className="text-white/60 text-xs mt-1">{cat.count}</p>
+          </div>
+        </Link>
+      ))}
+    </div>
+  </div>
+</section>
+
 {/* ===== PRODUCT GRID SECTION ===== */}
 <section id="products" className="w-full py-12 bg-white">
 
@@ -346,7 +378,7 @@ export default function Home() {
 
   {/* Header */}
   <div className="flex items-center justify-between px-6 mb-6 max-w-[1600px] mx-auto">
-    <h2 className="text-3xl font-semibold tracking-wide text-[#111]">
+    <h2 className="text-3xl font-light tracking-tight text-[#111]">
       Lookbook
     </h2>
     <a href="/lookbook" className="text-sm text-[#111] opacity-70 hover:opacity-100 transition">
@@ -406,12 +438,71 @@ export default function Home() {
 </section>
 
 
+{/* ===== EXCLUSIVE DROP SECTION ===== */}
+<section className="w-full bg-[#111111] py-14 px-6">
+  <div className="max-w-[1600px] mx-auto">
+
+    {/* Header row */}
+    <div className="flex items-start justify-between mb-8">
+      <div>
+        <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-yellow-400 mb-2 block">Exclusive Drop</span>
+        <h2 className="text-2xl md:text-3xl font-light text-white leading-tight tracking-tight">
+          UGLYSHADOW: Exclusive Capsule Collection
+        </h2>
+        <p className="text-sm text-white/50 mt-1">Limited to 200 pieces worldwide</p>
+      </div>
+
+      {/* Countdown */}
+      <div className="hidden md:flex items-center gap-2 flex-shrink-0">
+        <span className="text-xs text-white/60 mr-1">ENDS IN</span>
+        {["11", "42", "06"].map((val, i) => (
+          <React.Fragment key={i}>
+            <span className="bg-white/10 border border-white/20 text-white text-sm font-bold w-10 h-10 flex items-center justify-center rounded-md">{val}</span>
+            {i < 2 && <span className="text-white/40 text-sm font-bold">:</span>}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+
+    {/* Product cards */}
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {[
+        { id: 1, title: "Deconstructed hoodie [storm gray]", price: 142, salePrice: 99, discount: 30, image: "/apparel-hero1.jpg" },
+        { id: 2, title: "Oversized cargo vest [olive]", price: 118, salePrice: 83, discount: 30, image: "/apparel-hero5.jpg" },
+        { id: 3, title: "Distressed knit sweater [cream]", price: 98, salePrice: 69, discount: 30, image: "/apparel-hero3.jpg" },
+        { id: 4, title: "Wide-leg utility pants [black]", price: 108, salePrice: 76, discount: 30, image: "/apparel-knitsection-hero.jpg" },
+      ].map((item) => (
+        <Link key={item.id} href="#" className="group block">
+          <div className="relative aspect-[3/4] bg-[#1a1a1a] overflow-hidden mb-3">
+            <Image src={item.image} alt={item.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+            {/* LIMITED badge */}
+            <span className="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-sm uppercase tracking-wide">Limited</span>
+            {/* Wishlist */}
+            <button className="absolute top-3 right-3 w-8 h-8 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/60 transition">
+              <span className="text-white/70 text-sm">♡</span>
+            </button>
+          </div>
+          <div>
+            <p className="text-[11px] text-white/50 font-bold uppercase tracking-wider mb-1">UGLYSHADOW</p>
+            <h3 className="text-sm text-white font-normal line-clamp-1 mb-1.5">{item.title}</h3>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-yellow-400">{item.discount}%</span>
+              <span className="text-sm font-bold text-white">${item.salePrice}</span>
+            </div>
+            <p className="text-xs text-white/30 line-through mt-0.5">${item.price}</p>
+          </div>
+        </Link>
+      ))}
+    </div>
+  </div>
+</section>
+
 {/* ===== TOP 50 HAUL SECTION ===== */}
 <section className="w-full py-20 bg-gray-50 overflow-hidden">
   <div className="max-w-[1600px] mx-auto px-6">
     
     {/* Header */}
-    <h2 className="text-3xl font-semibold mb-10 text-[#111]">
+    <h2 className="text-3xl font-light tracking-tight mb-10 text-[#111]">
       Top 50 for Your First StyleCast Haul
     </h2>
 
@@ -527,7 +618,7 @@ export default function Home() {
           Scan & Try
         </p>
 
-        <h2 className="text-2xl font-semibold text-[#111111] leading-tight mb-3">
+        <h2 className="text-2xl font-light text-[#111111] leading-tight tracking-tight mb-3">
           Scan Any Beauty Product,<br />Try It Instantly
         </h2>
 
@@ -552,7 +643,7 @@ export default function Home() {
           AI Personal Color
         </p>
 
-        <h2 className="text-2xl font-semibold text-[#111111] leading-tight mb-3">
+        <h2 className="text-2xl font-light text-[#111111] leading-tight tracking-tight mb-3">
           Discover Your True<br />Personal Color
         </h2>
 
@@ -587,7 +678,7 @@ export default function Home() {
 
   {/* HEADER */}
   <div className="flex items-center justify-between px-6 mb-12 max-w-[1600px] mx-auto">
-    <h2 className="text-3xl font-semibold tracking-wide text-[#111]">
+    <h2 className="text-3xl font-light tracking-tight text-[#111]">
       Feed
     </h2>
 
