@@ -470,16 +470,38 @@ function TrendingSection() {
 
 
 
-// ========== Product Grid Section ==========
+// ========== Product Grid Section (Dynamic) ==========
 function ProductGridSection({
   title,
-  products,
+  category,
 }: {
   title: string;
-  products: any[];
+  category: string;
 }) {
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [productIndex, setProductIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        setLoading(true);
+        const res = await fetch(
+          `/api/beauty/products?category=${category}&limit=20`
+        );
+        if (!res.ok) throw new Error("Failed to fetch");
+        const data = await res.json();
+        setProducts(data.products || []);
+      } catch {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProducts();
+  }, [category]);
 
   const itemsPerPage = 4;
   const totalPages = Math.ceil(products.length / itemsPerPage);
@@ -497,13 +519,26 @@ function ProductGridSection({
     setProductIndex((prev) => (prev === totalPages - 1 ? 0 : prev + 1));
   };
 
-  // ✅ Banner image mapping
+  // Banner image mapping
   const bannerImage =
-    title.toLowerCase() === "skincare"
+    category === "skincare"
       ? "/skincarebanner-beauty.jpg"
-      : title.toLowerCase() === "makeup"
+      : category === "makeup"
       ? "/makeupbanner-beauty.jpg"
-      : `/${title.toLowerCase()}-banner.jpg`;
+      : `/${category}-banner.jpg`;
+
+  // Skeleton loader for product cards
+  const SkeletonCard = () => (
+    <div className="animate-pulse">
+      <div className="aspect-square rounded-xl bg-gray-200 mb-3" />
+      <div className="space-y-2">
+        <div className="h-3 w-16 bg-gray-200 rounded" />
+        <div className="h-4 w-full bg-gray-200 rounded" />
+        <div className="h-4 w-2/3 bg-gray-200 rounded" />
+        <div className="h-4 w-20 bg-gray-200 rounded" />
+      </div>
+    </div>
+  );
 
   return (
     <section
@@ -517,17 +552,19 @@ function ProductGridSection({
           {title}
         </h2>
 
-        <div className="flex gap-2">
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setProductIndex(index)}
-              className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                index === productIndex ? "bg-black" : "bg-gray-300"
-              }`}
-            />
-          ))}
-        </div>
+        {!loading && products.length > itemsPerPage && (
+          <div className="flex gap-2">
+            {Array.from({ length: totalPages }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setProductIndex(index)}
+                className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                  index === productIndex ? "bg-black" : "bg-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="relative grid grid-cols-1 lg:grid-cols-5 gap-5">
@@ -548,7 +585,10 @@ function ProductGridSection({
               <p className="text-sm mt-1">Shop all</p>
             </div>
 
-            <button className="self-end w-12 h-12 bg-white rounded-full flex items-center justify-center shadow">
+            <Link
+              href={`/beauty/${category}`}
+              className="self-end w-12 h-12 bg-white rounded-full flex items-center justify-center shadow hover:scale-105 transition"
+            >
               <svg
                 className="w-5 h-5 text-black"
                 fill="none"
@@ -562,86 +602,147 @@ function ProductGridSection({
                   d="M9 5l7 7-7 7"
                 />
               </svg>
-            </button>
+            </Link>
           </div>
         </div>
 
         {/* Product Grid */}
         <div className="lg:col-span-4 relative">
           {/* Arrows */}
-          {isHovered && productIndex > 0 && (
+          {!loading && isHovered && productIndex > 0 && (
             <button
               onClick={goToPrevious}
-              className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-10"
+              className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-10 flex items-center justify-center hover:bg-gray-50"
             >
               ‹
             </button>
           )}
 
-          {isHovered && productIndex < totalPages - 1 && (
+          {!loading && isHovered && productIndex < totalPages - 1 && (
             <button
               onClick={goToNext}
-              className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-10"
+              className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow z-10 flex items-center justify-center hover:bg-gray-50"
             >
               ›
             </button>
           )}
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {currentProducts.map((product) => (
-              <div key={product.id} className="cursor-pointer">
-                {/* Image Card */}
-                <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3 group">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+          {/* Loading State */}
+          {loading && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <SkeletonCard key={i} />
+              ))}
+            </div>
+          )}
 
-                  {/* New badge */}
-                  {product.isNew && (
-                    <div className="absolute top-3 left-3 bg-black text-white text-xs px-2 py-1 rounded">
-                      New
-                    </div>
-                  )}
+          {/* Error State */}
+          {!loading && error && (
+            <div className="flex items-center justify-center h-64 text-gray-400">
+              <p>Failed to load products. Please try again later.</p>
+            </div>
+          )}
 
-                  {/* Heart */}
-                  <button className="absolute top-3 right-3 w-9 h-9 bg-white rounded-full shadow flex items-center justify-center">
-                    ♡
-                  </button>
+          {/* Empty State */}
+          {!loading && !error && products.length === 0 && (
+            <div className="flex items-center justify-center h-64 text-gray-400">
+              <p>No products found.</p>
+            </div>
+          )}
 
-                  {/* ADD TO CART (hover) */}
-                  <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <button className="w-full bg-white text-black text-sm font-medium py-2.5 rounded-lg shadow hover:bg-gray-100">
-                      ADD TO CART
-                    </button>
-                  </div>
-                </div>
-
-                {/* Info */}
-                <div className="space-y-1">
-                  <p className="text-xs text-gray-500">
-                    {product.brand}
-                  </p>
-                  <p className="text-sm font-medium text-black line-clamp-2">
-                    {product.name}
-                  </p>
-
-                  <div className="flex items-center justify-between pt-1">
-                    <p className="text-base font-bold text-black">
-                      {product.price}
-                    </p>
-                    {product.stock && (
-                      <span className="text-xs text-green-600 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-green-600 rounded-full" />
-                        In stock
-                      </span>
+          {/* Product Cards */}
+          {!loading && !error && products.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+              {currentProducts.map((product) => (
+                <a
+                  key={product.id}
+                  href={product.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cursor-pointer group block"
+                >
+                  {/* Image Card */}
+                  <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
+                    {product.image ? (
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-300 text-sm">
+                        No Image
+                      </div>
                     )}
+
+                    {/* New badge */}
+                    {product.isNew && (
+                      <div className="absolute top-3 left-3 bg-black text-white text-xs px-2 py-1 rounded">
+                        New
+                      </div>
+                    )}
+
+                    {/* Sale badge */}
+                    {product.compareAtPrice && (
+                      <div className="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                        Sale
+                      </div>
+                    )}
+
+                    {/* Heart */}
+                    <button
+                      onClick={(e) => e.preventDefault()}
+                      className="absolute top-3 right-3 w-9 h-9 bg-white rounded-full shadow flex items-center justify-center hover:scale-110 transition"
+                    >
+                      ♡
+                    </button>
+
+                    {/* ADD TO CART (hover) */}
+                    <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <button
+                        onClick={(e) => e.preventDefault()}
+                        className="w-full bg-white text-black text-sm font-medium py-2.5 rounded-lg shadow hover:bg-gray-100"
+                      >
+                        ADD TO CART
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
+
+                  {/* Info */}
+                  <div className="space-y-1">
+                    <p className="text-xs text-gray-500">{product.brand}</p>
+                    <p className="text-sm font-medium text-black line-clamp-2">
+                      {product.name}
+                    </p>
+
+                    <div className="flex items-center justify-between pt-1">
+                      <div className="flex items-center gap-2">
+                        <p className="text-base font-bold text-black">
+                          {product.price}
+                        </p>
+                        {product.compareAtPrice && (
+                          <p className="text-sm text-gray-400 line-through">
+                            {product.compareAtPrice}
+                          </p>
+                        )}
+                      </div>
+                      {product.inStock ? (
+                        <span className="text-xs text-green-600 flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 bg-green-600 rounded-full" />
+                          In stock
+                        </span>
+                      ) : (
+                        <span className="text-xs text-red-500">
+                          Sold out
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -767,78 +868,12 @@ function RecommendedSection() {
 
 // ========== Main Beauty Page ==========
 export default function BeautyPage() {
-  const skincareProducts = [
-    {
-      id: 1,
-      brand: "Equalberry",
-      name: "EQUALBERRY NAD+ Peptide Boosting Serum",
-      price: "$33.99 CAD",
-      stock: true,
-      isNew: true,
-    },
-    {
-      id: 2,
-      brand: "Biodance",
-      name: "Biodance Bio-Collagen Real Deep Mask (Pink)",
-      price: "from $6.99",
-      stock: true,
-    },
-    {
-      id: 3,
-      brand: "Anua",
-      name: "Anua Niacinamide 10% + TXA 4% Serum 30ml",
-      price: "$31.69 CAD",
-      stock: true,
-    },
-    {
-      id: 4,
-      brand: "Dr. Althea",
-      name: "Dr. Althea 345 Relief Cream 50ml",
-      price: "$25.99 CAD",
-      stock: true,
-    },
-  ];
-
-  const makeupProducts = [
-    {
-      id: 1,
-      brand: "Milktouch",
-      name: "Milktouch Black Peel Off Lip Tattoo (5 Colors)",
-      price: "$23.99 CAD",
-      stock: true,
-      isNew: true,
-    },
-    {
-      id: 2,
-      brand: "TIRTIR",
-      name: "TIRTIR Mask Fit Red Cushion Foundation",
-      price: "$33.99 CAD",
-      stock: true,
-      isNew: true,
-    },
-    {
-      id: 3,
-      brand: "2&N",
-      name: "2&N Dual Cheek Jig (8 Colors)",
-      price: "$33.99 CAD",
-      stock: true,
-    },
-    {
-      id: 4,
-      brand: "Judydoll",
-      name: "Judydoll 2 in 1 Highlighter Contour Palette",
-      price: "$22.99 CAD",
-      stock: true,
-    },
-  ];
-
   return (
     <main className="bg-white text-black min-h-screen">
-      <HeroBannerSection />
       <ShopByCollectionSection />
       <TrendingSection />
-      <ProductGridSection title="Skincare" products={skincareProducts} />
-      <ProductGridSection title="Makeup" products={makeupProducts} />
+      <ProductGridSection title="Skincare" category="skincare" />
+      <ProductGridSection title="Makeup" category="makeup" />
       <RecommendedSection />
     </main>
   );

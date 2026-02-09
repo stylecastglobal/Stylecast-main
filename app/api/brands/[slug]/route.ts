@@ -6,10 +6,35 @@ const BRAND_CONFIG: Record<string, { shopifyDomain: string }> = {
     shopifyDomain: "https://en.glowny.co.kr",
   },
   "aime-leon-dore": {
-    shopifyDomain: "https://www.aimeleondore.com", // ← ALD Shopify 도메인 추가
+    shopifyDomain: "https://www.aimeleondore.com",
   },
   scuffers: {
     shopifyDomain: "https://scuffers.com",
+  },
+  // K-Beauty brands
+  cosrx: {
+    shopifyDomain: "https://www.cosrx.com",
+  },
+  tirtir: {
+    shopifyDomain: "https://tirtir.us",
+  },
+  anua: {
+    shopifyDomain: "https://anua.us",
+  },
+  numbuzin: {
+    shopifyDomain: "https://numbuzin.com",
+  },
+  skin1004: {
+    shopifyDomain: "https://skin1004.com",
+  },
+  mixsoon: {
+    shopifyDomain: "https://mixsoon.us",
+  },
+  medicube: {
+    shopifyDomain: "https://medicube.us",
+  },
+  biodance: {
+    shopifyDomain: "https://biodance.us",
   },
 };
 export async function GET(
