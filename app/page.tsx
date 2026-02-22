@@ -46,7 +46,21 @@ export default function Home() {
 
   useEffect(() => {
     let isMounted = true;
-    const brandSlugs = ["glowny", "aime-leon-dore", "scuffers"];
+    const brandSlugs = [
+      "glowny",
+      "aime-leon-dore",
+      "scuffers",
+      "sculptor",
+      "huni-design",
+      "saalt-studio",
+      "matin-kim",
+      "medicube",
+      "glossier",
+      "fentybeauty",
+      "iliabeauty",
+      "laneige",
+      "rarebeauty",
+    ];
 
     const loadNewDrops = async () => {
       const results = await Promise.allSettled(
@@ -78,16 +92,30 @@ export default function Home() {
   }, []);
 
   const brandBySlug = new Map(brands.map((brand) => [brand.slug, brand]));
-  const newDropItems = newDrops.slice(0, 10);
+
+  // Shuffle helper
+  const shuffle = <T,>(arr: T[]): T[] => {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+
+  const shuffledDrops = shuffle(newDrops);
+  const newDropItems = shuffledDrops.slice(0, 12);
   const newDropLoopItems =
     newDropItems.length > 0 ? [...newDropItems, ...newDropItems] : [];
-  const top50Items = newDrops.slice(0, 8);
+  const top50Items = shuffle(newDrops).slice(0, 10);
   const top50LoopItems =
     top50Items.length > 0 ? [...top50Items, ...top50Items] : [];
   const productGridItems: Array<BrandProduct | null> =
     newDrops.length > 0
-      ? newDrops.slice(0, 18)
-      : Array.from({ length: 18 }).map(() => null);
+      ? shuffle(newDrops).slice(0, 24)
+      : Array.from({ length: 24 }).map(() => null);
+  const editorialItems = shuffle(newDrops).slice(0, 12);
+  const exclusiveItems = shuffle(newDrops).slice(0, 4);
   const formatPrice = (price?: string | null) => {
     if (!price) return "—";
     const numeric = Number(String(price).replace(/,/g, ""));
@@ -171,7 +199,7 @@ export default function Home() {
 </section>
 
 {/* ===== NEW DROPS SECTION ===== */}
-<section className="w-full py-12 bg-gray-50 overflow-hidden">
+<section className="w-full py-12 bg-white overflow-hidden">
   
   {/* Header */}
   <div className="flex items-center justify-between px-6 mb-6 max-w-[1600px] mx-auto">
@@ -199,7 +227,7 @@ export default function Home() {
           return (
             <Link 
               key={`${item.id}-${i}`} 
-              href={item.officialUrl || (brand ? `/brands/${brand.slug}` : "/brands")}
+              href={`/products/${item.handle}?brand=${item.brandSlug}`}
               className="group relative bg-white overflow-hidden hover:shadow-lg transition-all duration-300 flex-shrink-0 w-[220px]"
             >
               {/* Product Image */}
@@ -290,12 +318,12 @@ export default function Home() {
 
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {[
-        { label: "Outerwear", count: "2.4k sold", image: "/apparel-hero1.jpg" },
-        { label: "Knitwear", count: "1.8k sold", image: "/apparel-knitsection-hero.jpg" },
-        { label: "Denim", count: "1.5k sold", image: "/apparel-hero3.jpg" },
-        { label: "Bags & Acc.", count: "1.2k sold", image: "/apparel-hero5.jpg" },
+        { label: "SCULPTOR", slug: "sculptor", count: "2.4k sold", image: "/sculptor-brandcardpic.jpg" },
+        { label: "Matin Kim", slug: "matin-kim", count: "1.8k sold", image: "/matinkim-brandcardspic.jpg" },
+        { label: "Scuffers", slug: "scuffers", count: "1.5k sold", image: "/scuffers-brandcardspic.jpg" },
+        { label: "HUNI Design", slug: "huni-design", count: "1.2k sold", image: "/hunidesign-brandcardpic.jpg" },
       ].map((cat) => (
-        <Link key={cat.label} href="#" className="group relative block aspect-[4/5] overflow-hidden bg-gray-100">
+        <Link key={cat.label} href={`/brands/${cat.slug}`} className="group relative block aspect-[4/5] overflow-hidden bg-gray-100">
           <Image src={cat.image} alt={cat.label} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-5">
@@ -307,6 +335,59 @@ export default function Home() {
     </div>
   </div>
 </section>
+
+{/* ===== EDITORIAL SECTION ===== */}
+<section className="w-full py-12 bg-white">
+  <div className="max-w-[1600px] mx-auto px-6">
+
+    {/* Section Title */}
+    <h2 className="text-2xl font-light tracking-tight text-[#111] mb-4">
+      Winter Essentials
+    </h2>
+
+    {/* Product Row */}
+    <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+      {editorialItems.length > 0
+        ? editorialItems.map((item, i) => {
+            const brand = brandBySlug.get(item.brandSlug);
+            const image = item.image || item.images?.[0] || "/product-1.jpg";
+            return (
+              <Link key={`editorial-${item.id}-${i}`} href={`/products/${item.handle}?brand=${item.brandSlug}`} className="group">
+                <div className="relative w-full aspect-square bg-white overflow-hidden mb-2">
+                  <img src={image} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                </div>
+                <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wide mb-0.5 line-clamp-1">
+                  {brand?.name ?? "STYLECAST"}
+                </p>
+                <h3 className="text-xs text-[#111] leading-tight line-clamp-1 mb-1">
+                  {item.title}
+                </h3>
+                <span className="text-sm font-bold text-[#111]">{formatPrice(item.price)}</span>
+              </Link>
+            );
+          })
+        : Array.from({ length: 6 }).map((_, i) => (
+            <div key={`editorial-skeleton-${i}`}>
+              <div className="w-full aspect-square bg-gray-100 animate-pulse mb-2" />
+              <div className="h-3 w-16 bg-gray-100 rounded animate-pulse mb-1" />
+              <div className="h-3 w-24 bg-gray-100 rounded animate-pulse" />
+            </div>
+          ))}
+    </div>
+
+    {/* Shop Now */}
+    <div className="flex justify-center mt-10">
+      <Link
+        href="/brands"
+        className="px-10 py-3 border border-gray-300 text-sm font-medium text-[#111] hover:bg-gray-50 transition"
+      >
+        Shop Now
+      </Link>
+    </div>
+
+  </div>
+</section>
+
 
 {/* ===== PRODUCT GRID SECTION ===== */}
 <section id="products" className="w-full py-12 bg-white">
@@ -373,69 +454,6 @@ export default function Home() {
   </div>
 </section>
 
-{/* ===== LOOKBOOK CARDS SECTION ===== */}
-<section className="w-full py-12 bg-gray-50 overflow-hidden">
-
-  {/* Header */}
-  <div className="flex items-center justify-between px-6 mb-6 max-w-[1600px] mx-auto">
-    <h2 className="text-3xl font-light tracking-tight text-[#111]">
-      Lookbook
-    </h2>
-    <a href="/lookbook" className="text-sm text-[#111] opacity-70 hover:opacity-100 transition">
-      View All →
-    </a>
-  </div>
-
-  <div className="px-6 max-w-[1600px] mx-auto">
-    <div className="relative">
-      <div
-        ref={lookbookScrollRef}
-        className="lookbook-scroll flex gap-6 overflow-x-auto scroll-smooth pr-12"
-      >
-      {lookbookCards.map((item) => (
-        <Link
-          key={item.id}
-          href={`/lookbook/women/${item.id}`}
-          className="group relative bg-white overflow-hidden hover:shadow-lg transition-all duration-300 flex-shrink-0 w-[220px]"
-        >
-          <div className="relative w-full aspect-[3/4] bg-gray-50 overflow-hidden p-2">
-            <Image
-              src={item.image}
-              alt={item.title}
-              fill
-              className="object-contain transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <div className="absolute left-3 right-3 bottom-3 translate-y-3 text-xs font-semibold text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-              <p className="text-[10px] text-white/70 mb-1">{item.season}</p>
-              <h3 className="text-xs font-semibold text-white line-clamp-2">
-                {item.title}
-              </h3>
-            </div>
-          </div>
-        </Link>
-      ))}
-      </div>
-
-      <button
-        type="button"
-        onClick={handleLookbookNext}
-        className="absolute -right-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white border border-gray-200 shadow-md hover:shadow-lg transition flex items-center justify-center text-xl text-gray-700"
-        aria-label="Next lookbooks"
-      >
-        ›
-      </button>
-      <button
-        type="button"
-        onClick={handleLookbookPrev}
-        className="absolute -left-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white border border-gray-200 shadow-md hover:shadow-lg transition flex items-center justify-center text-xl text-gray-700"
-        aria-label="Previous lookbooks"
-      >
-        ‹
-      </button>
-    </div>
-  </div>
-</section>
 
 
 {/* ===== EXCLUSIVE DROP SECTION ===== */}
@@ -466,33 +484,33 @@ export default function Home() {
 
     {/* Product cards */}
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      {[
-        { id: 1, title: "Deconstructed hoodie [storm gray]", price: 142, salePrice: 99, discount: 30, image: "/apparel-hero1.jpg" },
-        { id: 2, title: "Oversized cargo vest [olive]", price: 118, salePrice: 83, discount: 30, image: "/apparel-hero5.jpg" },
-        { id: 3, title: "Distressed knit sweater [cream]", price: 98, salePrice: 69, discount: 30, image: "/apparel-hero3.jpg" },
-        { id: 4, title: "Wide-leg utility pants [black]", price: 108, salePrice: 76, discount: 30, image: "/apparel-knitsection-hero.jpg" },
-      ].map((item) => (
-        <Link key={item.id} href="#" className="group block">
-          <div className="relative aspect-[3/4] bg-[#1a1a1a] overflow-hidden mb-3">
-            <Image src={item.image} alt={item.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
-            {/* LIMITED badge */}
-            <span className="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-sm uppercase tracking-wide">Limited</span>
-            {/* Wishlist */}
-            <button className="absolute top-3 right-3 w-8 h-8 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/60 transition">
-              <span className="text-white/70 text-sm">♡</span>
-            </button>
-          </div>
-          <div>
-            <p className="text-[11px] text-white/50 font-bold uppercase tracking-wider mb-1">UGLYSHADOW</p>
-            <h3 className="text-sm text-white font-normal line-clamp-1 mb-1.5">{item.title}</h3>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-yellow-400">{item.discount}%</span>
-              <span className="text-sm font-bold text-white">${item.salePrice}</span>
+      {exclusiveItems.length > 0
+        ? exclusiveItems.map((item, i) => {
+            const brand = brandBySlug.get(item.brandSlug);
+            const image = item.image || item.images?.[0] || "/product-1.jpg";
+            return (
+              <Link key={`exclusive-${item.id}-${i}`} href={`/products/${item.handle}?brand=${item.brandSlug}`} className="group block">
+                <div className="relative aspect-[3/4] bg-[#1a1a1a] overflow-hidden mb-3">
+                  <img src={image} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <span className="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-sm uppercase tracking-wide">Exclusive</span>
+                </div>
+                <div>
+                  <p className="text-[11px] text-white/50 font-bold uppercase tracking-wider mb-1">{brand?.name ?? "STYLECAST"}</p>
+                  <h3 className="text-sm text-white font-normal line-clamp-1 mb-1.5">{item.title}</h3>
+                  <span className="text-sm font-bold text-white">{formatPrice(item.price)}</span>
+                </div>
+              </Link>
+            );
+          })
+        : Array.from({ length: 4 }).map((_, i) => (
+            <div key={`exclusive-skeleton-${i}`} className="group block">
+              <div className="aspect-[3/4] bg-[#1a1a1a] animate-pulse mb-3" />
+              <div className="space-y-2">
+                <div className="h-3 w-20 bg-white/10 rounded animate-pulse" />
+                <div className="h-4 w-32 bg-white/10 rounded animate-pulse" />
+              </div>
             </div>
-            <p className="text-xs text-white/30 line-through mt-0.5">${item.price}</p>
-          </div>
-        </Link>
-      ))}
+          ))}
     </div>
   </div>
 </section>

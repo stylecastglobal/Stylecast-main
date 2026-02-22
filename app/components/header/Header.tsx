@@ -164,12 +164,12 @@ export default function Header() {
 
           {/* MAIN NAV */}
           <div className="flex gap-8 text-sm">
+            <Link href="/smart-features">Smart Features</Link>
             <Link href="/lookbook">Lookbook</Link>
+            <Link href="/celeb">Celeb</Link>
             <Link href="/wishes">Wishes</Link>
             <Link href="/feed">Feed</Link>
-            <Link href="/brands" className="text-sm font-medium text-black hover:opacity-60">
-              Brands
-            </Link>
+            <Link href="/brands">Brands</Link>
           </div>
         </nav>
       </div>

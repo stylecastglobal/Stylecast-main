@@ -654,11 +654,9 @@ function ProductGridSection({
           {!loading && !error && products.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
               {currentProducts.map((product) => (
-                <a
+                <Link
                   key={product.id}
-                  href={product.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={`/products/${product.handle}?brand=${product.brandSlug}`}
                   className="cursor-pointer group block"
                 >
                   {/* Image Card */}
@@ -739,7 +737,7 @@ function ProductGridSection({
                       )}
                     </div>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
           )}

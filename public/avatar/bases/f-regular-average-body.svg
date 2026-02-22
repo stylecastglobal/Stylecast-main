@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" fill="none">
+  <!-- Fashion croquis body — elegant elongated female figure -->
+  <defs>
+    <filter id="soft" x="-2%" y="-2%" width="104%" height="104%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Neck — long, graceful -->
+  <path class="skin" d="M188 108 Q188 100 192 98 L208 98 Q212 100 212 108 L214 148 Q214 152 210 153 L190 153 Q186 152 186 148 Z" fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Shoulders + upper torso — smooth taper to waist -->
+  <path class="skin" d="
+    M190 153
+    Q170 155 148 162 Q132 170 128 180
+    L122 200 Q120 210 124 212
+    L132 210 Q138 200 142 190
+    L148 180 Q155 172 165 168
+    L165 200 L155 280
+    Q150 310 152 330 Q155 345 168 350
+    L232 350 Q245 345 248 330
+    Q250 310 245 280 L235 200
+    L235 168 Q245 172 252 180
+    L258 190 Q262 200 268 210
+    L276 212 Q280 210 278 200
+    L272 180 Q268 170 252 162
+    Q230 155 210 153 Z
+  " fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Left arm — slender, slightly curved -->
+  <path class="skin" d="
+    M128 180 Q118 190 112 220
+    L104 300 Q100 330 98 350
+    Q96 365 100 370 L108 372
+    Q114 368 116 355 L120 330
+    L128 260 Q132 230 136 210
+    L132 195 Z
+  " fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Right arm -->
+  <path class="skin" d="
+    M272 180 Q282 190 288 220
+    L296 300 Q300 330 302 350
+    Q304 365 300 370 L292 372
+    Q286 368 284 355 L280 330
+    L272 260 Q268 230 264 210
+    L268 195 Z
+  " fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Left hand — delicate -->
+  <path class="skin" d="M100 370 Q94 372 92 380 Q90 390 95 394 Q100 398 108 396 Q114 392 114 382 Q114 374 108 372 Z" fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Right hand -->
+  <path class="skin" d="M300 370 Q306 372 308 380 Q310 390 305 394 Q300 398 292 396 Q286 392 286 382 Q286 374 292 372 Z" fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Hips — feminine curve from waist -->
+  <path class="skin" d="
+    M168 350
+    Q155 355 148 370 Q142 390 140 410
+    Q138 430 142 440 L148 442
+    L252 442 L258 440
+    Q262 430 260 410 Q258 390 252 370
+    Q245 355 232 350 Z
+  " fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Left leg — long, tapered -->
+  <path class="skin" d="
+    M148 442
+    Q146 460 148 500
+    L150 560 Q150 590 148 620
+    L146 660 Q145 672 150 676
+    L172 676 Q178 672 176 660
+    L174 620 Q174 590 176 560
+    L180 500 Q182 460 180 442 Z
+  " fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Right leg -->
+  <path class="skin" d="
+    M220 442
+    Q218 460 220 500
+    L222 560 Q222 590 224 620
+    L226 660 Q227 672 232 676
+    L254 676 Q260 672 258 660
+    L256 620 Q256 590 254 560
+    L250 500 Q248 460 250 442 Z
+  " fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Left foot — pointed, elegant -->
+  <path class="skin" d="M146 676 Q140 678 132 682 Q126 688 130 692 Q136 696 155 696 Q172 696 176 692 Q178 688 176 682 Q174 678 172 676 Z" fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Right foot -->
+  <path class="skin" d="M232 676 Q228 678 226 682 Q224 688 228 692 Q234 696 253 696 Q270 696 274 692 Q276 688 272 682 Q266 678 258 676 Z" fill="var(--avatar-skin, #D4A574)"/>
+</svg>

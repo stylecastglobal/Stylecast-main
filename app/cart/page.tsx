@@ -174,6 +174,13 @@ export default function CartPage() {
                   <div className="text-sm text-gray-700">{item.name}</div>
 
                   <div className="mt-4 text-sm">Qty: {item.qty}</div>
+
+                  <Link
+                    href="/outfit-builder"
+                    className="mt-3 inline-flex items-center gap-2 text-xs font-medium border border-black px-4 py-2 rounded-full hover:bg-black hover:text-white transition"
+                  >
+                    <span>✦</span> Create Outfit
+                  </Link>
                 </div>
 
                 <div className="text-right font-semibold">${item.price}</div>

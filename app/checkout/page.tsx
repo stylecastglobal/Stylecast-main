@@ -4,9 +4,12 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useShop } from "../context/ShopContext";
+import { useOutfitBuilderStore } from "../lib/outfit-builder-store";
+import { trackPurchaseAfterReasoning } from "../lib/analytics/reasoning";
 
 export default function CheckoutPage() {
   const { cart } = useShop();
+  const { reasoning, slots } = useOutfitBuilderStore();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -39,6 +42,12 @@ export default function CheckoutPage() {
     e.preventDefault();
     // Handle checkout submission
     console.log("Checkout submitted:", formData);
+
+    trackPurchaseAfterReasoning({
+      reasoningWasDisplayed: reasoning != null,
+      itemCount: cart.length,
+      totalAmount: total,
+    });
   };
 
   return (

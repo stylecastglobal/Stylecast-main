@@ -27,6 +27,11 @@ export default function Lookbook() {
   const [lookbookLink, setLookbookLink] = useState("");
   const [lookbookPdf, setLookbookPdf] = useState<File | null>(null);
   const [submitError, setSubmitError] = useState("");
+  const [submitGender, setSubmitGender] = useState<"women" | "men" | "unisex">("women");
+  const [submitName, setSubmitName] = useState("");
+  const [submitTitle, setSubmitTitle] = useState("");
+  const [submitImage, setSubmitImage] = useState<File | null>(null);
+  const [userLookbooks, setUserLookbooks] = useState<LookbookItem[]>([]);
 
   // Carousel index per row (6 rows)
   const [rowIndices, setRowIndices] = useState<number[]>([0, 0, 0, 0, 0, 0]);
@@ -34,14 +39,18 @@ export default function Lookbook() {
   // Get current lookbooks based on gender
   const currentGridLookbooks = gridLookbooks[selectedGender];
 
+  // User-submitted lookbooks filtered by selected gender
+  const userFiltered = userLookbooks.filter(
+    (lb) => lb.gender === selectedGender || lb.gender === "unisex"
+  );
+
   // Reset row carousels when gender changes
   useEffect(() => {
     setRowIndices([0, 0, 0, 0, 0, 0]);
   }, [selectedGender]);
 
-  const handleLookbookClick = (id: number) => {
-    const next = currentGridLookbooks.find((item) => item.id === id) ?? null;
-    setActiveLookbook(next);
+  const handleLookbookClick = (item: LookbookItem) => {
+    setActiveLookbook(item);
   };
 
   const parsePrice = (price: string) => {
@@ -88,11 +97,11 @@ export default function Lookbook() {
     <main className="min-h-screen bg-white text-[#111]">
       {/* Submit CTA */}
       <section className="w-full px-12 pt-20 pb-6">
-        <div className="max-w-[1400px] mx-auto flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between bg-gray-50 border border-gray-200 rounded-2xl px-6 py-5">
+        <div className="max-w-[1400px] mx-auto flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between bg-gray-50 border border-gray-200 px-6 py-5">
           <div>
             <h2 className="text-lg font-semibold text-black">Create your lookbook</h2>
             <p className="text-sm text-gray-600">
-              Submissions are reviewed first. Approved lookbooks will appear here.
+              Share your style. Your lookbook will appear on the page instantly.
             </p>
           </div>
           <button
@@ -103,8 +112,12 @@ export default function Lookbook() {
               setLookbookLink("");
               setLookbookPdf(null);
               setSubmitError("");
+              setSubmitGender("women");
+              setSubmitName("");
+              setSubmitTitle("");
+              setSubmitImage(null);
             }}
-            className="self-start sm:self-auto bg-black text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-900 transition-colors"
+            className="self-start sm:self-auto bg-black text-white px-5 py-2.5 text-sm font-semibold hover:bg-gray-900 transition-colors"
           >
             Submit a Lookbook
           </button>
@@ -113,29 +126,72 @@ export default function Lookbook() {
 
       {/* GENDER TOGGLE */}
       <section className="w-full px-12 pb-8">
-        <div className="inline-flex rounded-2xl bg-gray-100 p-1.5 shadow-inner">
+        <div className="inline-flex gap-6 border-b border-gray-200">
           <button
             onClick={() => setSelectedGender("women")}
-            className={`px-8 py-3 rounded-xl font-semibold text-base transition-all duration-300 ${
+            className={`pb-2.5 text-sm font-medium tracking-wide uppercase transition-all duration-200 ${
               selectedGender === "women"
-                ? "bg-white text-black shadow-lg"
-                : "text-gray-500 hover:text-gray-700"
+                ? "text-black border-b-2 border-black"
+                : "text-gray-400 hover:text-gray-600"
             }`}
           >
             Women
           </button>
           <button
             onClick={() => setSelectedGender("men")}
-            className={`px-8 py-3 rounded-xl font-semibold text-base transition-all duration-300 ${
+            className={`pb-2.5 text-sm font-medium tracking-wide uppercase transition-all duration-200 ${
               selectedGender === "men"
-                ? "bg-white text-black shadow-lg"
-                : "text-gray-500 hover:text-gray-700"
+                ? "text-black border-b-2 border-black"
+                : "text-gray-400 hover:text-gray-600"
             }`}
           >
             Men
           </button>
         </div>
       </section>
+
+      {/* USER SUBMISSIONS SECTION */}
+      {userFiltered.length > 0 && (
+        <section className="w-full px-12 pb-12">
+          <h2 className="text-2xl font-semibold mb-4">Made by Our StyleCasters</h2>
+          <div className="grid grid-cols-4 gap-6">
+            {userFiltered.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => handleLookbookClick(item)}
+                className="group cursor-pointer"
+              >
+                <div className="relative aspect-[3/5] overflow-hidden bg-gray-100 shadow-md transition-all duration-300 group-hover:shadow-2xl group-hover:scale-[1.02]">
+                  {item.image.startsWith("blob:") ? (
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  ) : (
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    <p className="text-white/70 text-xs font-medium tracking-wider uppercase mb-1">
+                      {item.season}
+                    </p>
+                    <h3 className="text-white text-xl font-semibold">
+                      {item.title}
+                    </h3>
+                    <p className="text-white/60 text-xs mt-1">{item.creator}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* MAIN CONTENT: LOOKBOOK GRID */}
       <section className="w-full px-12 pb-32">
@@ -171,16 +227,24 @@ export default function Lookbook() {
                       return (
                         <div
                           key={item.id}
-                          onClick={() => handleLookbookClick(item.id)}
+                          onClick={() => handleLookbookClick(item)}
                           className="group cursor-pointer"
                         >
-                          <div className="relative aspect-[3/5] rounded-2xl overflow-hidden bg-gray-100 shadow-md transition-all duration-300 group-hover:shadow-2xl group-hover:scale-[1.02]">
-                            <Image
-                              src={item.image}
-                              alt={item.title}
-                              fill
-                              className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            />
+                          <div className="relative aspect-[3/5] overflow-hidden bg-gray-100 shadow-md transition-all duration-300 group-hover:shadow-2xl group-hover:scale-[1.02]">
+                            {item.image.startsWith("blob:") ? (
+                              <img
+                                src={item.image}
+                                alt={item.title}
+                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              />
+                            ) : (
+                              <Image
+                                src={item.image}
+                                alt={item.title}
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                              />
+                            )}
                             
                             {/* Overlay on hover */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -223,13 +287,13 @@ export default function Lookbook() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl"
+            className="bg-white p-6 sm:p-8 max-w-2xl w-full shadow-2xl"
           >
             <div className="flex items-start justify-between mb-2">
               <div>
                 <h3 className="text-xl font-semibold">Submit your lookbook</h3>
                 <p className="text-sm text-gray-500 mt-1">
-                  Submissions are reviewed first. Approved lookbooks will appear on this page.
+                  Your lookbook will appear on the page right away.
                 </p>
               </div>
               <button
@@ -242,23 +306,40 @@ export default function Lookbook() {
             </div>
 
             {submitComplete ? (
-              <div className="rounded-2xl bg-gray-50 border border-gray-200 p-5 text-sm text-gray-700">
-                Thanks! Your submission is pending review. Once approved, it will appear
-                on this page.
+              <div className="bg-gray-50 border border-gray-200 p-5 text-sm text-gray-700">
+                Your lookbook is now live on the page!
               </div>
             ) : (
               <form
                 className="mt-6 space-y-5"
                 onSubmit={(event) => {
                   event.preventDefault();
-                  const hasLink = lookbookLink.trim().length > 0;
-                  const hasPdf = Boolean(lookbookPdf);
-                  if (!hasLink && !hasPdf) {
-                    setSubmitError("Please provide a lookbook link or upload a PDF.");
+                  if (!submitImage) {
+                    setSubmitError("Please upload a lookbook image.");
                     return;
                   }
                   setSubmitError("");
+                  const imageUrl = URL.createObjectURL(submitImage);
+                  const newLookbook: LookbookItem = {
+                    id: Date.now(),
+                    title: submitTitle.trim() || "Untitled Look",
+                    image: imageUrl,
+                    season: "Community Lookbook",
+                    brand: "Community",
+                    creator: submitName.trim() ? `@${submitName.trim().toLowerCase().replace(/\s+/g, "")}` : "@anonymous",
+                    gender: submitGender,
+                    products: productLinks
+                      .filter((l) => l.trim())
+                      .map((l, i) => ({
+                        name: `Product ${i + 1}`,
+                        price: "--",
+                        brand: "--",
+                        officialUrl: l.trim(),
+                      })),
+                  };
+                  setUserLookbooks((prev) => [...prev, newLookbook]);
                   setSubmitComplete(true);
+                  setTimeout(() => setIsSubmitOpen(false), 1000);
                 }}
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -266,7 +347,9 @@ export default function Lookbook() {
                     <label className="text-xs font-semibold text-gray-600">Name</label>
                     <input
                       required
-                      className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm"
+                      value={submitName}
+                      onChange={(e) => setSubmitName(e.target.value)}
+                      className="mt-1 w-full border border-gray-300 px-3 py-2 text-sm"
                       placeholder="Your name"
                     />
                   </div>
@@ -275,41 +358,72 @@ export default function Lookbook() {
                     <input
                       required
                       type="email"
-                      className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm"
+                      className="mt-1 w-full border border-gray-300 px-3 py-2 text-sm"
                       placeholder="you@email.com"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-600">
-                    Lookbook link (optional)
+                  <label className="text-xs font-semibold text-gray-600">Lookbook image</label>
+                  <label className="mt-1 flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 hover:border-black cursor-pointer transition-colors bg-gray-50">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setSubmitImage(e.target.files?.[0] || null)}
+                      className="hidden"
+                    />
+                    {submitImage ? (
+                      <div className="flex flex-col items-center gap-2">
+                        <img
+                          src={URL.createObjectURL(submitImage)}
+                          alt="Preview"
+                          className="h-24 object-contain"
+                        />
+                        <p className="text-xs text-gray-500">{submitImage.name}</p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-1 text-gray-400">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                          <path d="M12 16V4m0 0l-4 4m4-4l4 4" />
+                          <path d="M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17" />
+                        </svg>
+                        <span className="text-sm font-medium">Click to upload your lookbook image</span>
+                        <span className="text-xs">JPG, PNG, WEBP</span>
+                      </div>
+                    )}
                   </label>
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-gray-600">Lookbook title</label>
                   <input
-                    type="url"
-                    value={lookbookLink}
-                    onChange={(event) => setLookbookLink(event.target.value)}
-                    className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm"
-                    placeholder="Drive, Notion, or portfolio link"
+                    required
+                    value={submitTitle}
+                    onChange={(e) => setSubmitTitle(e.target.value)}
+                    className="mt-1 w-full border border-gray-300 px-3 py-2 text-sm"
+                    placeholder="e.g. Summer Casual"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-gray-600">
-                    Upload lookbook PDF (optional)
-                  </label>
-                  <input
-                    type="file"
-                    accept="application/pdf"
-                    onChange={(event) => {
-                      const file = event.target.files?.[0] || null;
-                      setLookbookPdf(file);
-                    }}
-                    className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm"
-                  />
-                  <p className="mt-1 text-xs text-gray-500">
-                    Provide either a link or a PDF. Only one is required.
-                  </p>
+                  <label className="text-xs font-semibold text-gray-600">Category</label>
+                  <div className="mt-1.5 flex gap-3">
+                    {(["women", "men", "unisex"] as const).map((g) => (
+                      <button
+                        key={g}
+                        type="button"
+                        onClick={() => setSubmitGender(g)}
+                        className={`px-4 py-2 text-sm font-medium border transition-colors ${
+                          submitGender === g
+                            ? "border-black bg-black text-white"
+                            : "border-gray-300 text-gray-600 hover:border-gray-500"
+                        }`}
+                      >
+                        {g.charAt(0).toUpperCase() + g.slice(1)}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -340,7 +454,7 @@ export default function Lookbook() {
                               return next;
                             });
                           }}
-                          className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm"
+                          className="w-full border border-gray-300 px-3 py-2 text-sm"
                           placeholder={`Product URL #${index + 1}`}
                         />
                         {productLinks.length > 1 && (
@@ -368,7 +482,7 @@ export default function Lookbook() {
                 <div>
                   <label className="text-xs font-semibold text-gray-600">Notes</label>
                   <textarea
-                    className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm min-h-[100px]"
+                    className="mt-1 w-full border border-gray-300 px-3 py-2 text-sm min-h-[100px]"
                     placeholder="Tell us about the concept or styling."
                   />
                 </div>
@@ -379,7 +493,7 @@ export default function Lookbook() {
 
                 <button
                   type="submit"
-                  className="w-full bg-black text-white py-3 rounded-xl text-sm font-semibold hover:bg-gray-900 transition-colors"
+                  className="w-full bg-black text-white py-3 text-sm font-semibold hover:bg-gray-900 transition-colors"
                 >
                   Submit for review
                 </button>
@@ -397,7 +511,7 @@ export default function Lookbook() {
         >
           <div
             onClick={(event) => event.stopPropagation()}
-            className="bg-white rounded-3xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl"
+            className="bg-white p-6 sm:p-8 max-w-3xl w-full shadow-2xl"
           >
             <div className="flex items-start justify-between mb-6 gap-6">
               <div>
@@ -420,14 +534,22 @@ export default function Lookbook() {
               </button>
             </div>
 
-            <div className="rounded-3xl border border-gray-100 bg-[#f7f6f2] p-3 sm:p-3.5 mb-6">
+            <div className="border border-gray-100 bg-[#f7f6f2] p-3 sm:p-3.5 mb-6">
               <div className="relative aspect-[4/5] w-full max-w-[430px] mx-auto">
-                <Image
-                  src={activeLookbook.image}
-                  alt={activeLookbook.title}
-                  fill
-                  className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.12)]"
-                />
+                {activeLookbook.image.startsWith("blob:") ? (
+                  <img
+                    src={activeLookbook.image}
+                    alt={activeLookbook.title}
+                    className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.12)]"
+                  />
+                ) : (
+                  <Image
+                    src={activeLookbook.image}
+                    alt={activeLookbook.title}
+                    fill
+                    className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.12)]"
+                  />
+                )}
               </div>
             </div>
 
@@ -435,7 +557,7 @@ export default function Lookbook() {
               {activeLookbook.products.map((product, index) => (
                 <div
                   key={`${product.name}-${index}`}
-                  className="border border-gray-200 rounded-2xl p-4 flex items-center justify-between gap-4"
+                  className="border border-gray-200 p-4 flex items-center justify-between gap-4"
                 >
                   <div>
                     <p className="text-xs uppercase tracking-[0.2em] text-gray-400">

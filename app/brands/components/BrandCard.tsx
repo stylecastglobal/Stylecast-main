@@ -10,11 +10,12 @@ export default function BrandCard({ brand }: BrandCardProps) {
   return (
     <Link href={`/brands/${brand.slug}`} className="block">
       <div className="relative group cursor-pointer">
-        <div className="relative aspect-[3/4] bg-gray-200 rounded-lg overflow-hidden">
+        <div className="relative aspect-[3/4] bg-gray-200 overflow-hidden">
           <Image
-            src={brand.heroImage} // ← 이 줄 수정! (image → heroImage)
+            src={brand.cardImage || brand.heroImage}
             alt={brand.name}
             fill
+            unoptimized
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
           />
@@ -25,7 +26,7 @@ export default function BrandCard({ brand }: BrandCardProps) {
                 {brand.badge}
               </div>
             )}
-            <h3 className="text-white font-bold text-lg mb-1">{brand.name}</h3>
+            <h3 className="text-white font-bold text-3xl mb-1">{brand.name}</h3>
             <span className="text-white text-sm underline hover:no-underline">
               Go to Brand Shop
             </span>

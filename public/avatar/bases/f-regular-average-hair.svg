@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" fill="none">
+  <!-- Fashion croquis hair — flowing, voluminous with movement -->
+
+  <!-- Hair back volume (behind head, rendered first) -->
+  <path class="hair" d="
+    M148 30 Q148 8 200 4 Q252 8 252 30
+    L258 50 Q262 70 260 90
+    L258 120 Q256 150 250 170
+    Q244 188 236 195 L232 198
+    Q228 200 224 195 Q230 180 234 160
+    Q238 140 240 120 L242 90
+    Q244 60 240 40 L238 30
+    Q235 15 200 12 Q165 15 162 30
+    L160 40 Q156 60 158 90
+    L160 120 Q162 140 166 160
+    Q170 180 176 195 Q172 200 168 198
+    L164 195 Q156 188 150 170
+    Q144 150 142 120
+    L140 90 Q138 70 142 50 Z
+  " fill="var(--avatar-hair, #3B2314)"/>
+
+  <!-- Hair top crown — volume and shape -->
+  <ellipse class="hair" cx="200" cy="22" rx="56" ry="22" fill="var(--avatar-hair, #3B2314)"/>
+
+  <!-- Hair parting highlight -->
+  <path d="M200 6 L200 40" stroke="var(--avatar-hair, #3B2314)" stroke-width="3" opacity="0.3"/>
+
+  <!-- Left side hair — flowing strands -->
+  <path class="hair" d="
+    M148 30 Q140 40 136 60
+    Q132 80 130 105 L128 135
+    Q126 160 130 180
+    Q134 200 142 210
+    Q148 218 155 220
+    Q160 218 158 210
+    Q152 195 148 175
+    Q144 155 146 130
+    L148 100 Q150 75 154 55 Z
+  " fill="var(--avatar-hair, #3B2314)"/>
+
+  <!-- Right side hair — flowing strands -->
+  <path class="hair" d="
+    M252 30 Q260 40 264 60
+    Q268 80 270 105 L272 135
+    Q274 160 270 180
+    Q266 200 258 210
+    Q252 218 245 220
+    Q240 218 242 210
+    Q248 195 252 175
+    Q256 155 254 130
+    L252 100 Q250 75 246 55 Z
+  " fill="var(--avatar-hair, #3B2314)"/>
+
+  <!-- Hair shine highlights -->
+  <path d="M175 20 Q185 15 195 18 Q200 20 200 25" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.12"/>
+  <path d="M160 45 Q170 38 180 42" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.08"/>
+
+  <!-- Subtle strand details -->
+  <path d="M140 100 Q142 130 146 155" stroke="var(--avatar-hair, #3B2314)" stroke-width="1.5" fill="none" opacity="0.3"/>
+  <path d="M260 100 Q258 130 254 155" stroke="var(--avatar-hair, #3B2314)" stroke-width="1.5" fill="none" opacity="0.3"/>
+</svg>

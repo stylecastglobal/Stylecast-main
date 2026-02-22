@@ -9,89 +9,136 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [focused, setFocused] = useState<string | null>(null);
 
   const login = () => {
-    // ✅ UI 확인용 (백엔드 없음)
     console.log({ email, password });
-
-    // 임시 이동 (나중에 role별로 바꿀 예정)
     router.push("/account");
   };
 
   const googleLogin = () => {
     console.log("Google login (UI only)");
-
-    // 임시 이동
     router.push("/account");
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#f5f5f5] flex items-center justify-center px-4 py-10">
-      <div className="flex flex-col md:flex-row bg-white rounded-[40px] shadow-xl overflow-hidden w-full max-w-6xl">
-        {/* LEFT IMAGE */}
-        <div className="relative w-full md:w-1/2 p-6">
-          <div className="relative w-full h-full rounded-[40px] overflow-hidden">
-            <Image
-              src="/london1.jpg"
-              alt="London"
-              fill
-              className="object-cover"
-            />
+    <div className="w-full min-h-screen flex flex-col lg:flex-row">
+      {/* LEFT — EDITORIAL IMAGE */}
+      <div className="relative w-full lg:w-[55%] h-[40vh] lg:h-screen overflow-hidden">
+        <Image
+          src="/london1.jpg"
+          alt="Editorial"
+          fill
+          priority
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+        <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-14">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-[1px] bg-white/70" />
+            <span className="text-white/70 text-xs tracking-[0.3em] uppercase">
+              Welcome Back
+            </span>
           </div>
+          <h2 className="text-white text-3xl lg:text-5xl font-light leading-tight tracking-tight">
+            Your style,
+            <br />
+            <span className="font-semibold">your story.</span>
+          </h2>
         </div>
+      </div>
 
-        {/* RIGHT FORM */}
-        <div className="w-full md:w-1/2 p-10 md:p-14 flex items-center">
-          <div className="w-full max-w-md">
-            <h1 className="text-4xl font-semibold mb-3">
-              Sign in to StyleCast
+      {/* RIGHT — FORM */}
+      <div className="w-full lg:w-[45%] flex items-center justify-center px-6 py-12 lg:py-0 bg-white">
+        <div className="w-full max-w-[400px]">
+          {/* LOGO / BRAND */}
+          <div className="mb-10">
+            <span className="text-[11px] tracking-[0.35em] uppercase text-neutral-400 font-medium">
+              StyleCast
+            </span>
+            <h1 className="text-[28px] lg:text-[32px] font-semibold text-black mt-2 leading-tight tracking-tight">
+              Sign in
             </h1>
-
-            <p className="text-gray-700 mb-8 text-[15px]">
+            <p className="text-neutral-500 text-sm mt-2 leading-relaxed">
               Shopping or managing your brand, everything starts here.
             </p>
+          </div>
 
-            {/* EMAIL */}
-            <label className="font-semibold text-black">Email</label>
+          {/* EMAIL */}
+          <div className="mb-5">
+            <label
+              className={`text-xs tracking-wide uppercase transition-colors duration-200 ${
+                focused === "email" ? "text-black" : "text-neutral-400"
+              }`}
+            >
+              Email
+            </label>
             <input
               type="email"
-              className="w-full mt-1 mb-5 bg-[#e6e6e6] rounded-[40px] px-5 py-3.5"
+              value={email}
+              onFocus={() => setFocused("email")}
+              onBlur={() => setFocused(null)}
               onChange={(e) => setEmail(e.target.value)}
+              className="w-full mt-2 bg-transparent border-b border-neutral-200 focus:border-black pb-3 text-[15px] text-black outline-none transition-colors duration-300 placeholder:text-neutral-300"
+              placeholder="your@email.com"
             />
+          </div>
 
-            {/* PASSWORD */}
-            <label className="font-semibold text-black">Password</label>
+          {/* PASSWORD */}
+          <div className="mb-8">
+            <label
+              className={`text-xs tracking-wide uppercase transition-colors duration-200 ${
+                focused === "password" ? "text-black" : "text-neutral-400"
+              }`}
+            >
+              Password
+            </label>
             <input
               type="password"
-              className="w-full mt-1 mb-4 bg-[#e6e6e6] rounded-[40px] px-5 py-3.5"
+              value={password}
+              onFocus={() => setFocused("password")}
+              onBlur={() => setFocused(null)}
               onChange={(e) => setPassword(e.target.value)}
+              className="w-full mt-2 bg-transparent border-b border-neutral-200 focus:border-black pb-3 text-[15px] text-black outline-none transition-colors duration-300 placeholder:text-neutral-300"
+              placeholder="Enter your password"
             />
-
-            {/* SIGN IN */}
-            <button
-              onClick={login}
-              className="w-full bg-black text-white py-3.5 rounded-[40px] text-[17px] font-medium mb-5"
-            >
-              Sign In
-            </button>
-
-            {/* GOOGLE SIGN IN */}
-            <button
-              onClick={googleLogin}
-              className="w-full bg-white border border-[#d6d6d6] py-3.5 rounded-[40px] flex items-center justify-center gap-3 text-[17px] font-medium hover:bg-gray-100"
-            >
-              <Image src="/google.png" width={22} height={22} alt="Google" />
-              Sign in with Google
-            </button>
-
-            {/* SIGN UP LINK */}
-            <p className="text-center text-sm mt-6">
-              Don’t have an account?{" "}
-              <Link href="/signup" className="underline">
-                Sign up
-              </Link>
-            </p>
           </div>
+
+          {/* SIGN IN */}
+          <button
+            onClick={login}
+            className="w-full bg-black text-white py-4 text-sm tracking-[0.15em] uppercase font-medium hover:bg-neutral-800 transition-colors duration-300"
+          >
+            Sign In
+          </button>
+
+          {/* DIVIDER */}
+          <div className="flex items-center gap-4 my-6">
+            <div className="flex-1 h-[1px] bg-neutral-200" />
+            <span className="text-[11px] text-neutral-400 tracking-wider uppercase">or</span>
+            <div className="flex-1 h-[1px] bg-neutral-200" />
+          </div>
+
+          {/* GOOGLE SIGN IN */}
+          <button
+            onClick={googleLogin}
+            className="w-full border border-neutral-200 py-3.5 flex items-center justify-center gap-3 text-sm font-medium text-neutral-700 hover:border-neutral-400 hover:bg-neutral-50 transition-all duration-300"
+          >
+            <Image src="/google.png" width={18} height={18} alt="Google" />
+            Continue with Google
+          </button>
+
+          {/* SIGN UP LINK */}
+          <p className="text-center text-sm text-neutral-400 mt-10">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/signup"
+              className="text-black font-medium hover:underline underline-offset-4 transition-all"
+            >
+              Create one
+            </Link>
+          </p>
         </div>
       </div>
     </div>

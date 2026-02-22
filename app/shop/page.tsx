@@ -36,7 +36,7 @@ export default function ShopPage() {
         id: 1,
         title: "Sale Up to 80% MUAH Logo Hoodie",
         brands: "MUAHMUAH",
-        image: "/apparel-hero1.jpg",
+        image: "/apparel-hero11.jpg",
       },
       {
         id: 2,
@@ -54,9 +54,9 @@ export default function ShopPage() {
     [
       {
         id: 4,
-        title: "New Season Essentials",
-        brands: "COS, ARKET, WEEKDAY & more",
-        image: "/apparel-hero4.jpg",
+        title: "Fav Workout Sets",
+        brands: "Gymshark, ARKET, WEEKDAY & more",
+        image: "/apparel-hero411.jpg",
       },
       {
         id: 5,
@@ -66,9 +66,9 @@ export default function ShopPage() {
       },
       {
         id: 6,
-        title: "Valentine's Day Special",
+        title: "Cozy Day Essentials",
         brands: "Not Your Rose, MANGO, H&M & more",
-        image: "/apparel-hero6.jpg",
+        image: "/apparel-hero61.jpg",
       },
     ],
   ];
@@ -305,33 +305,33 @@ export default function ShopPage() {
   const hottestBrands = [
     {
       id: "hb1",
-      brand: "VIKINI VENDER",
-      subtitle: "Encore Season Sale",
-      image: "/look4.jpg",
+      brand: "NICK & NICOLE",
+      subtitle: "Feminine Basic Essentials",
+      image: "/hotbrands-1.jpg",
     },
     {
       id: "hb2",
-      brand: "STANDARD ERROR",
+      brand: "MAHAGRID",
       subtitle: "Best-Selling Items",
-      image: "/look5.jpg",
+      image: "/hotbrands-2.jpg",
     },
     {
       id: "hb3",
-      brand: "CHINDOWN",
-      subtitle: "Only at MUSINSA: K-Icons Approved",
-      image: "/street-1.jpg",
+      brand: "CRANK",
+      subtitle: "K-Icons Approved",
+      image: "/hotbrands-3.jpg",
     },
     {
       id: "hb4",
-      brand: "GROVE",
+      brand: "INSILENCE",
       subtitle: "New Arrivals This Week",
-      image: "/look1.jpg",
+      image: "/hotbrands-4.jpg",
     },
     {
       id: "hb5",
-      brand: "PARTIMENTO",
+      brand: "ANDERSON BELL",
       subtitle: "Signature Collection",
-      image: "/look2.jpg",
+      image: "/hotbrands-5.jpg",
     },
   ];
 
@@ -635,163 +635,9 @@ export default function ShopPage() {
     ],
   };
 
-  // Section 11: A girl lost in love.
-  const girlLove = {
-    heroImage: "/look3.jpg",
-    items: [
-      {
-        id: 901,
-        brand: "HUG YOUR SKIN",
-        title: "Hooded half coat (charcoal)",
-        originalPrice: 183,
-        salePrice: 183,
-        discount: 0,
-        image: "/wtrending1.jpg",
-      },
-      {
-        id: 902,
-        brand: "HUG YOUR SKIN",
-        title: "Round collar check fleece jacket (pink gray)",
-        originalPrice: 122,
-        salePrice: 122,
-        discount: 0,
-        image: "/wtrending2.jpg",
-      },
-      {
-        id: 903,
-        brand: "HUG YOUR SKIN",
-        title: "Round collar check fleece jacket (mint gray)",
-        originalPrice: 122,
-        salePrice: 122,
-        discount: 0,
-        image: "/wtrending3.jpg",
-      },
-      {
-        id: 904,
-        brand: "HUG YOUR SKIN",
-        title: "Fleece skirt jogger pants (pink gray)",
-        originalPrice: 117,
-        salePrice: 117,
-        discount: 0,
-        image: "/wtrending4.jpg",
-      },
-      {
-        id: 905,
-        brand: "HUG YOUR SKIN",
-        title: "Quilted puffer vest (cream)",
-        originalPrice: 98,
-        salePrice: 98,
-        discount: 0,
-        image: "/wtrending5.jpg",
-      },
-      {
-        id: 906,
-        brand: "HUG YOUR SKIN",
-        title: "Ribbon knit muffler (pink)",
-        originalPrice: 68,
-        salePrice: 68,
-        discount: 0,
-        image: "/wtrending6.jpg",
-      },
-      {
-        id: 907,
-        brand: "HUG YOUR SKIN",
-        title: "Cable knit cardigan (beige)",
-        originalPrice: 145,
-        salePrice: 145,
-        discount: 0,
-        image: "/wtrending7.jpg",
-      },
-      {
-        id: 908,
-        brand: "HUG YOUR SKIN",
-        title: "Wool blend pleated skirt (gray)",
-        originalPrice: 108,
-        salePrice: 108,
-        discount: 0,
-        image: "/pinterest1.jpg",
-      },
-    ],
-  };
+ 
 
-  // Section 12: Must-Have Bags on Sale
-  const bagsOnSale = {
-    heroImages: ["/look2.jpg", "/look5.jpg"],
-    items: [
-      {
-        id: 1001,
-        brand: "SIYAZU",
-        title: "Siac3053 flow bag_brown",
-        originalPrice: 137,
-        salePrice: 117,
-        discount: 14,
-        image: "/drop-1.jpg",
-      },
-      {
-        id: 1002,
-        brand: "RAWROW",
-        title: "Cordura clip messenger bag 362 [2color]",
-        originalPrice: 84,
-        salePrice: 75,
-        discount: 10,
-        image: "/drop-2.jpg",
-      },
-      {
-        id: 1003,
-        brand: "ATIL STUDIO",
-        title: "Velour suede mini dewy ribbon shoulder & crossbody bag_[black]",
-        originalPrice: 73,
-        salePrice: 57,
-        discount: 21,
-        image: "/drop-3.jpg",
-      },
-      {
-        id: 1004,
-        brand: "BLACK PURPLE",
-        title: "Crease wide boots_black",
-        originalPrice: 197,
-        salePrice: 178,
-        discount: 9,
-        image: "/drop-6.jpg",
-      },
-      {
-        id: 1005,
-        brand: "SIYAZU",
-        title: "Mini leather crossbody bag_tan",
-        originalPrice: 95,
-        salePrice: 81,
-        discount: 15,
-        image: "/drop-7.jpg",
-      },
-      {
-        id: 1006,
-        brand: "RAWROW",
-        title: "Canvas tote bag large [3color]",
-        originalPrice: 62,
-        salePrice: 53,
-        discount: 15,
-        image: "/drop-8.jpg",
-      },
-      {
-        id: 1007,
-        brand: "ATIL STUDIO",
-        title: "Quilted chain shoulder bag_[cream]",
-        originalPrice: 89,
-        salePrice: 71,
-        discount: 20,
-        image: "/women-printer-1.jpg",
-      },
-      {
-        id: 1008,
-        brand: "BLACK PURPLE",
-        title: "Buckle strap ankle boots_brown",
-        originalPrice: 178,
-        salePrice: 152,
-        discount: 15,
-        image: "/women-grid-2.jpg",
-      },
-    ],
-  };
+
 
   // Section 13: Must-Haves Chosen by Influencers
   const influencerPicks = {
@@ -953,7 +799,7 @@ export default function ShopPage() {
 
   // Final Winter Picks
   const finalWinter = {
-    heroImages: ["/apparel-finalwinterpicks1.jpg", "/apparel-finalwinterpicks2.jpg"],
+    heroImages: ["/apparelwinterpicks1.jpg", "/apparel-finalwinterpicks2.jpg"],
     items: [
       {
         id: 1301,
@@ -1443,99 +1289,7 @@ export default function ShopPage() {
         </div>
       </section>
 
-      {/* Section 2: Valentine's Gift Picks - Horizontal Scroll */}
-      <section className="py-10 px-6 md:px-12 lg:px-20 bg-white">
-        <div className="max-w-[1600px] mx-auto">
-          {/* Section Title */}
-          <h2 className="text-2xl font-normal mb-8">
-            Valentine&apos;s Gift Picks
-          </h2>
-
-          {/* Scrollable Product Row */}
-          <div className="relative group/scroll">
-            <div
-              ref={giftScrollRef}
-              className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 scroll-smooth"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              {giftPicks.map((item) => (
-                <Link
-                  key={item.id}
-                  href="#"
-                  className="group flex-shrink-0 w-[220px] md:w-[260px] block"
-                >
-                  {/* Product Image */}
-                  <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden  mb-3">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-
-                    {/* Badge */}
-                    <span className="absolute bottom-3 left-3 bg-black text-white text-[10px] font-semibold px-2 py-1 rounded-sm">
-                      {item.badge}
-                    </span>
-
-                    {/* Wishlist Heart */}
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleWishlist(item.id);
-                      }}
-                      className="absolute bottom-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
-                    >
-                      <span className={wishlist.includes(item.id) ? "text-red-500" : "text-gray-400"}>
-                        {wishlist.includes(item.id) ? "♥" : "♡"}
-                      </span>
-                    </button>
-                  </div>
-
-                  {/* Product Info */}
-                  <div className="space-y-1">
-                    <p className="text-xs text-gray-500 font-medium">
-                      {item.brand}
-                    </p>
-                    <h3 className="text-sm font-normal line-clamp-1">
-                      {item.title}
-                    </h3>
-
-                    {/* Price Row */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-red-600">
-                        {item.discount}%
-                      </span>
-                      <span className="text-sm font-bold">
-                        ${item.salePrice}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-400 line-through">
-                      ${item.originalPrice}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            {/* Scroll Arrow - Right */}
-            <button
-              onClick={scrollGiftRight}
-              className="absolute right-0 top-[35%] -translate-y-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover/scroll:opacity-100 transition-opacity z-10"
-            >
-              <span className="text-gray-600 text-lg">›</span>
-            </button>
-
-            {/* Scroll Arrow - Left */}
-            <button
-              onClick={scrollGiftLeft}
-              className="absolute left-0 top-[35%] -translate-y-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover/scroll:opacity-100 transition-opacity z-10"
-            >
-              <span className="text-gray-600 text-lg">‹</span>
-            </button>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Section 3: MUSINSA STANDARD Weekly Special */}
       <section className="py-10 px-6 md:px-12 lg:px-20 bg-white">
@@ -1658,118 +1412,7 @@ export default function ShopPage() {
         </div>
       </section>
 
-      {/* Final Winter Picks */}
-      <section className="py-10 px-6 md:px-12 lg:px-20 bg-white">
-        <div className="max-w-[1600px] mx-auto">
-          <h2 className="text-2xl font-normal mb-6">
-            Final Winter Picks
-          </h2>
-
-          {/* Hero Banners - Two Cards */}
-          <div className="grid grid-cols-2 gap-3 mb-8">
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <Image
-                src={finalWinter.heroImages[0]}
-                alt="Final Winter Picks 1"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <Image
-                src={finalWinter.heroImages[1]}
-                alt="Final Winter Picks 2"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-
-          {/* Product Row */}
-          <div className="relative group/scroll">
-            <div
-              ref={finalWinterRef}
-              className="flex gap-4 overflow-x-auto pb-2 scroll-smooth"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              {finalWinter.items.map((item) => (
-                <Link
-                  key={item.id}
-                  href="#"
-                  className="group flex-shrink-0 w-[220px] md:w-[260px] block"
-                >
-                  <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden mb-3">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleWishlist(item.id);
-                      }}
-                      className="absolute bottom-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
-                    >
-                      <span className={wishlist.includes(item.id) ? "text-red-500" : "text-gray-400"}>
-                        {wishlist.includes(item.id) ? "♥" : "♡"}
-                      </span>
-                    </button>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-gray-500 font-medium">{item.brand}</p>
-                    <h3 className="text-sm font-normal line-clamp-1">
-                      {item.title}
-                    </h3>
-                    {item.discount > 0 ? (
-                      <>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold text-red-600">
-                            {item.discount}%
-                          </span>
-                          <span className="text-sm font-bold">
-                            ${item.salePrice}
-                          </span>
-                        </div>
-                        <p className="text-xs text-gray-400 line-through">
-                          ${item.originalPrice}
-                        </p>
-                      </>
-                    ) : (
-                      <p className="text-sm font-bold pt-1">
-                        ${item.salePrice}
-                      </p>
-                    )}
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            <button
-              onClick={() => scrollRight(finalWinterRef)}
-              className="absolute right-0 top-[35%] -translate-y-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover/scroll:opacity-100 transition-opacity z-10"
-            >
-              <span className="text-gray-600 text-lg">›</span>
-            </button>
-            <button
-              onClick={() => scrollLeft(finalWinterRef)}
-              className="absolute left-0 top-[35%] -translate-y-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover/scroll:opacity-100 transition-opacity z-10"
-            >
-              <span className="text-gray-600 text-lg">‹</span>
-            </button>
-          </div>
-
-          <div className="flex justify-center mt-8">
-            <Link
-              href="#"
-              className="inline-flex items-center px-8 py-3 border border-gray-900 text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white transition-colors"
-            >
-              Shop Now
-            </Link>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Section 4: The Season Finale - Up to 70% off */}
       <section className="py-10 px-6 md:px-12 lg:px-20 bg-white">
@@ -1866,7 +1509,7 @@ export default function ShopPage() {
       <section className="py-10 px-6 md:px-12 lg:px-20 bg-white">
         <div className="max-w-[1600px] mx-auto">
           <h2 className="text-2xl font-normal mb-8">
-            Valentine&apos;s Styling Picks
+            Must-Haves Chosen by Influencers
           </h2>
 
           <div className="relative group/scroll">
@@ -2182,112 +1825,19 @@ export default function ShopPage() {
         </div>
       </section>
 
-      {/* Section 9: POP-UP IN TOKYO : WINTER I */}
-      <section className="py-10 px-6 md:px-12 lg:px-20 bg-white">
-        <div className="max-w-[1600px] mx-auto">
-          <h2 className="text-2xl font-normal mb-6">
-            POP-UP IN TOKYO : WINTER I - 冬の私
-          </h2>
-
-          {/* Hero Banner */}
-          <div className="relative w-full aspect-[21/9] overflow-hidden  mb-8">
-            <Image
-              src={tokyoPopup.heroImage}
-              alt="POP-UP IN TOKYO"
-              fill
-              className="object-cover"
-            />
-          </div>
-
-          {/* Product Row */}
-          <div className="relative group/scroll">
-            <div
-              ref={tokyoPopupRef}
-              className="flex gap-4 overflow-x-auto pb-2 scroll-smooth"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              {tokyoPopup.items.map((item) => (
-                <Link
-                  key={item.id}
-                  href="#"
-                  className="group flex-shrink-0 w-[220px] md:w-[260px] block"
-                >
-                  <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden  mb-3">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleWishlist(item.id);
-                      }}
-                      className="absolute bottom-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
-                    >
-                      <span className={wishlist.includes(item.id) ? "text-red-500" : "text-gray-400"}>
-                        {wishlist.includes(item.id) ? "♥" : "♡"}
-                      </span>
-                    </button>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-gray-500 font-medium">{item.brand}</p>
-                    <h3 className="text-sm font-normal line-clamp-1">
-                      {item.title}
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-red-600">
-                        {item.discount}%
-                      </span>
-                      <span className="text-sm font-bold">
-                        ${item.salePrice}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-400 line-through">
-                      ${item.originalPrice}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            <button
-              onClick={() => scrollRight(tokyoPopupRef)}
-              className="absolute right-0 top-[35%] -translate-y-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover/scroll:opacity-100 transition-opacity z-10"
-            >
-              <span className="text-gray-600 text-lg">›</span>
-            </button>
-            <button
-              onClick={() => scrollLeft(tokyoPopupRef)}
-              className="absolute left-0 top-[35%] -translate-y-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover/scroll:opacity-100 transition-opacity z-10"
-            >
-              <span className="text-gray-600 text-lg">‹</span>
-            </button>
-          </div>
-
-          <div className="flex justify-center mt-8">
-            <Link
-              href="#"
-              className="inline-flex items-center px-8 py-3 border border-gray-900 text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white transition-colors"
-            >
-              Shop Now
-            </Link>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Section 10: Editor's Pick */}
       <section className="py-10 px-6 md:px-12 lg:px-20 bg-white">
         <div className="max-w-[1600px] mx-auto">
           <h2 className="text-2xl font-normal mb-6">
-            Editor&apos;s Pick: Jacquard Knit Zip-Up Cardigan
+            Editor&apos;s Pick: Spring Essentials
           </h2>
 
           {/* Hero Banner */}
           <div className="relative w-full aspect-[21/9] overflow-hidden  mb-8">
             <Image
-              src={editorsPick.heroImage}
+              src="/winterfav-pic1.jpg"
               alt="Editor's Pick"
               fill
               className="object-cover"
@@ -2372,308 +1922,9 @@ export default function ShopPage() {
         </div>
       </section>
 
-      {/* Section 11: A girl lost in love. */}
-      <section className="py-10 px-6 md:px-12 lg:px-20 bg-white">
-        <div className="max-w-[1600px] mx-auto">
-          <h2 className="text-2xl font-normal italic mb-6">
-            A girl lost in love.
-          </h2>
+      
 
-          {/* Hero Banner */}
-          <div className="relative w-full aspect-[21/9] overflow-hidden  mb-8">
-            <Image
-              src={girlLove.heroImage}
-              alt="A girl lost in love"
-              fill
-              className="object-cover"
-            />
-          </div>
-
-          {/* Product Row */}
-          <div className="relative group/scroll">
-            <div
-              ref={girlLoveRef}
-              className="flex gap-4 overflow-x-auto pb-2 scroll-smooth"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              {girlLove.items.map((item) => (
-                <Link
-                  key={item.id}
-                  href="#"
-                  className="group flex-shrink-0 w-[220px] md:w-[260px] block"
-                >
-                  <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden  mb-3">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleWishlist(item.id);
-                      }}
-                      className="absolute bottom-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
-                    >
-                      <span className={wishlist.includes(item.id) ? "text-red-500" : "text-gray-400"}>
-                        {wishlist.includes(item.id) ? "♥" : "♡"}
-                      </span>
-                    </button>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-gray-500 font-medium">{item.brand}</p>
-                    <h3 className="text-sm font-normal line-clamp-1">
-                      {item.title}
-                    </h3>
-                    {item.discount > 0 ? (
-                      <>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold text-red-600">
-                            {item.discount}%
-                          </span>
-                          <span className="text-sm font-bold">
-                            ${item.salePrice}
-                          </span>
-                        </div>
-                        <p className="text-xs text-gray-400 line-through">
-                          ${item.originalPrice}
-                        </p>
-                      </>
-                    ) : (
-                      <p className="text-sm font-bold pt-1">
-                        ${item.salePrice}
-                      </p>
-                    )}
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            <button
-              onClick={() => scrollRight(girlLoveRef)}
-              className="absolute right-0 top-[35%] -translate-y-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover/scroll:opacity-100 transition-opacity z-10"
-            >
-              <span className="text-gray-600 text-lg">›</span>
-            </button>
-            <button
-              onClick={() => scrollLeft(girlLoveRef)}
-              className="absolute left-0 top-[35%] -translate-y-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover/scroll:opacity-100 transition-opacity z-10"
-            >
-              <span className="text-gray-600 text-lg">‹</span>
-            </button>
-          </div>
-
-          <div className="flex justify-center mt-8">
-            <Link
-              href="#"
-              className="inline-flex items-center px-8 py-3 border border-gray-900 text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white transition-colors"
-            >
-              Shop Now
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 12: Must-Have Bags on Sale */}
-      <section className="py-10 px-6 md:px-12 lg:px-20 bg-white">
-        <div className="max-w-[1600px] mx-auto">
-          <h2 className="text-2xl font-normal mb-6">
-            Must-Have Bags on Sale
-          </h2>
-
-          {/* Hero Banners - Two Cards */}
-          <div className="grid grid-cols-2 gap-3 mb-8">
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <Image
-                src={bagsOnSale.heroImages[0]}
-                alt="Must-Have Bags on Sale 1"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <Image
-                src={bagsOnSale.heroImages[1]}
-                alt="Must-Have Bags on Sale 2"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-
-          {/* Product Row */}
-          <div className="relative group/scroll">
-            <div
-              ref={bagsOnSaleRef}
-              className="flex gap-4 overflow-x-auto pb-2 scroll-smooth"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              {bagsOnSale.items.map((item) => (
-                <Link
-                  key={item.id}
-                  href="#"
-                  className="group flex-shrink-0 w-[220px] md:w-[260px] block"
-                >
-                  <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden  mb-3">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleWishlist(item.id);
-                      }}
-                      className="absolute bottom-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
-                    >
-                      <span className={wishlist.includes(item.id) ? "text-red-500" : "text-gray-400"}>
-                        {wishlist.includes(item.id) ? "♥" : "♡"}
-                      </span>
-                    </button>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-gray-500 font-medium">{item.brand}</p>
-                    <h3 className="text-sm font-normal line-clamp-1">
-                      {item.title}
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-red-600">
-                        {item.discount}%
-                      </span>
-                      <span className="text-sm font-bold">
-                        ${item.salePrice}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-400 line-through">
-                      ${item.originalPrice}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            <button
-              onClick={() => scrollRight(bagsOnSaleRef)}
-              className="absolute right-0 top-[35%] -translate-y-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover/scroll:opacity-100 transition-opacity z-10"
-            >
-              <span className="text-gray-600 text-lg">›</span>
-            </button>
-            <button
-              onClick={() => scrollLeft(bagsOnSaleRef)}
-              className="absolute left-0 top-[35%] -translate-y-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover/scroll:opacity-100 transition-opacity z-10"
-            >
-              <span className="text-gray-600 text-lg">‹</span>
-            </button>
-          </div>
-
-          <div className="flex justify-center mt-8">
-            <Link
-              href="#"
-              className="inline-flex items-center px-8 py-3 border border-gray-900 text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white transition-colors"
-            >
-              Shop Now
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 13: Must-Haves Chosen by Influencers */}
-      <section className="py-10 px-6 md:px-12 lg:px-20 bg-white">
-        <div className="max-w-[1600px] mx-auto">
-          <h2 className="text-2xl font-normal mb-6">
-            Must-Haves Chosen by Influencers
-          </h2>
-
-          {/* Hero Banner */}
-          <div className="relative w-full aspect-[16/9] overflow-hidden  mb-8">
-            <Image
-              src={influencerPicks.heroImage}
-              alt="Must-Haves Chosen by Influencers"
-              fill
-              className="object-cover"
-            />
-          </div>
-
-          {/* Product Row */}
-          <div className="relative group/scroll">
-            <div
-              ref={influencerRef}
-              className="flex gap-4 overflow-x-auto pb-2 scroll-smooth"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              {influencerPicks.items.map((item) => (
-                <Link
-                  key={item.id}
-                  href="#"
-                  className="group flex-shrink-0 w-[220px] md:w-[260px] block"
-                >
-                  <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden  mb-3">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleWishlist(item.id);
-                      }}
-                      className="absolute bottom-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
-                    >
-                      <span className={wishlist.includes(item.id) ? "text-red-500" : "text-gray-400"}>
-                        {wishlist.includes(item.id) ? "♥" : "♡"}
-                      </span>
-                    </button>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-gray-500 font-medium">{item.brand}</p>
-                    <h3 className="text-sm font-normal line-clamp-1">
-                      {item.title}
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-red-600">
-                        {item.discount}%
-                      </span>
-                      <span className="text-sm font-bold">
-                        ${item.salePrice}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-400 line-through">
-                      ${item.originalPrice}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            <button
-              onClick={() => scrollRight(influencerRef)}
-              className="absolute right-0 top-[35%] -translate-y-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover/scroll:opacity-100 transition-opacity z-10"
-            >
-              <span className="text-gray-600 text-lg">›</span>
-            </button>
-            <button
-              onClick={() => scrollLeft(influencerRef)}
-              className="absolute left-0 top-[35%] -translate-y-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover/scroll:opacity-100 transition-opacity z-10"
-            >
-              <span className="text-gray-600 text-lg">‹</span>
-            </button>
-          </div>
-
-          <div className="flex justify-center mt-8">
-            <Link
-              href="#"
-              className="inline-flex items-center px-8 py-3 border border-gray-900 text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white transition-colors"
-            >
-              Shop Now
-            </Link>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Product Grid Section (Musinsa Style) */}
       <section className="py-8 px-6 md:px-12 lg:px-20 bg-white">

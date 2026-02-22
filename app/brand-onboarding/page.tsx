@@ -99,17 +99,21 @@ export default function BrandOnboardingPage() {
 
     /* Camera flashes */
     const loopFlash = () => {
-      animate(
-        flashLeft.current!,
-        { opacity: [0, 0.4, 0] },
-        { duration: 1.8, easing: "ease-out" }
-      );
-      setTimeout(() => {
+      if (flashLeft.current) {
         animate(
-          flashRight.current!,
+          flashLeft.current,
           { opacity: [0, 0.4, 0] },
           { duration: 1.8, easing: "ease-out" }
         );
+      }
+      setTimeout(() => {
+        if (flashRight.current) {
+          animate(
+            flashRight.current,
+            { opacity: [0, 0.4, 0] },
+            { duration: 1.8, easing: "ease-out" }
+          );
+        }
       }, 900);
     };
 

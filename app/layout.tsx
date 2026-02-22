@@ -8,6 +8,7 @@ import "./globals.css";
 
 import Providers from "./providers";
 import Footer from "./components/footer/Footer";
+import LocaleSelector from "./components/header/LocaleSelector";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -137,11 +138,14 @@ export default function RootLayout({
                 </div>
 
                 {/* RIGHT ACTIONS */}
-                <div className="flex items-center gap-8">
+                <div className="flex items-center gap-5">
+                  {/* LANGUAGE & CURRENCY */}
+                  <LocaleSelector />
+
                   {/* SIGN IN */}
                   <Link
                     href="/login"
-                    className="flex items-center gap-3 hover:text-[#8B6A43]"
+                    className="flex items-center hover:opacity-70 transition"
                   >
                     <Image
                       src="/user.png"
@@ -149,14 +153,10 @@ export default function RootLayout({
                       width={22}
                       height={22}
                     />
-                    <div className="leading-tight">
-                      <div className="text-xs text-gray-500">
-                      </div>
-                    </div>
                   </Link>
 
                   {/* ❤️ WISHLIST (찜 전용) */}
-                  <Link href="/wishlist" className="hover:opacity-70 transition -ml-6">
+                  <Link href="/wishlist" className="flex items-center hover:opacity-70 transition">
                     <Image
                       src="/heart.png"
                       alt="Wishlist"
@@ -166,7 +166,7 @@ export default function RootLayout({
                   </Link>
 
                   {/* 🛍 CART */}
-                  <Link href="/cart" className="hover:opacity-70 transition -ml-6">
+                  <Link href="/cart" className="flex items-center hover:opacity-70 transition">
                     <Image
                       src="/shopping-bag.png"
                       alt="Cart"
@@ -222,6 +222,9 @@ export default function RootLayout({
                 <div className="flex items-center gap-8">
                   <Link href="/lookbook" className="py-4 hover:text-gray-300">
                     Lookbook
+                  </Link>
+                  <Link href="/celeb" className="py-4 hover:text-gray-300">
+                    Celeb
                   </Link>
 
                   {/* ⚠️ Wishes는 기존 기능 (찜 아님) */}

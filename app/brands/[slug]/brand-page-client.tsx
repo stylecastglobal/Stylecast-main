@@ -74,15 +74,30 @@ export default function BrandPageClient({
                  title.includes('jean');
         }
         
+        if (selectedCategory === "Outerwear") {
+          return productType.includes('outerwear') || 
+                 productType.includes('jacket') || 
+                 productType.includes('coat') ||
+                 productType.includes('windbreaker') ||
+                 productType.includes('parka') ||
+                 productType.includes('vest') ||
+                 title.includes('jacket') ||
+                 title.includes('coat') ||
+                 title.includes('windbreaker') ||
+                 title.includes('parka');
+        }
+
         if (selectedCategory === "Accessories") {
           return productType.includes('accessories') || 
                  productType.includes('bag') || 
                  productType.includes('hat') ||
                  productType.includes('cap') ||
                  productType.includes('belt') ||
+                 productType.includes('sock') ||
                  title.includes('bag') ||
                  title.includes('hat') ||
-                 title.includes('cap');
+                 title.includes('cap') ||
+                 title.includes('sock');
         }
         
         return false;
@@ -212,6 +227,16 @@ export default function BrandPageClient({
                 }`}
               >
                 Bottoms
+              </button>
+              <button
+                onClick={() => handleCategoryChange("Outerwear")}
+                className={`text-sm pb-2 ${
+                  selectedCategory === "Outerwear"
+                    ? "font-semibold border-b-2 border-black"
+                    : "text-gray-500 hover:text-black"
+                }`}
+              >
+                Outerwear
               </button>
               <button
                 onClick={() => handleCategoryChange("Accessories")}

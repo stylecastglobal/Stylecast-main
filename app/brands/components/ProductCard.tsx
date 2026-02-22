@@ -54,19 +54,6 @@ export default function ProductCard({ product, brandSlug }: ProductCardProps) {
     </>
   );
 
-  if (product.officialUrl) {
-    return (
-      <a
-        href={product.officialUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block group"
-      >
-        {cardContent}
-      </a>
-    );
-  }
-
   return (
     <Link
       href={`/products/${product.handle}?brand=${brandSlug}`}

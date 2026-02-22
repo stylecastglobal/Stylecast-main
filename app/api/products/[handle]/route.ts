@@ -1,7 +1,9 @@
 // app/api/products/[handle]/route.ts
 import { NextResponse } from "next/server";
 
-const BRAND_CONFIG: Record<string, { shopifyDomain: string }> = {
+const KRW_TO_USD = 0.00072;
+
+const BRAND_CONFIG: Record<string, { shopifyDomain: string; currency?: string }> = {
   glowny: {
     shopifyDomain: "https://en.glowny.co.kr",
   },
@@ -10,6 +12,37 @@ const BRAND_CONFIG: Record<string, { shopifyDomain: string }> = {
   },
   scuffers: {
     shopifyDomain: "https://scuffers.com",
+  },
+  cosrx: {
+    shopifyDomain: "https://www.cosrx.com",
+  },
+  tirtir: {
+    shopifyDomain: "https://tirtir.us",
+  },
+  anua: {
+    shopifyDomain: "https://anua.us",
+  },
+  skin1004: {
+    shopifyDomain: "https://skin1004.com",
+  },
+  mixsoon: {
+    shopifyDomain: "https://mixsoon.us",
+  },
+  medicube: {
+    shopifyDomain: "https://medicube.us",
+  },
+  sculptor: {
+    shopifyDomain: "https://sculptor-worldwide.com",
+    currency: "KRW",
+  },
+  "huni-design": {
+    shopifyDomain: "https://hunidesign.com",
+  },
+  "saalt-studio": {
+    shopifyDomain: "https://saaltstudio.com",
+  },
+  "matin-kim": {
+    shopifyDomain: "https://matinkim.shop",
   },
 };
 
@@ -49,12 +82,15 @@ export async function GET(
     const json = await res.json();
     const product = json.product;
 
+    const isKRW = brand.currency === "KRW";
+    const convertPrice = (p: string) => isKRW ? (parseFloat(p) * KRW_TO_USD).toFixed(2) : p;
+
     const formattedProduct = {
       id: product.id,
       title: product.title,
       handle: product.handle,
       description: product.body_html || "",
-      price: product.variants[0]?.price || "0",
+      price: convertPrice(product.variants[0]?.price || "0"),
       vendor: product.vendor,
       product_type: product.product_type,
       images: product.images.map((img: any) => ({
@@ -71,11 +107,11 @@ export async function GET(
       variants: product.variants.map((v: any) => ({
         id: v.id,
         title: v.title,
-        price: v.price,
+        price: convertPrice(v.price),
         sku: v.sku,
         option1: v.option1,
         option2: v.option2,
-        available: v.inventory_management === "shopify",
+        available: v.available !== false,
         image_id: v.image_id,
       })),
       officialUrl: `${brand.shopifyDomain}/products/${handle}`,

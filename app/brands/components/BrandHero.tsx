@@ -20,9 +20,10 @@ export default function BrandHero({ brand }: BrandHeroProps) {
         alt={brand.name}
         fill
         priority
-        className="object-cover object-center" // ← object-center 추가!
+        unoptimized
+        className="object-cover object-center"
         sizes="100vw"
-        style={{ objectPosition: 'center 35%' }} // ← 위쪽 35% 위치에 중심
+        style={{ objectPosition: 'center 35%' }}
       />
 
       {/* 오버레이 */}

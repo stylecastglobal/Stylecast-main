@@ -6,6 +6,7 @@ export interface Brand {
     name: string;
     description: string;
     heroImage: string;
+    cardImage?: string;
     category: string[];
     badge?: string;
     favorites?: string;

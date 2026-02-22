@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800" fill="none">
+  <!-- Fashion croquis face — refined, elegant features -->
+
+  <!-- Head — oval, slightly elongated for fashion proportion -->
+  <ellipse class="skin" cx="200" cy="62" rx="46" ry="52" fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Jaw refinement — softer V-shape -->
+  <path class="skin" d="M158 75 Q160 100 180 108 Q195 114 200 115 Q205 114 220 108 Q240 100 242 75" fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Ears — small, partially hidden -->
+  <ellipse class="skin" cx="154" cy="65" rx="6" ry="10" fill="var(--avatar-skin, #D4A574)"/>
+  <ellipse class="skin" cx="246" cy="65" rx="6" ry="10" fill="var(--avatar-skin, #D4A574)"/>
+
+  <!-- Eyebrows — arched, groomed -->
+  <path d="M172 48 Q180 43 190 45 Q194 46 195 47" stroke="#3B2314" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M205 47 Q206 46 210 45 Q220 43 228 48" stroke="#3B2314" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+  <!-- Eyes — almond shaped with detail -->
+  <!-- Left eye -->
+  <path d="M174 56 Q182 51 192 56 Q182 60 174 56 Z" fill="#FFFFFF"/>
+  <ellipse cx="183" cy="56" rx="5" ry="4.5" fill="#3B2314"/>
+  <ellipse cx="184" cy="55" rx="1.8" ry="1.5" fill="#FFFFFF"/>
+  <!-- Left lashes -->
+  <path d="M174 55 Q176 51 180 50" stroke="#2C1810" stroke-width="1" stroke-linecap="round" fill="none"/>
+  <path d="M188 53 Q191 50 192 50" stroke="#2C1810" stroke-width="0.8" stroke-linecap="round" fill="none"/>
+  <!-- Left eyelid line -->
+  <path d="M174 56 Q182 51 192 56" stroke="#2C1810" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+
+  <!-- Right eye -->
+  <path d="M208 56 Q218 51 226 56 Q218 60 208 56 Z" fill="#FFFFFF"/>
+  <ellipse cx="217" cy="56" rx="5" ry="4.5" fill="#3B2314"/>
+  <ellipse cx="218" cy="55" rx="1.8" ry="1.5" fill="#FFFFFF"/>
+  <!-- Right lashes -->
+  <path d="M208 50 Q209 50 212 53" stroke="#2C1810" stroke-width="0.8" stroke-linecap="round" fill="none"/>
+  <path d="M220 50 Q224 51 226 55" stroke="#2C1810" stroke-width="1" stroke-linecap="round" fill="none"/>
+  <!-- Right eyelid line -->
+  <path d="M208 56 Q218 51 226 56" stroke="#2C1810" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+
+  <!-- Nose — subtle, refined -->
+  <path d="M198 65 L196 78 Q198 82 200 82 Q202 82 204 78 L202 65" stroke="#C4956A" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <path d="M194 80 Q197 83 200 83 Q203 83 206 80" stroke="#C4956A" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.5"/>
+
+  <!-- Lips — full, defined cupid's bow -->
+  <path d="M188 92 Q192 88 196 90 Q198 91 200 90 Q202 91 204 90 Q208 88 212 92" stroke="#C4706A" stroke-width="1.5" stroke-linecap="round" fill="#D4847A" opacity="0.7"/>
+  <path d="M188 92 Q195 94 200 98 Q205 94 212 92" fill="#C4706A" opacity="0.6"/>
+  <path d="M188 92 Q195 94 200 98 Q205 94 212 92" stroke="#B85A5A" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.4"/>
+
+  <!-- Subtle blush -->
+  <ellipse cx="172" cy="76" rx="10" ry="5" fill="#E8A090" opacity="0.15"/>
+  <ellipse cx="228" cy="76" rx="10" ry="5" fill="#E8A090" opacity="0.15"/>
+</svg>

@@ -39,8 +39,11 @@ export type ProductData = {
 export default function ProductDetailClient({ product }: { product: ProductData }) {
   const { addToCart, addToWishlist } = useShop();
   const [selectedImage, setSelectedImage] = useState(0);
+  const colorOption = product.options.find(o => o.name.toUpperCase() === "COLOR");
+  const sizeOption = product.options.find(o => o.name.toUpperCase() === "SIZE");
+
   const [selectedColor, setSelectedColor] = useState(
-    product.options.find(o => o.name === "COLOR")?.values[0] || ""
+    colorOption?.values[0] || ""
   );
   const [selectedSize, setSelectedSize] = useState("")
   const [activeTab, setActiveTab] = useState("description");
@@ -88,8 +91,8 @@ export default function ProductDetailClient({ product }: { product: ProductData 
               </button>
             ))}
           </div>
-          <div className="flex-1 relative aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
-            <Image src={displayImages[selectedImage]?.src || product.images[0].src} alt={product.title} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" priority unoptimized />
+          <div className="flex-1 relative bg-gray-100 rounded-lg overflow-hidden" style={{ maxHeight: "600px", aspectRatio: "3/4" }}>
+            <Image src={displayImages[selectedImage]?.src || product.images[0].src} alt={product.title} fill className="object-contain" sizes="(max-width: 1024px) 100vw, 50vw" priority unoptimized />
           </div>
         </div>
 
@@ -106,11 +109,11 @@ export default function ProductDetailClient({ product }: { product: ProductData 
           <div className="text-3xl font-bold mb-6">${product.price}</div>
           <div className="text-sm text-gray-600 mb-6">Earn up to 120 Points (worth $1.2)</div>
 
-          {product.options.find(o => o.name === "COLOR") && (
+          {colorOption && (
             <div className="mb-6">
               <div className="text-sm font-semibold mb-3">Color Options</div>
               <div className="flex gap-2">
-                {product.options.find(o => o.name === "COLOR")?.values.map(color => (
+                {colorOption.values.map(color => (
                   <button key={color} onClick={() => { setSelectedColor(color); setSelectedImage(0); }} className={`w-16 h-16 border-2 rounded overflow-hidden ${selectedColor === color ? "border-black" : "border-gray-200"}`}>
                     <Image src={product.images.find(img => img.alt?.toUpperCase() === color.toUpperCase())?.src || product.images[0].src} alt={color} width={64} height={64} className="object-cover w-full h-full" unoptimized />
                   </button>
@@ -119,13 +122,18 @@ export default function ProductDetailClient({ product }: { product: ProductData 
             </div>
           )}
 
-          {product.options.find(o => o.name === "SIZE") && (
+          {sizeOption && (
             <div className="mb-6">
               <div className="text-sm font-semibold mb-3">Size</div>
               <div className="flex gap-2">
-                {product.options.find(o => o.name === "SIZE")?.values.map(size => {
-                  const variant = product.variants.find(v => v.option1 === selectedColor && v.option2 === size);
-                  const available = variant?.available;
+                {sizeOption.values.map(size => {
+                  const variant = product.variants.find(v => {
+                    const opts = [v.option1, v.option2].filter(Boolean);
+                    const matchesSize = opts.includes(size);
+                    const matchesColor = !selectedColor || opts.includes(selectedColor);
+                    return matchesSize && matchesColor;
+                  });
+                  const available = variant?.available ?? true;
                   return (
                     <button key={size} onClick={() => setSelectedSize(size)} disabled={!available} className={`px-6 py-2 border rounded ${selectedSize === size ? "border-black bg-black text-white" : available ? "border-gray-300 hover:border-black" : "border-gray-200 text-gray-300 cursor-not-allowed"}`}>
                       {size}

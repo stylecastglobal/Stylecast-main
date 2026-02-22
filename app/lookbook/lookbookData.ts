@@ -13,6 +13,7 @@ export type LookbookItem = {
   brand: string;
   creator: string;
   products: LookbookProduct[];
+  gender?: "women" | "men" | "unisex";
 };
 
 const defaultProducts: LookbookProduct[] = [
