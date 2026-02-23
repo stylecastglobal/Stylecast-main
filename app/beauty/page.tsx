@@ -361,28 +361,18 @@ function TrendingSection() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {trendingProducts.map((product) => {
           const isFirst = product.id === 1;
+          const firstHref = (product as typeof product & { href?: string }).href;
 
-          const CardWrapper = isFirst && (product as typeof product & { href?: string }).href
-            ? Link
-            : "div";
-          const cardProps = isFirst && (product as typeof product & { href?: string }).href
-            ? { href: (product as typeof product & { href: string }).href }
-            : {};
+          const cardClassName = `relative rounded-3xl overflow-hidden aspect-[3/4] cursor-pointer transition-all block
+            ${isFirst ? "shadow-2xl" : "border-2 border-gray-300 hover:shadow-xl"}
+          `;
+          const cardEventHandlers = {
+            onMouseEnter: () => !product.disableHover && setHoveredCard(product.id),
+            onMouseLeave: () => !product.disableHover && setHoveredCard(null),
+          };
 
-          return (
-            <CardWrapper
-              key={product.id}
-              {...cardProps}
-              className={`relative rounded-3xl overflow-hidden aspect-[3/4] cursor-pointer transition-all block
-                ${isFirst ? "shadow-2xl" : "border-2 border-gray-300 hover:shadow-xl"}
-              `}
-              onMouseEnter={() =>
-                !product.disableHover && setHoveredCard(product.id)
-              }
-              onMouseLeave={() =>
-                !product.disableHover && setHoveredCard(null)
-              }
-            >
+          const cardContent = (
+            <>
               {/* Background Image */}
               <div
                 className={`absolute inset-0 bg-cover bg-center ${
@@ -469,7 +459,26 @@ function TrendingSection() {
                   </button>
                 )}
               </div>
-            </CardWrapper>
+            </>
+          );
+
+          return isFirst && firstHref ? (
+            <Link
+              key={product.id}
+              href={firstHref}
+              className={cardClassName}
+              {...cardEventHandlers}
+            >
+              {cardContent}
+            </Link>
+          ) : (
+            <div
+              key={product.id}
+              className={cardClassName}
+              {...cardEventHandlers}
+            >
+              {cardContent}
+            </div>
           );
         })}
       </div>
