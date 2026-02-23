@@ -24,7 +24,7 @@ export default function SignUpPage() {
       {/* LEFT — EDITORIAL IMAGE */}
       <div className="relative w-full lg:w-[55%] h-[40vh] lg:h-screen overflow-hidden">
         <Image
-          src="/nyc1.jpg"
+          src="/london1.jpg"
           alt="Editorial"
           fill
           priority

@@ -26,7 +26,7 @@ export default function LoginPage() {
       {/* LEFT — EDITORIAL IMAGE */}
       <div className="relative w-full lg:w-[55%] h-[40vh] lg:h-screen overflow-hidden">
         <Image
-          src="/london1.jpg"
+          src="/nyc1.jpg"
           alt="Editorial"
           fill
           priority

@@ -4,17 +4,193 @@ import { NextResponse } from "next/server";
 // K-Beauty Shopify stores to fetch from
 const BEAUTY_STORES: Record<
   string,
-  { domain: string; displayName: string; defaultCategory: "skincare" | "makeup" }
+  { domain: string; displayName: string; defaultCategory: "skincare" | "makeup"; productPaths?: string[] }
 > = {
+  kundal: {
+    domain: "https://kundal.us",
+    displayName: "Kundal",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  mixsoon: {
+    domain: "https://mixsoon.us",
+    displayName: "MIXSOON",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/mixsoon-all/products.json?limit=50"],
+  },
   cosrx: {
     domain: "https://www.cosrx.com",
     displayName: "COSRX",
     defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  numbuzin: {
+    domain: "https://us.numbuzin.com",
+    displayName: "Numbuzin",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all-products-1/products.json?limit=50"],
+  },
+  peripera: {
+    domain: "https://clubclio.shop",
+    displayName: "Peripera",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/peripera/products.json?limit=50"],
+  },
+  clio: {
+    domain: "https://clubclio.shop",
+    displayName: "Clio",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/clio/products.json?limit=50"],
+  },
+  romand: {
+    domain: "https://romand.us",
+    displayName: "Rom&nd",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/all-products/products.json?limit=50"],
   },
   tirtir: {
-    domain: "https://tirtir.us",
+    domain: "https://tirtir.global",
     displayName: "TIRTIR",
     defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/shop-all/products.json?limit=50"],
+  },
+  innisfree: {
+    domain: "https://us.innisfree.com",
+    displayName: "Innisfree",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/shop-all/products.json?limit=50"],
+  },
+  "muzigae-mansion": {
+    domain: "https://muzigae-mansion.us",
+    displayName: "Muzigae Mansion",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/shop/products.json?limit=50"],
+  },
+  dasique: {
+    domain: "https://dasique.com",
+    displayName: "Dasique",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  amuse: {
+    domain: "https://amuseseoulmakeup.com",
+    displayName: "Amuse",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  aprilskin: {
+    domain: "https://aprilskin.us",
+    displayName: "APRILSKIN",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all-product/products.json?limit=50"],
+  },
+  arencia: {
+    domain: "https://arencia.us",
+    displayName: "Arencia",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/shop-all/products.json?limit=50"],
+  },
+  biodance: {
+    domain: "https://biodance.com",
+    displayName: "BIODANCE",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all-products/products.json?limit=50"],
+  },
+  celimax: {
+    domain: "https://celimax.us",
+    displayName: "Celimax",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  morphe: {
+    domain: "https://morphe.com",
+    displayName: "Morphe",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  "anastasia-beverly-hills": {
+    domain: "https://anastasiabeverlyhills.com",
+    displayName: "Anastasia Beverly Hills",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  "milk-makeup": {
+    domain: "https://milkmakeup.com",
+    displayName: "Milk Makeup",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  tower28: {
+    domain: "https://tower28beauty.com",
+    displayName: "Tower 28",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  kosas: {
+    domain: "https://kosas.com",
+    displayName: "Kosas",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  saie: {
+    domain: "https://saiebeauty.com",
+    displayName: "Saie",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  "jones-road": {
+    domain: "https://jonesroadbeauty.com",
+    displayName: "Jones Road",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  "drunk-elephant": {
+    domain: "https://drunkelephant.com",
+    displayName: "Drunk Elephant",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  tatcha: {
+    domain: "https://tatcha.com",
+    displayName: "Tatcha",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  "glow-recipe": {
+    domain: "https://glowrecipe.com",
+    displayName: "Glow Recipe",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  "the-ordinary": {
+    domain: "https://theordinary.com",
+    displayName: "The Ordinary",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  "first-aid-beauty": {
+    domain: "https://firstaidbeauty.com",
+    displayName: "First Aid Beauty",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  "youth-to-the-people": {
+    domain: "https://youthtothepeople.com",
+    displayName: "Youth to the People",
+    defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  "judy-doll": {
+    domain: "https://judydoll.com",
+    displayName: "Judy Doll",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
+  },
+  canmake: {
+    domain: "https://canmakeusa.com",
+    displayName: "Canmake",
+    defaultCategory: "makeup",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
   },
   anua: {
     domain: "https://anua.us",
@@ -26,15 +202,11 @@ const BEAUTY_STORES: Record<
     displayName: "SKIN1004",
     defaultCategory: "skincare",
   },
-  mixsoon: {
-    domain: "https://mixsoon.us",
-    displayName: "mixsoon",
-    defaultCategory: "skincare",
-  },
   medicube: {
     domain: "https://medicube.us",
     displayName: "Medicube",
     defaultCategory: "skincare",
+    productPaths: ["/products.json?limit=50", "/collections/all/products.json?limit=50"],
   },
 };
 
@@ -100,8 +272,12 @@ async function fetchFromShopify(
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
 
-  try {
-    const res = await fetch(`${store.domain}/products.json?limit=50`, {
+  const paths = store.productPaths || ["/products.json?limit=50"];
+  let lastError: unknown = null;
+
+  for (const path of paths) {
+    try {
+      const res = await fetch(`${store.domain}${path}`, {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
@@ -114,14 +290,15 @@ async function fetchFromShopify(
     clearTimeout(timeoutId);
 
     if (!res.ok) {
-      console.warn(`[beauty-api] ${slug}: HTTP ${res.status}`);
-      return [];
+      lastError = new Error(`HTTP ${res.status}`);
+      continue;
     }
 
     const json = await res.json();
 
     if (!json.products || !Array.isArray(json.products)) {
-      return [];
+      lastError = new Error("No products array");
+      continue;
     }
 
     const now = new Date();
@@ -171,15 +348,19 @@ async function fetchFromShopify(
           url: `${store.domain}/products/${p.handle}`,
         };
       });
-  } catch (err: any) {
-    clearTimeout(timeoutId);
-    if (err?.name === "AbortError") {
+    } catch (err: any) {
+      lastError = err;
+    }
+  }
+
+  if (lastError) {
+    if ((lastError as any)?.name === "AbortError") {
       console.warn(`[beauty-api] ${slug}: Timeout`);
     } else {
-      console.warn(`[beauty-api] ${slug}: Error -`, err?.message || err);
+      console.warn(`[beauty-api] ${slug}: Error -`, (lastError as any)?.message || lastError);
     }
-    return [];
   }
+  return [];
 }
 
 export async function GET(req: Request) {

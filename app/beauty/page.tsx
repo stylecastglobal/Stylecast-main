@@ -316,12 +316,13 @@ function TrendingSection() {
     {
       id: 1,
       label: "All",
-      title: "Skincare",
+      title: "Shop Medicube",
       subtitle: "Shop all",
       isDark: true,
       mainImage: "/trending-korean-devices.jpg",
       hoverImage: "",
       disableHover: true,
+      href: "/brands/medicube",
     },
     {
       id: 2,
@@ -361,10 +362,18 @@ function TrendingSection() {
         {trendingProducts.map((product) => {
           const isFirst = product.id === 1;
 
+          const CardWrapper = isFirst && (product as typeof product & { href?: string }).href
+            ? Link
+            : "div";
+          const cardProps = isFirst && (product as typeof product & { href?: string }).href
+            ? { href: (product as typeof product & { href: string }).href }
+            : {};
+
           return (
-            <div
+            <CardWrapper
               key={product.id}
-              className={`relative rounded-3xl overflow-hidden aspect-[3/4] cursor-pointer transition-all
+              {...cardProps}
+              className={`relative rounded-3xl overflow-hidden aspect-[3/4] cursor-pointer transition-all block
                 ${isFirst ? "shadow-2xl" : "border-2 border-gray-300 hover:shadow-xl"}
               `}
               onMouseEnter={() =>
@@ -460,7 +469,7 @@ function TrendingSection() {
                   </button>
                 )}
               </div>
-            </div>
+            </CardWrapper>
           );
         })}
       </div>

@@ -13,20 +13,104 @@ const BRAND_CONFIG: Record<string, { shopifyDomain: string; currency?: string }>
   scuffers: {
     shopifyDomain: "https://scuffers.com",
   },
+  kundal: {
+    shopifyDomain: "https://kundal.us",
+  },
+  mixsoon: {
+    shopifyDomain: "https://mixsoon.us",
+  },
   cosrx: {
     shopifyDomain: "https://www.cosrx.com",
   },
+  numbuzin: {
+    shopifyDomain: "https://us.numbuzin.com",
+  },
+  peripera: {
+    shopifyDomain: "https://clubclio.shop",
+  },
+  clio: {
+    shopifyDomain: "https://clubclio.shop",
+  },
+  romand: {
+    shopifyDomain: "https://romand.us",
+  },
   tirtir: {
-    shopifyDomain: "https://tirtir.us",
+    shopifyDomain: "https://tirtir.global",
+  },
+  innisfree: {
+    shopifyDomain: "https://us.innisfree.com",
+  },
+  "muzigae-mansion": {
+    shopifyDomain: "https://muzigae-mansion.us",
+  },
+  dasique: {
+    shopifyDomain: "https://dasique.com",
+  },
+  amuse: {
+    shopifyDomain: "https://amuseseoulmakeup.com",
+  },
+  aprilskin: {
+    shopifyDomain: "https://aprilskin.us",
+  },
+  arencia: {
+    shopifyDomain: "https://arencia.us",
+  },
+  biodance: {
+    shopifyDomain: "https://biodance.com",
+  },
+  celimax: {
+    shopifyDomain: "https://celimax.us",
+  },
+  morphe: {
+    shopifyDomain: "https://morphe.com",
+  },
+  "anastasia-beverly-hills": {
+    shopifyDomain: "https://anastasiabeverlyhills.com",
+  },
+  "milk-makeup": {
+    shopifyDomain: "https://milkmakeup.com",
+  },
+  tower28: {
+    shopifyDomain: "https://tower28beauty.com",
+  },
+  kosas: {
+    shopifyDomain: "https://kosas.com",
+  },
+  saie: {
+    shopifyDomain: "https://saiebeauty.com",
+  },
+  "jones-road": {
+    shopifyDomain: "https://jonesroadbeauty.com",
+  },
+  "drunk-elephant": {
+    shopifyDomain: "https://drunkelephant.com",
+  },
+  tatcha: {
+    shopifyDomain: "https://tatcha.com",
+  },
+  "glow-recipe": {
+    shopifyDomain: "https://glowrecipe.com",
+  },
+  "the-ordinary": {
+    shopifyDomain: "https://theordinary.com",
+  },
+  "first-aid-beauty": {
+    shopifyDomain: "https://firstaidbeauty.com",
+  },
+  "youth-to-the-people": {
+    shopifyDomain: "https://youthtothepeople.com",
+  },
+  "judy-doll": {
+    shopifyDomain: "https://judydoll.com",
+  },
+  canmake: {
+    shopifyDomain: "https://canmakeusa.com",
   },
   anua: {
     shopifyDomain: "https://anua.us",
   },
   skin1004: {
     shopifyDomain: "https://skin1004.com",
-  },
-  mixsoon: {
-    shopifyDomain: "https://mixsoon.us",
   },
   medicube: {
     shopifyDomain: "https://medicube.us",

@@ -10,6 +10,10 @@ type BrandConfig = {
 const BRAND_CONFIG: Record<string, BrandConfig> = {
   glowny: {
     shopifyDomain: "https://en.glowny.co.kr",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
   },
   "aime-leon-dore": {
     shopifyDomain: "https://www.aimeleondore.com",
@@ -53,29 +57,235 @@ const BRAND_CONFIG: Record<string, BrandConfig> = {
     ],
   },
   // K-Beauty brands
+  kundal: {
+    shopifyDomain: "https://kundal.us",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  mixsoon: {
+    shopifyDomain: "https://mixsoon.us",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/mixsoon-all/products.json?limit=250",
+    ],
+  },
   cosrx: {
     shopifyDomain: "https://www.cosrx.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  numbuzin: {
+    shopifyDomain: "https://us.numbuzin.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all-products-1/products.json?limit=250",
+    ],
+  },
+  peripera: {
+    shopifyDomain: "https://clubclio.shop",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/peripera/products.json?limit=250",
+    ],
+  },
+  clio: {
+    shopifyDomain: "https://clubclio.shop",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/clio/products.json?limit=250",
+    ],
+  },
+  "romand": {
+    shopifyDomain: "https://romand.us",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all-products/products.json?limit=250",
+    ],
   },
   tirtir: {
-    shopifyDomain: "https://tirtir.us",
+    shopifyDomain: "https://tirtir.global",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/shop-all/products.json?limit=250",
+    ],
+  },
+  innisfree: {
+    shopifyDomain: "https://us.innisfree.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/shop-all/products.json?limit=250",
+    ],
   },
   anua: {
     shopifyDomain: "https://anua.us",
   },
-  numbuzin: {
-    shopifyDomain: "https://numbuzin.com",
-  },
   skin1004: {
     shopifyDomain: "https://www.skin1004.com",
   },
-  mixsoon: {
-    shopifyDomain: "https://mixsoon.us",
-  },
   medicube: {
     shopifyDomain: "https://medicube.us",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  "muzigae-mansion": {
+    shopifyDomain: "https://muzigae-mansion.us",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/shop/products.json?limit=250",
+    ],
+  },
+  dasique: {
+    shopifyDomain: "https://dasique.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  amuse: {
+    shopifyDomain: "https://amuseseoulmakeup.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  aprilskin: {
+    shopifyDomain: "https://aprilskin.us",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all-product/products.json?limit=250",
+    ],
+  },
+  arencia: {
+    shopifyDomain: "https://arencia.us",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/shop-all/products.json?limit=250",
+    ],
   },
   biodance: {
-    shopifyDomain: "https://biodance.us",
+    shopifyDomain: "https://biodance.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all-products/products.json?limit=250",
+    ],
+  },
+  celimax: {
+    shopifyDomain: "https://celimax.us",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  morphe: {
+    shopifyDomain: "https://morphe.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  "anastasia-beverly-hills": {
+    shopifyDomain: "https://anastasiabeverlyhills.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  "milk-makeup": {
+    shopifyDomain: "https://milkmakeup.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  tower28: {
+    shopifyDomain: "https://tower28beauty.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  kosas: {
+    shopifyDomain: "https://kosas.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  saie: {
+    shopifyDomain: "https://saiebeauty.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  "jones-road": {
+    shopifyDomain: "https://jonesroadbeauty.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  "drunk-elephant": {
+    shopifyDomain: "https://drunkelephant.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  tatcha: {
+    shopifyDomain: "https://tatcha.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  "glow-recipe": {
+    shopifyDomain: "https://glowrecipe.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  "the-ordinary": {
+    shopifyDomain: "https://theordinary.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  "first-aid-beauty": {
+    shopifyDomain: "https://firstaidbeauty.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  "youth-to-the-people": {
+    shopifyDomain: "https://youthtothepeople.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  "judy-doll": {
+    shopifyDomain: "https://judydoll.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
+  },
+  canmake: {
+    shopifyDomain: "https://canmakeusa.com",
+    productJsonPaths: [
+      "/products.json?limit=250",
+      "/collections/all/products.json?limit=250",
+    ],
   },
   sculptor: {
     shopifyDomain: "https://sculptor-worldwide.com",

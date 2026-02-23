@@ -220,18 +220,15 @@ export default function RootLayout({
 
                 {/* MAIN LINKS */}
                 <div className="flex items-center gap-8">
+                  <Link href="/smartcast" className="py-4 hover:text-gray-300">
+                    Smartcast
+                  </Link>
                   <Link href="/lookbook" className="py-4 hover:text-gray-300">
                     Lookbook
                   </Link>
                   <Link href="/celeb" className="py-4 hover:text-gray-300">
                     Celeb
                   </Link>
-
-                  {/* ⚠️ Wishes는 기존 기능 (찜 아님) */}
-                  <Link href="/wishes" className="py-4 hover:text-gray-300">
-                    Wishes
-                  </Link>
-
                   <Link href="/feed" className="py-4 hover:text-gray-300">
                     Feed
                   </Link>
